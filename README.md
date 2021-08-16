@@ -1,25 +1,32 @@
-# eucalyptus-sept
+# RMIT SEPT 2021 Major Project
 
-## Description
+# Group Day-Time
 
-## Run Instructions
+## Members
+* xxxxx
+* xxxxx
+* xxxxx
+* xxxxx
 
-### Java
+## Records
 
-From the root, run: `mvn compile exec:java -Dexec.mainClass="eucalyptus.bookeroo.BookerooApplication"`
+* Github repository :https://github.com/xxx
+* jira Board : https://xxxx
+* Google Docs : https://drive.google.com/xxxx
 
-This compiles then builds the SpringBoot backend on `localhost:8080`
+	
+## Code documentation - Release 0.1.0 - date
+* feature 1
+* feature 2
+* feature 3
+  
 
-### React
+To run the application locally : 
+1) cd into each and every microservice (ms_booking, ms_availability, ms_profiles, ms_service) and run :
+2) ./mvnw package && java -jar target/ms_[microservice]-0.0.1-SNAPSHOT.jar
+3) cd into FrontEnd/myfirstapp
+4) run "npm install"
+5) run "npm start"
 
-cd `src/main/react/frontend` then `npm start` or `yarn start`
 
-This displays the frontend on `localhost:3000`
-
-If there are errors, try `npm install` first.
-
-## Links
-[Jira](https://eucalyptus-sept.atlassian.net/jira/software/projects/EUC/boards/1)
-
-Starter based on [bezkoder tutorial](https://www.bezkoder.com/react-spring-boot-crud/)
 
