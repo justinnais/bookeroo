@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import classnames from "classnames";
 
+// TODO - this whole file is awful - delete and redo
 class Register extends Component {
     constructor(){
         super();

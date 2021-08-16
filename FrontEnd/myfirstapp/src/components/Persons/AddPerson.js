@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {createPerson} from "../../actions/personActions";
 
+// TODO - same as register form - scrap whole thing and start again
 
 class AddPerson extends Component {
     constructor(){
