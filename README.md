@@ -1,18 +1,18 @@
 # RMIT SEPT 2021 Major Project
 
-# Group Day-Time
+# Group 2 - Friday 10:30
 
 ## Members
-* xxxxx
-* xxxxx
-* xxxxx
-* xxxxx
+* Justin - s3605206@student.rmit.edu.au
+* Dan - s3843035@student.rmit.edu.au
+* Diana - s3668134@student.rmit.edu.au
+* Josh - s3782125@student.rmit.edu.au
 
 ## Records
 
-* Github repository :https://github.com/xxx
-* jira Board : https://xxxx
-* Google Docs : https://drive.google.com/xxxx
+* [GitHub](https://github.com/justinnais/eucalyptus-sept)
+* [Jira](https://eucalyptus-sept.atlassian.net/jira/your-work)
+* [Google Drive](https://drive.google.com/drive/u/1/folders/1OUPVo1OoOhK8me4Oc5aunNAdwj1d99aG)
 
 	
 ## Code documentation - Release 0.1.0 - date
