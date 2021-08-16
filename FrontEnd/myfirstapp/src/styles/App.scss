@@ -1,39 +1,36 @@
 // @import "~bootstrap/scss/bootstrap";
 
 // colours
-$primary: #F0F4F2;
+$primary: #f0f4f2;
 // maybe darker E1E9E4
 $primary-accent: #014623; // forest green
 
 $secondary: #e2d9df;
 $secondary-accent: #460124;
 
-
 $white: #fff;
-$grey-100: #F5F5F5;
-$grey-300: #E0E0E0;
+$grey-100: #f5f5f5;
+$grey-300: #e0e0e0;
 $grey-600: #757575;
-$black: #373F41; // dark blue grey
+$black: #373f41; // dark blue grey
 // $black: #38423d; // green grey??
-
 
 $complementary: #460124;
 $complementary-light: #f2dee4;
 
-
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-  sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-  monospace;
-} 
+    monospace;
+}
 
 .test-div {
   height: 100px;
@@ -42,7 +39,6 @@ code {
 .navbar {
   height: 5.5rem;
   background-color: $primary;
-
 }
 
 .btn-clear {

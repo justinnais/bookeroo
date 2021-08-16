@@ -1,22 +1,22 @@
-import { GET_PERSONS, GET_PERSON} from "../actions/types";
+import { GET_PERSONS, GET_PERSON } from '../actions/types';
 
 const initialState = {
   persons: [],
-  person: {}
+  person: {},
 };
 
-export default function(state = initialState, action) {
+export default function (state = initialState, action) {
   switch (action.type) {
     case GET_PERSONS:
       return {
         ...state,
-        persons: action.payload
+        persons: action.payload,
       };
 
     case GET_PERSON:
       return {
         ...state,
-        person: action.payload
+        person: action.payload,
       };
 
     default:

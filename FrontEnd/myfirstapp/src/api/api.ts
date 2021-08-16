@@ -35,7 +35,9 @@ export async function getRequest(
   identifier: Identifier
 ) {
   try {
-    const response = await axios.get(`${REST_URL}/${requestType}/${identifier}`);
+    const response = await axios.get(
+      `${REST_URL}/${requestType}/${identifier}`
+    );
     switch (response.status) {
       case 200:
         console.log(response);
