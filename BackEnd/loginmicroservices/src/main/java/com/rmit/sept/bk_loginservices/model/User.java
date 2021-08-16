@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_loginservices.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rmit.sept.bk_loginservices.utils.AccountType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -66,6 +67,9 @@ public class User implements UserDetails {
      * The last date this account was updated
      */
     private Date lastUpdated;
+
+    @NotBlank
+    private AccountType accountType;
 
     //OneToMany with Project
 
@@ -135,6 +139,10 @@ public class User implements UserDetails {
     public void setLastUpdated(Date lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
+    public AccountType getAccountType() { return this.accountType; }
+
+    public void setAccountType(AccountType accountType) { this.accountType = accountType; }
 
     @PrePersist
     protected void onCreate(){
