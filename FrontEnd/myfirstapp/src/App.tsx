@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
+import "./styles/App.scss";
 import Dashboard from "./components/Dashboard";
 import Header from "./components/Layout/Header";
-import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import AddPerson from "./components/Persons/AddPerson";
 import { Provider } from "react-redux";
@@ -15,7 +14,7 @@ import Login from "./components/UserManagement/Login";
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
+      // <Provider store={store}>
         <Router>
           <div className="App">
             <Header />
@@ -35,7 +34,7 @@ class App extends Component {
           
           </div>
         </Router>
-      </Provider>
+      // </Provider>
     );
   }
 }
