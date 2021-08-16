@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_loginservices.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rmit.sept.bk_loginservices.utils.AccountType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,25 +11,65 @@ import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.Collection;
 
-
 @Entity
 public class User implements UserDetails {
+
+    /**
+     * The unique identifier for this user object
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email(message = "Username needs to be an email")
-    @NotBlank(message = "username is required")
+    /**
+     * The unique display name of the user, which is shown to users on the website
+     */
+    @NotBlank(message = "Display Name is required")
+    @Column(unique = true)
+    private String displayName;
+
+    /**
+     * The email/username of the user, used to log them in to the system
+     */
+    @Email(message = "Username must be a valid email")
+    @NotBlank(message = "Username is required")
     @Column(unique = true)
     private String username;
-    @NotBlank(message = "Please enter your full name")
-    private String fullName;
+
+    /**
+     * The first name of the user this object represents.
+     * For a business account this is the contact name
+     */
+    @NotBlank(message = "First name is required")
+    private String firstName;
+
+    /**
+     * The last name of the user this object represents.
+     * For a business account this is a contact name
+     */
+    @NotBlank(message = "Last name is required")
+    private String lastName;
+
+    /**
+     * The password of this account. Encrypted in the system,
+     * not sent over JSON
+     */
+    @JsonIgnore
     @NotBlank(message = "Password field is required")
     private String password;
     @Transient
     private String confirmPassword;
-    private Date create_At;
-    private Date update_At;
+    /**
+     * The date this account was created
+     */
+    private Date dateCreated;
+    /**
+     * The last date this account was updated
+     */
+    private Date lastUpdated;
+
+    @NotBlank
+    private AccountType accountType;
 
     //OneToMany with Project
 
@@ -36,31 +77,39 @@ public class User implements UserDetails {
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getDisplayName() {
+        return this.displayName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
+
+    public String getUsername() { return this.username; }
+
+    public void setUsername(String username) { this.username = username; }
 
     public String getFullName() {
-        return fullName;
+        return String.format("%s %s",this.firstName, this.lastName);
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
+    public String getFirstName() { return this.firstName; }
+
+    public void setFirstName(String firstName) { this.firstName = firstName; }
+
+    public String getLastName() { return this.lastName; }
+
+    public void setLastName(String lastName) {this.lastName = lastName; }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
 
     public void setPassword(String password) {
@@ -75,30 +124,34 @@ public class User implements UserDetails {
         this.confirmPassword = confirmPassword;
     }
 
-    public Date getCreate_At() {
-        return create_At;
+    public Date getDateCreated() {
+        return this.dateCreated;
     }
 
-    public void setCreate_At(Date create_At) {
-        this.create_At = create_At;
+    public void setDateCreated(Date dateCreated) {
+        this.dateCreated = dateCreated;
     }
 
-    public Date getUpdate_At() {
-        return update_At;
+    public Date getLastUpdated() {
+        return this.lastUpdated;
     }
 
-    public void setUpdate_At(Date update_At) {
-        this.update_At = update_At;
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
+
+    public AccountType getAccountType() { return this.accountType; }
+
+    public void setAccountType(AccountType accountType) { this.accountType = accountType; }
 
     @PrePersist
     protected void onCreate(){
-        this.create_At = new Date();
+        this.dateCreated = new Date();
     }
 
     @PreUpdate
     protected void onUpdate(){
-        this.update_At = new Date();
+        this.lastUpdated = new Date();
     }
 
     /*

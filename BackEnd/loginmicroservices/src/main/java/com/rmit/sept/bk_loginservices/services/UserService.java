@@ -3,8 +3,9 @@ package com.rmit.sept.bk_loginservices.services;
 
 
 
-import com.rmit.sept.bk_loginservices.Repositories.UserRepository;
 import com.rmit.sept.bk_loginservices.exceptions.UsernameAlreadyExistsException;
+import com.rmit.sept.bk_loginservices.repositories.UserRepository;
+import com.rmit.sept.bk_loginservices.exceptions.DisplayNameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,24 +22,22 @@ public class UserService {
 
     public User saveUser (User newUser){
 
-      /*  newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-        //Username has to be unique (exception)
-        // Make sure that password and confirmPassword match
-        // We don't persist or show the confirmPassword
-        return userRepository.save(newUser);
-       */
-        try{
-            newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
-            //Username has to be unique (exception)
-            newUser.setUsername(newUser.getUsername());
-            // Make sure that password and confirmPassword match
-            // We don't persist or show the confirmPassword
-            newUser.setConfirmPassword("");
-            return userRepository.save(newUser);
+        //Encrypt the password
+        newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
 
-        }catch (Exception e){
+        //If the username is already in use, throw exception
+        if (userRepository.findByUsername(newUser.getUsername()) != null) {
             throw new UsernameAlreadyExistsException("Username '"+newUser.getUsername()+"' already exists");
         }
+
+        //If the display name already exists, throw exception
+        if (userRepository.findByDisplayName(newUser.getDisplayName()) != null) {
+            throw new DisplayNameAlreadyExistsException("Display Name '"+newUser.getDisplayName()+"' already exists");
+        }
+
+        //Clear the "confirm password" then save and return the user
+        newUser.setConfirmPassword("");
+        return userRepository.save(newUser);
 
     }
 
