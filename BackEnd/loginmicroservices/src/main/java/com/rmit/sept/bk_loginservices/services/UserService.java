@@ -3,10 +3,15 @@ package com.rmit.sept.bk_loginservices.services;
 
 
 
+import com.rmit.sept.bk_loginservices.exceptions.InvalidAbnException;
+import com.rmit.sept.bk_loginservices.exceptions.MissingFieldException;
 import com.rmit.sept.bk_loginservices.exceptions.UsernameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.repositories.UserRepository;
 import com.rmit.sept.bk_loginservices.exceptions.DisplayNameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.model.User;
+import com.rmit.sept.bk_loginservices.utils.AccountStatus;
+import com.rmit.sept.bk_loginservices.utils.AccountType;
+import com.rmit.sept.bk_loginservices.validator.AbnValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -33,6 +38,25 @@ public class UserService {
         //If the display name already exists, throw exception
         if (userRepository.findByDisplayName(newUser.getDisplayName()) != null) {
             throw new DisplayNameAlreadyExistsException("Display Name '"+newUser.getDisplayName()+"' already exists");
+        }
+
+        if (newUser.getAccountType().equals(AccountType.BUSINESS)) {
+
+            newUser.setAccountStatus(AccountStatus.PENDING);
+
+            if (newUser.getAbn() == null) {
+                throw new InvalidAbnException("An ABN is required for a business");
+            }
+
+            if (!AbnValidator.validate(newUser.getAbn())) {
+                throw new InvalidAbnException("ABN is invalid!");
+            }
+
+            if (newUser.getCompanyName() == null) {
+                throw new MissingFieldException("Company Name is required for a business");
+            }
+        } else {
+            newUser.setAccountStatus(AccountStatus.OK);
         }
 
         //Clear the "confirm password" then save and return the user

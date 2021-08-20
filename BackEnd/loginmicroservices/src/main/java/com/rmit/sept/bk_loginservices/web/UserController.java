@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.jboss.logging.Logger;
 import javax.validation.Valid;
 
 import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PREFIX;
@@ -29,6 +29,8 @@ import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PRE
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    private static final Logger log = Logger.getLogger(UserController.class);
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
@@ -42,15 +44,21 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
+
+        log.info("Receiving register request");
         // Validate passwords match
         userValidator.validate(user,result);
+
+        log.info("New user is valid");
 
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null)return errorMap;
 
         User newUser = userService.saveUser(user);
 
-        return  new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+        log.info("User: '" + newUser.getUsername() + "' created");
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
@@ -76,7 +84,7 @@ public class UserController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = TOKEN_PREFIX +  tokenProvider.generateToken(authentication);
-
+        log.info("Logged in user: " + loginRequest.getUsername());
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 

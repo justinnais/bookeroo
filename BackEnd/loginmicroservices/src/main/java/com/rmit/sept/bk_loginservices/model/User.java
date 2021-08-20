@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_loginservices.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rmit.sept.bk_loginservices.utils.AccountStatus;
 import com.rmit.sept.bk_loginservices.utils.AccountType;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -68,8 +69,27 @@ public class User implements UserDetails {
      */
     private Date lastUpdated;
 
+    /**
+     * Represents the current type of account (ADMIN, BUSINESS, NORMAL USER)
+     */
     @NotBlank
     private AccountType accountType;
+
+    /**
+     * The current status of the account
+     */
+    @NotBlank
+    private AccountStatus accountStatus;
+
+    /**
+     * If a business account, the abn of the business
+     */
+    private String abn;
+
+    /**
+     * If a business account, the company name
+     */
+    private String companyName;
 
     //OneToMany with Project
 
@@ -143,6 +163,18 @@ public class User implements UserDetails {
     public AccountType getAccountType() { return this.accountType; }
 
     public void setAccountType(AccountType accountType) { this.accountType = accountType; }
+
+    public AccountStatus getAccountStatus() {return this.accountStatus; }
+
+    public void setAccountStatus(AccountStatus accountStatus) { this.accountStatus = accountStatus; }
+
+    public String getAbn() { return this.abn; }
+
+    public void setAbn(String abn) { this.abn = abn; }
+
+    public String getCompanyName() { return this.companyName; }
+
+    public void setCompanyName(String companyName) { this.companyName = companyName; }
 
     @PrePersist
     protected void onCreate(){
