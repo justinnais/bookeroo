@@ -25,5 +25,18 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
         DisplayNameAlreadyExistsResponse existsResponse = new DisplayNameAlreadyExistsResponse(ex.getMessage());
         return new ResponseEntity<>(existsResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleInvalidAbn(InvalidAbnException ex, WebRequest request) {
+        InvalidAbnResponse invalidResponse = new InvalidAbnResponse(ex.getMessage());
+        return new ResponseEntity<>(invalidResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public final ResponseEntity<Object> handleMissingField(MissingFieldException ex, WebRequest request) {
+        MissingFieldResponse missingResponse = new MissingFieldResponse(ex.getMessage());
+        return new ResponseEntity<>(missingResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }
 
