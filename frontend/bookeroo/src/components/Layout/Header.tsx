@@ -14,6 +14,7 @@ import {
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
+import NavigationButton from './NavigationButton';
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -24,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       boxShadow: 'none', // removes shadow from navbar
-      color: theme.palette.secondary.main, // sets text colour to main accent colour
+    //   color: theme.palette.secondary.main, // sets text colour to main accent colour
     },
     toolbar: {
       justifyContent: 'space-between', // spaces items in navbar apart from each other
@@ -33,14 +34,14 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up('md')]: { display: 'none' }, // hide menu button on screens above medium
     },
     navButtons: {
-      [theme.breakpoints.down('sm')]: { display: 'none' }, // hide nav button on screens below small
       '& *': {
         textTransform: 'capitalize',
       },
+      [theme.breakpoints.down('sm')]: { display: 'none' }, // hide nav button on screens below small
     },
-    title: {
+    logo: {
       textTransform: 'uppercase',
-      color: 'inherit',
+      color: theme.palette.secondary.main,
       textDecoration: 'inherit',
     },
   })
@@ -60,12 +61,17 @@ export default function Header() {
   /* I have created these components, HeaderButton, MenuButton, NavButton and Logo
      They are just local in this Header.tsx file as they are likely unique to this component for now
      If I was to then use one of these outside of this file, remove it from here and make its own functional component
+
+     UPDATE - I have moved HeaderButton into a new component NavigationButton, as it was being used elsewhere. 
+     I have left the code in for now to demonstrate the change from local component to its own functional component.
   */
 
   /**
    * Button component that extends a regular button
    * @param props text string, optional link string, and MUI button props
    * @returns button
+   * @deprecated replaced by NavigationButton component
+   *
    */
   const HeaderButton = (props: HeaderButtonProps) => (
     <Button
@@ -97,13 +103,13 @@ export default function Header() {
   const NavButtons = () => (
     <>
       <div className={classes.navButtons}>
-        <HeaderButton text='Search' onClick={() => console.log('search')} />
-        <HeaderButton text='Books' />
-        <HeaderButton text='Sell Books' />
+        <NavigationButton text='Search' onClick={() => console.log('search')} />
+        <NavigationButton text='Books' />
+        <NavigationButton text='Sell Books' />
       </div>
       <div className={classes.navButtons}>
-        <HeaderButton text='Sign In' to='/test' />
-        <HeaderButton
+        <NavigationButton text='Sign In' to='/test' />
+        <NavigationButton
           text='Sign Up'
           variant='contained'
           color='secondary'
@@ -116,7 +122,7 @@ export default function Header() {
   const Logo = () => (
     <Typography
       variant='h6'
-      className={classes.title}
+      className={classes.logo}
       component={RouterLink}
       to='/'
     >

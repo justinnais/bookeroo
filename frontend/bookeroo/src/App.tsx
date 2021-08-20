@@ -10,23 +10,27 @@ import AddPerson from './components/Persons/AddPerson';
 import Landing from './components/Layout/Landing';
 import Register from './components/UserManagement/Register';
 import Login from './components/UserManagement/Login';
-import { Container } from '@material-ui/core';
+import { Container, createStyles, makeStyles, Theme } from '@material-ui/core';
+import Footer from './components/Layout/Footer';
 
 function App() {
   return (
     // <Provider store={store}>
-    <Router>
-      <Header />
-      <Container>
-        <Switch>
-          <Route exact path='/' component={Landing} />
-          <Route exact path='/register' component={Register} />
-          <Route exact path='/login' component={Login} />
-          <Route exact path='/dashboard' component={Dashboard} />
-          <Route exact path='/addPerson' component={AddPerson} />
-        </Switch>
-      </Container>
-    </Router>
+    <div className='page-container'>
+      <Router>
+        <Header />
+        <Container>
+          <Switch>
+            <Route exact path='/' component={Landing} />
+            <Route exact path='/register' component={Register} />
+            <Route exact path='/login' component={Login} />
+            <Route exact path='/dashboard' component={Dashboard} />
+            <Route exact path='/addPerson' component={AddPerson} />
+          </Switch>
+        </Container>
+        <Footer />
+      </Router>
+    </div>
     // </Provider>
   );
 }
