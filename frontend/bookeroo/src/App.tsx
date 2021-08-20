@@ -12,14 +12,25 @@ import Register from './components/UserManagement/Register';
 import Login from './components/UserManagement/Login';
 import { Container, createStyles, makeStyles, Theme } from '@material-ui/core';
 import Footer from './components/Layout/Footer';
+import { classes } from 'istanbul-lib-coverage';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    content: {
+      [theme.breakpoints.up('xs')]: { paddingBottom: '65px' }, // reduce footer size on small screens
+      [theme.breakpoints.down('xs')]: { paddingBottom: '56px' },
+    },
+  })
+);
 
 function App() {
+  const classes = useStyles();
   return (
     // <Provider store={store}>
     <div className='page-container'>
       <Router>
         <Header />
-        <Container>
+        <div className={classes.content}>
           <Switch>
             <Route exact path='/' component={Landing} />
             <Route exact path='/register' component={Register} />
@@ -27,7 +38,7 @@ function App() {
             <Route exact path='/dashboard' component={Dashboard} />
             <Route exact path='/addPerson' component={AddPerson} />
           </Switch>
-        </Container>
+        </div>
         <Footer />
       </Router>
     </div>

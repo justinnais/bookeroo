@@ -31,13 +31,13 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between', // spaces items in navbar apart from each other
     },
     menuButton: {
-      [theme.breakpoints.up('md')]: { display: 'none' }, // hide menu button on screens above medium
+      [theme.breakpoints.up('sm')]: { display: 'none' }, // hide menu button on screens above small
     },
     navButtons: {
       '& *': {
         textTransform: 'capitalize',
       },
-      [theme.breakpoints.down('sm')]: { display: 'none' }, // hide nav button on screens below small
+      [theme.breakpoints.down('xs')]: { display: 'none' }, // hide nav button on screens below xs
     },
     logo: {
       textTransform: 'uppercase',
