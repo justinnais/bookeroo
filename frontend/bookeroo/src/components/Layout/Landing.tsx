@@ -13,21 +13,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'material-ui-image';
 import { theme } from '../../styles/theme';
+import GridLayout from './GridLayout';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      flexGrow: 1,
-      background: theme.palette.primary.main,
-      paddingTop: theme.spacing(8),
-      paddingBottom: theme.spacing(8),
-    },
     displayImage: {
       width: '100%',
       height: 'auto',
-    },
-    control: {
-      padding: theme.spacing(2),
     },
     welcomeCard: {
       display: 'flex',
@@ -35,11 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
       alignItems: 'flex-start',
       height: '16rem',
       justifyContent: 'space-between',
-    },
-    gridContainer: {
-      justifyContent: 'space-evenly',
-      alignItems: 'center',
-      [theme.breakpoints.down('xs')]: { flexDirection: 'column-reverse' }, // on small screens, reverse grid order to show text first
     },
   })
 );
@@ -54,7 +41,7 @@ export default function Landing() {
           Welcome to
         </Typography>
 
-        <Typography variant='h3' component='h2'>
+        <Typography variant='h2' component='h2'>
           Bookeroo
         </Typography>
       </div>
@@ -69,28 +56,62 @@ export default function Landing() {
     </div>
   );
 
+  const welcomeItems = [
+    <img
+      className={classes.displayImage}
+      src='https://via.placeholder.com/635x512'
+      alt='placeholder'
+    />,
+    <WelcomeCard />,
+  ];
+
+  const Foo = () => (
+    <div className={classes.welcomeCard}>
+      <div>
+        <Typography variant='h4' component='h4'>
+          The number one book store on this side of the equator
+        </Typography>
+      </div>
+      <GridLayout
+        // TODO this is kinda buggy needs a fix
+        spacing={2}
+        items={[
+          <Typography variant='body2' component='p'>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro quos
+            doloribus dolorum quis labore?
+          </Typography>,
+          <Typography variant='body2' component='p'>
+            Tempora tenetur delectus quibusdam cumque inventore a omnis maxime
+            qui. Reprehenderit porro
+          </Typography>,
+        ]}
+      />
+    </div>
+  );
+
+  const secondCard = [
+    <Foo />,
+    <img
+      className={classes.displayImage}
+      src='https://via.placeholder.com/540x440'
+      alt='placeholder'
+    />,
+  ];
+
   return (
-    <div className={classes.root}>
-      <Container>
-        <Grid container spacing={2} className={classes.gridContainer}>
-          <Grid item sm={6}>
-            <img
-              className={classes.displayImage}
-              src='https://via.placeholder.com/635x512'
-              alt='placeholder'
-            />
-            {/* // TODO fix image not working with responsive grid*/}
-            {/* <Image
-                src='https://via.placeholder.com/635x512'
-                alt='placeholder'
-                color={theme.palette.primary.main}
-              /> */}
-          </Grid>
-          <Grid item sm={6}>
-            <WelcomeCard />
-          </Grid>
-        </Grid>
-      </Container>
+    <div>
+      <GridLayout
+        items={welcomeItems}
+        spacing={2}
+        background={theme.palette.primary.main}
+        reverseLayout={true}
+      />
+      <GridLayout
+        items={secondCard}
+        spacing={2}
+        background={theme.palette.common.white}
+        reverseLayout={true}
+      />
     </div>
   );
 }
