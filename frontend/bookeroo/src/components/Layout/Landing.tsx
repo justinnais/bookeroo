@@ -13,7 +13,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'material-ui-image';
 import { theme } from '../../styles/theme';
-import GridLayout from './GridLayout';
+import GridLayout, { IGridItem } from './GridLayout';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,12 +57,17 @@ export default function Landing() {
   );
 
   const welcomeItems = [
-    <img
-      className={classes.displayImage}
-      src='https://via.placeholder.com/635x512'
-      alt='placeholder'
-    />,
-    <WelcomeCard />,
+    {
+      size: 7,
+      node: (
+        <img
+          className={classes.displayImage}
+          src='https://via.placeholder.com/635x512'
+          alt='placeholder'
+        />
+      ),
+    },
+    { size: 5, node: <WelcomeCard /> },
   ];
 
   const Foo = () => (
@@ -76,28 +81,41 @@ export default function Landing() {
         // TODO this is kinda buggy needs a fix
         spacing={2}
         items={[
-          <Typography variant='body2' component='p'>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro quos
-            doloribus dolorum quis labore?
-          </Typography>,
-          <Typography variant='body2' component='p'>
-            Tempora tenetur delectus quibusdam cumque inventore a omnis maxime
-            qui. Reprehenderit porro
-          </Typography>,
+          {
+            node: (
+              <Typography variant='body2' component='p'>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro
+                quos doloribus dolorum quis labore?
+              </Typography>
+            ),
+          },
+          {
+            node: (
+              <Typography variant='body2' component='p'>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro
+                quos doloribus dolorum quis labore?
+              </Typography>
+            ),
+          },
         ]}
       />
     </div>
   );
 
-  const secondCard = [
-    <Foo />,
-    <img
-      className={classes.displayImage}
-      src='https://via.placeholder.com/540x440'
-      alt='placeholder'
-    />,
+  const secondCard: IGridItem[] = [
+    { node: <Foo /> },
+    {
+      node: (
+        <img
+          className={classes.displayImage}
+          src='https://via.placeholder.com/540x440'
+          alt='placeholder'
+        />
+      ),
+    },
   ];
 
+  // TODO IGridItem is clunky and needs reworking
   return (
     <div>
       <GridLayout

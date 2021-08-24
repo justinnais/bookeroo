@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       boxShadow: 'none', // removes shadow from navbar
-    //   color: theme.palette.secondary.main, // sets text colour to main accent colour
+      //   color: theme.palette.secondary.main, // sets text colour to main accent colour
     },
     toolbar: {
       justifyContent: 'space-between', // spaces items in navbar apart from each other
@@ -108,7 +108,7 @@ export default function Header() {
         <NavigationButton text='Sell Books' />
       </div>
       <div className={classes.navButtons}>
-        <NavigationButton text='Sign In' to='/test' />
+        <NavigationButton text='Sign In' to='/login' />
         <NavigationButton
           text='Sign Up'
           variant='contained'

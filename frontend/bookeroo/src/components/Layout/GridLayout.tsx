@@ -10,8 +10,13 @@ import { PaletteColor } from '@material-ui/core/styles/createPalette';
 import { createStyles } from '@material-ui/styles';
 import React from 'react';
 
+export interface IGridItem {
+  size?: number;
+  node: React.ReactNode;
+}
 interface Props {
-  items: React.ReactNode[];
+  items: IGridItem[];
+  // items: IGridItem[] | React.ReactNode[];
   spacing?: GridSpacing;
   background?: string;
   reverseLayout?: boolean;
@@ -47,9 +52,10 @@ export default function GridLayout(props: Props) {
           className={classes.gridContainer}
         >
           {props.items.map((item, index, arr) => {
+            const size = item.size ? item.size : 12 / arr.length;
             return (
-              <Grid item sm={(12 / arr.length) as GridSize}>
-                {item}
+              <Grid item sm={size as GridSize}>
+                {item.node}
               </Grid>
             );
           })}
@@ -58,5 +64,3 @@ export default function GridLayout(props: Props) {
     </div>
   );
 }
-
-// TODO maybe need a prop for sm={6} on line 45
