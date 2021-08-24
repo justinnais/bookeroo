@@ -111,6 +111,7 @@ export default function Header() {
         <NavigationButton text='Sign In' to='/test' />
         <NavigationButton
           text='Sign Up'
+          to='/register'
           variant='contained'
           color='secondary'
           disableElevation
