@@ -1,24 +1,38 @@
 import {
-  Button,
+  Container,
+  createStyles,
   Grid,
   GridSize,
+  makeStyles,
   OutlinedTextFieldProps,
-  StandardTextFieldProps,
   TextField,
-  TextFieldProps,
+  Theme,
 } from '@material-ui/core';
 import React from 'react';
-import FormCard from './FormCard';
+import FormCard from '../components/Form/FormCard';
 import Formik from 'formik';
-import { theme } from '../../styles/theme';
-import NavigationButton from '../Layout/NavigationButton';
+import { theme } from '../styles/theme';
+import Button from '../components/Button/Button';
 
 interface TextInputProps extends OutlinedTextFieldProps {
   gridItemSize: number;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    pageContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexDirection: 'column',
+      paddingTop: '15vh',
+    },
+  })
+);
+
 export default function Login() {
   // TODO add formik and yup to actually make a form
+  const classes = useStyles();
 
   const TextInput = (props: TextInputProps) => {
     return (
@@ -40,17 +54,8 @@ export default function Login() {
         {/* <TextInput id='email' label='Email' gridItemSize={12} /> */}
         <Grid item xs={12}>
           <TextField
-            id='password'
-            label='Password'
-            variant='outlined'
-            color='secondary'
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id='password'
-            label='Password'
+            id='email'
+            label='Email'
             variant='outlined'
             color='secondary'
             fullWidth
@@ -71,12 +76,13 @@ export default function Login() {
 
   const buttons = [
     // <NavigationButton text='Sign In' to='/login' />,
-    <NavigationButton
-      text='Sign In'
-      variant='contained'
-      color='secondary'
-      disableElevation
-    />,
+    <Button variant='contained' color='secondary' disableElevation>
+      Sign In
+    </Button>,
   ];
-  return <FormCard title='Sign In' form={form} buttons={buttons} />;
+  return (
+    <Container className={classes.pageContainer}>
+      <FormCard title='Sign In' form={form} buttons={buttons} />
+    </Container>
+  );
 }

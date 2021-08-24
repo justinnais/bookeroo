@@ -1,5 +1,4 @@
 import {
-  Button,
   Container,
   createStyles,
   Grid,
@@ -13,6 +12,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'material-ui-image';
 import { theme } from '../styles/theme';
+import Button from '../components/Button/Button';
 import GridLayout, { IGridItem } from '../components/Layout/GridLayout';
 
 const useStyles = makeStyles((theme: Theme) =>
