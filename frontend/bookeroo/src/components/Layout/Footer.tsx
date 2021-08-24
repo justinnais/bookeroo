@@ -7,7 +7,7 @@ import {
   Toolbar,
 } from '@material-ui/core';
 import React from 'react';
-import NavigationButton from './NavigationButton';
+import Button from '../Button/Button';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,9 +32,9 @@ export default function Footer() {
       {/* <AppBar className={classes.root}> */}
       <Container>
         <Toolbar className={classes.toolbar} disableGutters>
-          <NavigationButton text='Team' />
-          <NavigationButton text='Contact' />
-          <NavigationButton text='Help' />
+          <Button>Team</Button>
+          <Button>Contact</Button>
+          <Button>Help</Button>
         </Toolbar>
       </Container>
       {/* </AppBar> */}

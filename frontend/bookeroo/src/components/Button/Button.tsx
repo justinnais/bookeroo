@@ -1,18 +1,15 @@
 import {
-  Button,
+  Button as ButtonMU,
   ButtonProps,
   createStyles,
   makeStyles,
   Theme,
 } from '@material-ui/core';
 import React from 'react';
-import {
-  Link as RouterLink,
-  LinkProps as RouterLinkProps,
-} from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 interface Props extends ButtonProps {
-  text: string;
+  children?: React.ReactNode;
   to?: string;
 }
 
@@ -25,21 +22,22 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 /**
- * Button component that extends a regular button to be used in navigation bars, eg Header, Footer
- * @param props text string, optional link string, and MUI button props
+ * Button component that extends a regular button
+ * @param props optional link string, and MUI button props
  * @returns Button
  */
-export default function NavigationButton(props: Props) {
+export default function Button(props: Props) {
   const classes = useStyles();
 
   return (
-    <Button
+    <ButtonMU
       color='inherit'
-      component={props.to ? RouterLink : Button}
+      component={props.to ? RouterLink : ButtonMU}
       {...props}
       className={classes.button}
+      disableElevation
     >
-      {props.text}
-    </Button>
+      {props.children}
+    </ButtonMU>
   );
 }

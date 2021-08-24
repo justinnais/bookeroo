@@ -3,7 +3,6 @@ import {
   AppBar,
   Toolbar,
   Typography,
-  Button,
   Container,
   ButtonProps,
   IconButton,
@@ -14,7 +13,8 @@ import {
   LinkProps as RouterLinkProps,
 } from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
-import NavigationButton from './NavigationButton';
+import Button from '../Button/Button';
+import ButtonGroup from '../Button/ButtonGroup';
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -25,19 +25,19 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       boxShadow: 'none', // removes shadow from navbar
-    //   color: theme.palette.secondary.main, // sets text colour to main accent colour
+      //   color: theme.palette.secondary.main, // sets text colour to main accent colour
     },
     toolbar: {
       justifyContent: 'space-between', // spaces items in navbar apart from each other
     },
     menuButton: {
-      [theme.breakpoints.up('md')]: { display: 'none' }, // hide menu button on screens above medium
+      [theme.breakpoints.up('sm')]: { display: 'none' }, // hide menu button on screens above small
     },
     navButtons: {
       '& *': {
         textTransform: 'capitalize',
       },
-      [theme.breakpoints.down('sm')]: { display: 'none' }, // hide nav button on screens below small
+      [theme.breakpoints.down('xs')]: { display: 'none' }, // hide nav button on screens below xs
     },
     logo: {
       textTransform: 'uppercase',
@@ -73,7 +73,7 @@ export default function Header() {
    * @deprecated replaced by NavigationButton component
    *
    */
-  const HeaderButton = (props: HeaderButtonProps) => (
+  /* const HeaderButton = (props: HeaderButtonProps) => (
     <Button
       color='inherit'
       component={props.to ? RouterLink : Button}
@@ -81,7 +81,7 @@ export default function Header() {
     >
       {props.text}
     </Button>
-  );
+  ); */
 
   /**
    * Menu button that displays on small screens, contains all links that would show on larger screens
@@ -103,22 +103,26 @@ export default function Header() {
   const NavButtons = () => (
     <>
       <div className={classes.navButtons}>
-        <NavigationButton text='Search' onClick={() => console.log('search')} />
-        <NavigationButton text='Books' />
-        <NavigationButton text='Sell Books' />
+        <Button>Search</Button>
+        <Button>Books</Button>
+        <Button>Sell Books</Button>
       </div>
       <div className={classes.navButtons}>
-        <NavigationButton text='Sign In' to='/test' />
-        <NavigationButton
-          text='Sign Up'
-          variant='contained'
-          color='secondary'
-          disableElevation
-        />
+        <Button to='/login'>Sign In</Button>
+        <Button variant='contained' color='secondary'>
+          Sign Up
+        </Button>
       </div>
     </>
   );
 
+  const MiddleNavButtons = () => (
+    <ButtonGroup spacing={2}>
+      <Button>Search</Button>
+      <Button>Books</Button>
+      <Button>Sell Books</Button>
+    </ButtonGroup>
+  );
   const Logo = () => (
     <Typography
       variant='h6'
@@ -139,8 +143,9 @@ export default function Header() {
       <Container>
         <Toolbar className={classes.toolbar} disableGutters>
           <Logo />
+          {/* <MiddleNavButtons /> */}
           <NavButtons />
-          <MenuButton />
+          {/* <MenuButton /> */}
         </Toolbar>
       </Container>
     </AppBar>
