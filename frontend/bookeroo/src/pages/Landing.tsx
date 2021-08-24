@@ -12,8 +12,8 @@ import {
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Image from 'material-ui-image';
-import { theme } from '../../styles/theme';
-import GridLayout, { IGridItem } from './GridLayout';
+import { theme } from '../styles/theme';
+import GridLayout, { IGridItem } from '../components/Layout/GridLayout';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

@@ -7,12 +7,11 @@ import AddPerson from './components/Persons/AddPerson';
 // import { Provider } from "react-redux";
 // import store from "./store";
 
-import Landing from './components/Layout/Landing';
+import Landing from './pages/Landing';
 import Register from './components/UserManagement/Register';
 import Login from './components/UserManagement/Login';
 import { Container, createStyles, makeStyles, Theme } from '@material-ui/core';
 import Footer from './components/Layout/Footer';
-import { classes } from 'istanbul-lib-coverage';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
