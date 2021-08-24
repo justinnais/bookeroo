@@ -1,13 +1,10 @@
-package com.rmit.sept.bk_loginservices;
+package com.rmit.sept.bookeroo;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-
-
 @SpringBootTest
-class msloginTests {
+class BookerooApplicationTests {
 
     @Test
     void contextLoads() {

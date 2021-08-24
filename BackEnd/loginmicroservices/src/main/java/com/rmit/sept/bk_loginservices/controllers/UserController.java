@@ -1,4 +1,4 @@
-package com.rmit.sept.bk_loginservices.web;
+package com.rmit.sept.bk_loginservices.controllers;
 
 
 import com.rmit.sept.bk_loginservices.model.User;
@@ -9,12 +9,14 @@ import com.rmit.sept.bk_loginservices.services.MapValidationErrorService;
 import com.rmit.sept.bk_loginservices.services.UserService;
 import com.rmit.sept.bk_loginservices.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +33,9 @@ import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PRE
 public class UserController {
 
     private static final Logger log = Logger.getLogger(UserController.class);
+
+
+
 
     @Autowired
     private MapValidationErrorService mapValidationErrorService;
