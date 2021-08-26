@@ -7,7 +7,7 @@ import AddPerson from "./components/Persons/AddPerson";
 // import store from "./store";
 
 import Landing from "./pages/Landing";
-import Register from "./components/UserManagement/Register";
+import Register from "./pages/Register";
 import Login from "./pages/Login";
 import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";

@@ -1,28 +1,22 @@
 import {
-    Container,
     createStyles,
     Grid,
-    GridSize,
     Link,
     makeStyles,
-    OutlinedTextFieldProps,
+    Paper,
     TextField,
     Theme,
 } from "@material-ui/core";
+import Button from "../components/Button/Button";
+import { Form, Formik } from "formik";
 import React from "react";
 import FormCard from "../components/Form/FormCard";
-import Formik from "formik";
-import { theme } from "../styles/theme";
-import Button from "../components/Button/Button";
-import TextInput from "../components/Form/TextInput";
+import { Container } from "@material-ui/core";
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
 } from "react-router-dom";
-
-interface TextInputProps extends OutlinedTextFieldProps {
-    gridItemSize: number;
-}
+import TextInput from "../components/Form/TextInput";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -39,11 +33,15 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default function Login() {
-    // TODO add formik and yup to actually make a form
+export default function Register() {
     const classes = useStyles();
-    const fields = ["Email", "Password"];
-
+    const fields = [
+        "First Name",
+        "Last Name",
+        "Email",
+        "Password",
+        "Confirm Password",
+    ];
     const form = (
         <form>
             <Grid container spacing={2}>
@@ -60,7 +58,7 @@ export default function Login() {
                         to="/login"
                         color="textPrimary"
                     >
-                        New? Create an account here
+                        Already have an account? Log In
                     </Link>
                 </Grid>
             </Grid>
@@ -68,14 +66,14 @@ export default function Login() {
     );
 
     const buttons = [
-        // <NavigationButton text='Sign In' to='/login' />,
-        <Button variant="contained" color="secondary" disableElevation>
-            Sign In
+        <Button variant="contained" color="secondary">
+            Sign Up
         </Button>,
     ];
+
     return (
         <Container className={classes.pageContainer}>
-            <FormCard title="Sign In" form={form} buttons={buttons} />
+            <FormCard title="Sign Up" form={form} buttons={buttons} />
         </Container>
     );
 }

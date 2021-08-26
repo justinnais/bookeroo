@@ -36,7 +36,8 @@ export default function Button(props: Props) {
             {...props}
             className={classes.button}
         >
-            {props.children}
+            <div>{props.children}</div>
+            
         </ButtonMU>
     );
 }

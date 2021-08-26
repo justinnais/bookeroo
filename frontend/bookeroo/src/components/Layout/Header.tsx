@@ -109,7 +109,7 @@ export default function Header() {
             </div>
             <div className={classes.navButtons}>
                 <Button to="/login">Sign In</Button>
-                <Button variant="contained" color="secondary">
+                <Button variant="contained" color="secondary" to="/register">
                     Sign Up
                 </Button>
             </div>
