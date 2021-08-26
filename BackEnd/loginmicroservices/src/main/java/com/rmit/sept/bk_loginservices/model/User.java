@@ -3,6 +3,7 @@ package com.rmit.sept.bk_loginservices.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rmit.sept.bk_loginservices.utils.AccountStatus;
 import com.rmit.sept.bk_loginservices.utils.AccountType;
+import com.rmit.sept.bk_loginservices.validator.AccountTypeConstraint;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -72,7 +73,8 @@ public class User implements UserDetails {
     /**
      * Represents the current type of account (ADMIN, BUSINESS, NORMAL USER)
      */
-    @NotBlank
+    @NotBlank(message = "Account type is required")
+    @AccountTypeConstraint(anyOf = {AccountType.ADMIN, AccountType.BUSINESS, AccountType.STANDARD})
     private AccountType accountType;
 
     /**
