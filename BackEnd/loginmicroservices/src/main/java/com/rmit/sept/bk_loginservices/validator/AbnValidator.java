@@ -6,7 +6,7 @@ public class AbnValidator {
     private static int DIVISOR = 89;
 
     public static boolean validate(String abn) {
-
+        if (abn == null) return false;
         if (abn.length() != ABN_LENGTH) return false;
 
         int[] digits = new int[ABN_LENGTH];

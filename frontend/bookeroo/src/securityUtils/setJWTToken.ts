@@ -1,3 +1,3 @@
 export function setJWTToken() {
-  return null;
+    return null;
 }

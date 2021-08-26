@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { createNewUser } from '../../actions/securityActions';
-import PropTypes from 'prop-types';
+import React, { Component } from "react";
+import { createNewUser } from "../../actions/securityActions";
+import PropTypes from "prop-types";
 // import { connect } from 'react-redux';
 // import classnames from 'classnames';
 
 // TODO - this whole file is awful - delete and redo
 
 export default function Register() {
-  return <div>this component needs to be fixed</div>;
+    return <div>this component needs to be fixed</div>;
 }
 
 // class Register extends Component {
