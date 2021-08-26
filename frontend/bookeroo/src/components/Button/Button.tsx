@@ -35,7 +35,6 @@ export default function Button(props: Props) {
       component={props.to ? RouterLink : ButtonMU}
       {...props}
       className={classes.button}
-      disableElevation
     >
       {props.children}
     </ButtonMU>

@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
     root: {
       width: '30rem',
       background: theme.palette.primary.main,
-      boxShadow: 'none',
+      // boxShadow: 'none',
     },
     content: {
       height: '22rem',
