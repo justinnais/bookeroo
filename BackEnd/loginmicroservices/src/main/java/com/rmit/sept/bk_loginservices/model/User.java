@@ -80,7 +80,7 @@ public class User implements UserDetails {
     /**
      * The current status of the account
      */
-    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.OK, AccountStatus.PENDING, AccountStatus.REJECTED, AccountStatus.BANNED, AccountStatus.INACTIVE})
+    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.BANNED, AccountStatus.OK, AccountStatus.DELETED, AccountStatus.PENDING, AccountStatus.DELETED, AccountStatus.REJECTED, AccountStatus.INACTIVE})
     private AccountStatus accountStatus;
 
     /**
