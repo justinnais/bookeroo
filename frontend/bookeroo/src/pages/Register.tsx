@@ -1,4 +1,5 @@
 import {
+    CircularProgress,
     createStyles,
     Grid,
     Link,
@@ -58,7 +59,10 @@ export default function Register() {
     const validationSchema = yup.object().shape({
         firstName: yup.string().required("First Name is required"),
         lastName: yup.string().required("Last Name is required"),
-        email: yup.string().email().required("Email is required"),
+        email: yup
+            .string()
+            .email("Email must be a valid email")
+            .required("Email is required"),
         password: yup.string().required("Password is required"),
         // .min(8, 'Password is too short'), // todo uncomment after testing and add regex
         confirmPassword: yup
@@ -78,6 +82,7 @@ export default function Register() {
          */
         onSubmit: (values) => {
             setSubmitting(true);
+
             let duplicate = false;
             // TODO check database for existing accounts with email
             if (duplicate) {
@@ -131,8 +136,14 @@ export default function Register() {
     );
 
     const buttons = [
-        <Button variant="contained" color="secondary" id="register">
-            Sign Up
+        <Button
+            variant="contained"
+            color="secondary"
+            form="register"
+            disabled={isSubmitting}
+            type='submit'
+        >
+            {isSubmitting ? <CircularProgress /> : "Sign Up"}
         </Button>,
     ];
 

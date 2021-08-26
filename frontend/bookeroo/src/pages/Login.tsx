@@ -1,4 +1,5 @@
 import {
+    CircularProgress,
     Container,
     createStyles,
     Grid,
@@ -21,11 +22,6 @@ import {
 } from "react-router-dom";
 import * as yup from "yup";
 import { camelCase } from "../util/stringManipulation";
-import { string } from "yup/lib/locale";
-
-interface TextInputProps extends OutlinedTextFieldProps {
-    gridItemSize: number;
-}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,11 +61,13 @@ export default function Login() {
         initialValues,
         validationSchema,
         onSubmit: (values) => {
+            setSubmitting(true);
             console.table(values);
+            setSubmitting(false);
         },
     });
     const form = (
-        <form onSubmit={formik.handleSubmit} id="login">
+        <form onSubmit={formik.handleSubmit} id="loginForm">
             <Grid container spacing={2}>
                 {fields.map((field, key) => {
                     return (
@@ -96,9 +94,10 @@ export default function Login() {
             variant="contained"
             color="secondary"
             type="submit"
-            form="login"
+            disabled={isSubmitting}
+            form="loginForm"
         >
-            Sign In
+            {isSubmitting ? <CircularProgress /> : "Sign In"}
         </Button>,
     ];
     return (
