@@ -55,7 +55,9 @@ export default function FormCard(props: Props) {
                 </Typography>
                 <div className={classes.form}>{props.form}</div>
                 <CardActions className={classes.buttons}>
-                    {props.buttons.map((button) => button)}
+                    {props.buttons.map((button, key) => (
+                        <div key={key}>{button}</div>
+                    ))}
                 </CardActions>
             </CardContent>
         </Card>

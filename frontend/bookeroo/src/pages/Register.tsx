@@ -45,9 +45,9 @@ export default function Register() {
     const form = (
         <form>
             <Grid container spacing={2}>
-                {fields.map((field) => {
+                {fields.map((field, key) => {
                     return (
-                        <Grid item xs={12}>
+                        <Grid item xs={12} key={key}>
                             <TextInput label={field} />
                         </Grid>
                     );
