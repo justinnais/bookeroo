@@ -55,6 +55,8 @@ public class UserService {
             if (newUser.getCompanyName() == null) {
                 throw new MissingFieldException("Company Name is required for a business");
             }
+        } else if (newUser.getAccountType().equals(AccountType.ADMIN)) {
+            throw new IllegalArgumentException("Admin registration not allowed at this time");
         } else {
             newUser.setAccountStatus(AccountStatus.OK);
         }
