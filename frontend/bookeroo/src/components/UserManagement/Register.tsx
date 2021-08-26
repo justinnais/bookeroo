@@ -1,75 +1,78 @@
+import { Box, createStyles, makeStyles, Paper, TextField, Theme } from '@material-ui/core';
+import { Form, Formik } from 'formik';
 import React from 'react';
-import { Formik, Form, Field } from 'formik';
-import { Box, TextField } from '@material-ui/core';
-import { StringNullableChain } from 'lodash';
 
-interface TextInputProps {
-    name: string;
-    label: string;
-}
-
-const TextInput = (props: TextInputProps) => (
-    <Box>
-        <Field
-            component={TextField}
-            name={props.name}
-            label={props.label}
-        />
-    </Box>
-
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+        root: {
+            background: theme.palette.primary.main,
+        },
+    })
 );
 
 export default function Register() {
+    const classes = useStyles();
+
     return (
-        <div>
-            <Formik
-                initialValues={{
+        <Box display="flex" justifyContent="center" alignItems="center">
+            <Paper elevation={0} className={classes.root}>
+                <Formik
+                    initialValues={{
 
-                }}
-                validate={(values) => {
-                    // const errors: Partial<Values> = {};
-                }}
-                onSubmit={(values, { setSubmitting }) => {
+                    }}
+                    validate={(values) => {
+                        
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
 
-                }}
-            >
-                {({ submitForm, isSubmitting, touched, errors }) => (
-                    <Form>
-                        <TextInput
-                            name="username"
-                            label="Username"
-                        />
-                        <TextInput
-                            name="email"
-                            label="Email"
-                        />
-                        <TextInput
-                            name="fname"
-                            label="First Name"
-                        />
-                        <TextInput
-                            name="sname"
-                            label="Surname"
-                        />
-                        <Box>
-                            <Field
-                                component={TextField}
-                                name="pass"
-                                type="password"
-                                label="Password"
-                            />
-                        </Box>
-                        <Box>
-                            <Field
-                                component={TextField}
-                                name="confpass"
-                                type="password"
-                                label="Confirm Password"
-                            />
-                        </Box>
-                    </Form>
-                )}
-            </Formik>
-        </div>
+                    }}
+                >
+                    {(
+                        <Form>
+                            <Box>
+                                <TextField
+                                    variant="outlined"
+                                    name="fname"
+                                    type="text"
+                                    label="First name"
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant="outlined"
+                                    name="lname"
+                                    type="text"
+                                    label="Last name"
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant="outlined"
+                                    name="email"
+                                    type="text"
+                                    label="Email"
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant="outlined"
+                                    name="password"
+                                    type="password"
+                                    label="Password"
+                                />
+                            </Box>
+                            <Box>
+                                <TextField
+                                    variant="outlined"
+                                    name="confPassword"
+                                    type="password"
+                                    label="Confirm Password"
+                                />
+                            </Box>
+                        </Form>
+                    )}
+                </Formik>
+            </Paper>
+        </Box>
     )
 }
