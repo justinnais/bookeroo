@@ -51,13 +51,13 @@ public class UserController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result){
 
         log.info("Receiving register request");
+
         // Validate passwords match
         userValidator.validate(user,result);
-
-        log.info("New user is valid");
-
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
         if(errorMap != null)return errorMap;
+
+        log.info("New user is valid");
 
         User newUser = userService.saveUser(user);
 
