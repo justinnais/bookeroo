@@ -20,9 +20,17 @@ import {
 import TextInput, { Field } from "../components/Form/TextInput";
 import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
-import { API } from "../api/api";
+import { post } from "../api/api";
 import { CreateAccountRequest } from "../api/account";
 import { AccountType } from "../util/enums";
+
+interface RegisterForm {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -90,13 +98,19 @@ export default function Register() {
             } else {
                 const { confirmPassword, ...other } = values; // omits confirmPassword from values
                 console.table(values);
-                // const request: CreateAccountRequest = {
-                //     ...other,
-                //     accountType: AccountType.STANDARD,
-                //     type: "register",
-                // };
-                // const response = API.post("register", request);
 
+                const request: CreateAccountRequest = {
+                    // ...other, // ? can't use this while generating fields
+                    type: "register",
+                    accountType: AccountType.STANDARD,
+                    email: values.email,
+                    password: values.password,
+                    firstName: values.firstName,
+                    lastName: values.lastName,
+                };
+                const response = post(request);
+
+                console.table(response);
                 // setAccounts({ ...accounts, [accountId]: formValues });
 
                 // props.alertCb
@@ -141,7 +155,7 @@ export default function Register() {
             color="secondary"
             form="register"
             disabled={isSubmitting}
-            type='submit'
+            type="submit"
         >
             {isSubmitting ? <CircularProgress /> : "Sign Up"}
         </Button>,
