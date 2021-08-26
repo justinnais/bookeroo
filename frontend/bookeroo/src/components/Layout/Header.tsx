@@ -47,41 +47,12 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface HeaderButtonProps extends ButtonProps {
-    text: string;
-    to?: string;
-}
 
 /**
  * Header component located at top of web page
  */
 export default function Header() {
     const classes = useStyles();
-
-    /* I have created these components, HeaderButton, MenuButton, NavButton and Logo
-     They are just local in this Header.tsx file as they are likely unique to this component for now
-     If I was to then use one of these outside of this file, remove it from here and make its own functional component
-
-     UPDATE - I have moved HeaderButton into a new component NavigationButton, as it was being used elsewhere. 
-     I have left the code in for now to demonstrate the change from local component to its own functional component.
-  */
-
-    /**
-     * Button component that extends a regular button
-     * @param props text string, optional link string, and MUI button props
-     * @returns button
-     * @deprecated replaced by NavigationButton component
-     *
-     */
-    /* const HeaderButton = (props: HeaderButtonProps) => (
-    <Button
-      color='inherit'
-      component={props.to ? RouterLink : Button}
-      {...props}
-    >
-      {props.text}
-    </Button>
-  ); */
 
     /**
      * Menu button that displays on small screens, contains all links that would show on larger screens
@@ -116,13 +87,6 @@ export default function Header() {
         </>
     );
 
-    const MiddleNavButtons = () => (
-        <ButtonGroup spacing={2}>
-            <Button>Search</Button>
-            <Button>Books</Button>
-            <Button>Sell Books</Button>
-        </ButtonGroup>
-    );
     const Logo = () => (
         <Typography
             variant="h6"
@@ -145,7 +109,7 @@ export default function Header() {
                     <Logo />
                     {/* <MiddleNavButtons /> */}
                     <NavButtons />
-                    {/* <MenuButton /> */}
+                    <MenuButton />
                 </Toolbar>
             </Container>
         </AppBar>

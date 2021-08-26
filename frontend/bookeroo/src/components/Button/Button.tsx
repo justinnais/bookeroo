@@ -32,7 +32,8 @@ export default function Button(props: Props) {
     return (
         <ButtonMU
             color="inherit"
-            component={props.to ? RouterLink : ButtonMU}
+            // component={props.to ? RouterLink : ButtonMU}
+            href={props.to ? props.to : undefined}
             {...props}
             className={classes.button}
         >
