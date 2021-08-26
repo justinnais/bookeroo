@@ -44,17 +44,8 @@ public class UserService {
 
             newUser.setAccountStatus(AccountStatus.PENDING);
 
-            if (newUser.getAbn() == null) {
-                throw new InvalidAbnException("An ABN is required for a business");
-            }
-
-            if (!AbnValidator.validate(newUser.getAbn())) {
-                throw new InvalidAbnException("ABN is invalid!");
-            }
-
-            if (newUser.getCompanyName() == null) {
-                throw new MissingFieldException("Company Name is required for a business");
-            }
+        } else if (newUser.getAccountType().equals(AccountType.ADMIN)) {
+            throw new IllegalArgumentException("Admin registration not allowed at this time");
         } else {
             newUser.setAccountStatus(AccountStatus.OK);
         }
