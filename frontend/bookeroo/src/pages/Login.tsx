@@ -27,6 +27,9 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
             paddingTop: "15vh",
         },
+        textfield: {
+            background: theme.palette.common.white,
+        },
     })
 );
 
@@ -54,6 +57,7 @@ export default function Login() {
                 {/* <TextInput id='email' label='Email' gridItemSize={12} /> */}
                 <Grid item xs={12}>
                     <TextField
+                        className={classes.textfield}
                         id="email"
                         label="Email"
                         variant="outlined"
@@ -63,6 +67,7 @@ export default function Login() {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
+                        className={classes.textfield}
                         id="password"
                         label="Password"
                         variant="outlined"
@@ -76,7 +81,7 @@ export default function Login() {
 
     const buttons = [
         // <NavigationButton text='Sign In' to='/login' />,
-        <Button variant="contained" color="secondary" disableElevation>
+        <Button variant="contained" color="secondary">
             Sign In
         </Button>,
     ];
