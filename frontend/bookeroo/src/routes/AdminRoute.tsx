@@ -7,7 +7,7 @@ import { Routes } from "./Routes";
  * @param props RouteProps
  * @returns admin router
  */
-export default function AdminRouter(props: RouteProps) {
+export default function AdminRoute(props: RouteProps) {
     // https://navid2zp.medium.com/private-routes-with-react-router-while-using-the-render-method-77534c11fa25
     const { component: Component, ...rest } = props;
     // todo implement auth
