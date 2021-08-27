@@ -11,6 +11,8 @@ import Register from "./components/UserManagement/Register";
 import Login from "./pages/Login";
 import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
+import { Routes } from "./routes/Routes";
+import RestrictedRoute from "./routes/RestrictedRoute";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,10 +32,17 @@ function App() {
                 <Header />
                 <div className={classes.content}>
                     <Switch>
-                        <Route exact path="/" component={Landing} />
-                        <Route exact path="/register" component={Register} />
-                        <Route exact path="/login" component={Login} />
-                        <Route exact path="/addPerson" component={AddPerson} />
+                        <Route exact path={Routes.Home} component={Landing} />
+                        <RestrictedRoute
+                            exact
+                            path={Routes.Register}
+                            component={Register}
+                        />
+                        <RestrictedRoute
+                            exact
+                            path={Routes.Login}
+                            component={Login}
+                        />
                     </Switch>
                 </div>
                 <Footer />
