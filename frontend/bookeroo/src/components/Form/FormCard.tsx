@@ -20,10 +20,8 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             width: "30rem",
             background: theme.palette.primary.main,
-            // boxShadow: 'none',
         },
         content: {
-            height: "22rem",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
@@ -32,6 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         title: {
             textAlign: "center",
+            marginBottom: "4rem",
+        },
+        form: {
+            marginBottom: "2rem",
         },
         buttons: {
             justifyContent: "flex-end",
@@ -51,9 +53,11 @@ export default function FormCard(props: Props) {
                 >
                     {props.title}
                 </Typography>
-                <div>{props.form}</div>
+                <div className={classes.form}>{props.form}</div>
                 <CardActions className={classes.buttons}>
-                    {props.buttons.map((button) => button)}
+                    {props.buttons.map((button, key) => (
+                        <div key={key}>{button}</div>
+                    ))}
                 </CardActions>
             </CardContent>
         </Card>

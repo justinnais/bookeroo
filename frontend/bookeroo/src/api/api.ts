@@ -1,22 +1,17 @@
 import axios from "axios";
+import { CreateAccountRequest } from "./account";
 
 const REST_URL = "http://localhost:8080/api/";
 
-interface IExampleInterface {
-    id: string;
-    name: string;
-}
-
-type RequestTypes = "person";
-type RequestInterfaces = IExampleInterface;
+type RequestTypes = "register" | "login";
+type RequestInterfaces = CreateAccountRequest;
 type Identifier = string | number | undefined;
 
-export async function createRequest(
-    requestType: RequestTypes,
-    item: RequestInterfaces
-) {
+// export namespace API {
+
+export async function post(item: RequestInterfaces) {
     try {
-        const response = await axios.post(`${REST_URL}/${requestType}`, item);
+        const response = await axios.post(`${REST_URL}/${item.type}`, item);
         switch (response.status) {
             case 200:
                 console.log(response);
@@ -30,10 +25,7 @@ export async function createRequest(
     }
 }
 
-export async function getRequest(
-    requestType: RequestTypes,
-    identifier: Identifier
-) {
+export async function get(requestType: RequestTypes, identifier: Identifier) {
     try {
         const response = await axios.get(
             `${REST_URL}/${requestType}/${identifier}`
@@ -50,3 +42,4 @@ export async function getRequest(
         console.error(error);
     }
 }
+// }

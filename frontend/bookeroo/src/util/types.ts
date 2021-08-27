@@ -1,7 +1,22 @@
-// ? what the heck
+import { accountStatus, AccountType } from "./enums";
 
-export const GET_ERRORS = "GET_ERRORS";
-export const GET_PERSONS = "GET_PERSONS";
-export const GET_PERSON = "GET_PERSON";
+interface IAccountBase {
+    id: number; // ? maybe string with uuid
+    email: string;
+    password: string;
+    confirmPassword: string;
+    dateCreated: number;
+    lastUpdated: number;
+    accountType: AccountType;
+    accountStatus: accountStatus;
+}
 
-export const SET_CURRENT_USER = "SET_CURRENT_USER";
+export interface IAccount extends IAccountBase {
+    firstName: string;
+    lastName: string;
+}
+
+export interface IBusinessAccount extends IAccountBase {
+    abn: string;
+    companyName: string;
+}

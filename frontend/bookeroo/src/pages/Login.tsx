@@ -1,22 +1,27 @@
 import {
+    CircularProgress,
     Container,
     createStyles,
     Grid,
     GridSize,
+    Link,
     makeStyles,
     OutlinedTextFieldProps,
     TextField,
     Theme,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import FormCard from "../components/Form/FormCard";
-import Formik from "formik";
+import Formik, { useFormik } from "formik";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
-
-interface TextInputProps extends OutlinedTextFieldProps {
-    gridItemSize: number;
-}
+import TextInput, { Field } from "../components/Form/TextInput";
+import {
+    Link as RouterLink,
+    LinkProps as RouterLinkProps,
+} from "react-router-dom";
+import * as yup from "yup";
+import { camelCase } from "../util/stringManipulation";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -27,62 +32,72 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
             paddingTop: "15vh",
         },
-        textfield: {
-            background: theme.palette.common.white,
+        link: {
+            textAlign: "center",
         },
     })
 );
 
 export default function Login() {
-    // TODO add formik and yup to actually make a form
+    const [isSubmitting, setSubmitting] = useState(false);
     const classes = useStyles();
+    // const fields = ["Email", "Password"];
+    const fields: Field[] = [
+        { label: "Email", type: "email" },
+        { label: "Password", type: "password" },
+    ];
 
-    const TextInput = (props: TextInputProps) => {
-        return (
-            <Grid item xs={props.gridItemSize as GridSize}>
-                <TextField
-                    id={props.id}
-                    label={props.label}
-                    variant="outlined"
-                    color="secondary"
-                    fullWidth
-                />
-            </Grid>
-        );
-    };
+    // convert fields into initial values
+    let initialValues: { [key: string]: string } = {};
+    fields.forEach((field) => {
+        initialValues[camelCase(field.label)] = "";
+    });
 
+    const validationSchema = yup.object().shape({
+        email: yup.string().email().required("Email is required"),
+        password: yup.string().required("Password is required"),
+    });
+    const formik = useFormik({
+        initialValues,
+        validationSchema,
+        onSubmit: (values) => {
+            setSubmitting(true);
+            console.table(values);
+            setSubmitting(false);
+        },
+    });
     const form = (
-        <form>
+        <form onSubmit={formik.handleSubmit} id="loginForm">
             <Grid container spacing={2}>
-                {/* <TextInput id='email' label='Email' gridItemSize={12} /> */}
-                <Grid item xs={12}>
-                    <TextField
-                        className={classes.textfield}
-                        id="email"
-                        label="Email"
-                        variant="outlined"
-                        color="secondary"
-                        fullWidth
-                    />
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField
-                        className={classes.textfield}
-                        id="password"
-                        label="Password"
-                        variant="outlined"
-                        color="secondary"
-                        fullWidth
-                    />
+                {fields.map((field, key) => {
+                    return (
+                        <Grid item xs={12} key={key}>
+                            <TextInput field={field} formik={formik} />
+                        </Grid>
+                    );
+                })}
+                <Grid item xs={12} className={classes.link}>
+                    <Link
+                        component={RouterLink}
+                        to="/register"
+                        color="textPrimary"
+                    >
+                        New? Create an account here
+                    </Link>
                 </Grid>
             </Grid>
         </form>
     );
 
     const buttons = [
-        // <NavigationButton text='Sign In' to='/login' />,
-        <Button variant="contained" color="secondary">
-            Sign In
+        <Button
+            variant="contained"
+            color="secondary"
+            type="submit"
+            disabled={isSubmitting}
+            form="loginForm"
+        >
+            {isSubmitting ? <CircularProgress /> : "Sign In"}
         </Button>,
     ];
     return (
