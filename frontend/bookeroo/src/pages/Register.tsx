@@ -21,7 +21,7 @@ import TextInput, { Field } from "../components/Form/TextInput";
 import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
 import { post } from "../api/api";
-import { CreateAccountRequest } from "../api/account";
+import { CreateAccountRequest } from "../api/microservices/user";
 import { AccountType } from "../util/enums";
 
 interface RegisterForm {
@@ -101,7 +101,7 @@ export default function Register() {
 
                 const request: CreateAccountRequest = {
                     // ...other, // ? can't use this while generating fields
-                    type: "register",
+                    type: "user/register",
                     accountType: AccountType.STANDARD,
                     email: values.email,
                     password: values.password,

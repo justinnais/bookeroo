@@ -1,14 +1,12 @@
-import { accountStatus, AccountType } from "./enums";
+import { AccountStatus, AccountType } from "../../util/enums";
 
 interface IAccountBase {
     id: number; // ? maybe string with uuid
     email: string;
-    password: string;
-    confirmPassword: string;
     dateCreated: number;
     lastUpdated: number;
     accountType: AccountType;
-    accountStatus: accountStatus;
+    accountStatus: AccountStatus;
 }
 
 export interface IAccount extends IAccountBase {

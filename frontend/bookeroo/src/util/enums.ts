@@ -4,7 +4,7 @@ export enum AccountType {
     ADMIN,
 }
 
-export enum accountStatus {
+export enum AccountStatus {
     OK,
     PENDING,
     REJECTED,
