@@ -1,20 +1,13 @@
 import React from "react";
-import {
-    AppBar,
-    Toolbar,
-    Typography,
-    Container,
-    ButtonProps,
-    IconButton,
-} from "@material-ui/core";
+import { AppBar, Toolbar, Typography, Container } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
 } from "react-router-dom";
-import MenuIcon from "@material-ui/icons/Menu";
 import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
+import MenuButton from "./MenuButton";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -47,26 +40,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-
 /**
  * Header component located at top of web page
  */
 export default function Header() {
     const classes = useStyles();
-
-    /**
-     * Menu button that displays on small screens, contains all links that would show on larger screens
-     */
-    const MenuButton = () => (
-        <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-        >
-            <MenuIcon />
-        </IconButton>
-    );
 
     /**
      * Navigation links that show on large screens

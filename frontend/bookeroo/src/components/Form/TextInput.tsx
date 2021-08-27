@@ -10,13 +10,9 @@ import { FormikProps } from "formik";
 import React from "react";
 import { camelCase } from "../../util/stringManipulation";
 
-export interface Field {
+interface Props extends Omit<OutlinedTextFieldProps, "variant"> {
     label: string;
     type?: "text" | "email" | "password";
-}
-
-interface Props extends Omit<OutlinedTextFieldProps, "variant"> {
-    field: Field;
     formik: {
         touched: { [x: string]: any };
         errors: {
@@ -42,15 +38,15 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 export default function TextInput(props: Props) {
     const classes = useStyles();
-    const id = camelCase(props.field.label); // converts label into id
+    const id = camelCase(props.label); // converts label into id
     const error = !!props.formik.touched[id] && !!props.formik.errors[id];
     const helperText = props.formik.touched[id] && props.formik.errors[id];
     return (
         <TextField
             className={classes.text}
             id={id}
-            label={props.field.label}
-            type={props.field.type ? props.field.type : "text"}
+            label={props.label}
+            type={props.type ? props.type : "text"}
             variant="outlined"
             color="secondary"
             fullWidth
