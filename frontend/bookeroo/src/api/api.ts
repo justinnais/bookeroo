@@ -1,7 +1,7 @@
 import axios from "axios";
 import { CreateAccountRequest } from "./account";
 
-const REST_URL = "http://localhost:8080/api/";
+const REST_URL = "http://bookeroo-api.danieljmills.com/api/users";
 
 type RequestTypes = "register" | "login";
 type RequestInterfaces = CreateAccountRequest;
