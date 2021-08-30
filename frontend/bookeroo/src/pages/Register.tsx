@@ -21,7 +21,7 @@ import TextInput from "../components/Form/TextInput";
 import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
 import { post } from "../api/api";
-import { CreateAccountRequest } from "../api/account";
+import { CreateAccountRequest } from "../api/microservices/user";
 import { AccountType } from "../util/enums";
 import FormGenerator, {
     GeneratedField,
@@ -105,7 +105,7 @@ export default function Register() {
 
             const request: CreateAccountRequest = {
                 ...other,
-                type: "register",
+                type: "user/register",
                 accountType: AccountType.STANDARD,
             };
             const response = post(request);
