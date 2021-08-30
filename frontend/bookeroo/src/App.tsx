@@ -13,6 +13,12 @@ import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
+import Contact from "./pages/Contact";
+import Search from "./pages/Search";
+import PrivateRoute from "./routes/PrivateRoute";
+import Profile from "./pages/Profile";
+import AdminRoute from "./routes/AdminRoute";
+import Admin from "./pages/Admin";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -31,18 +37,20 @@ function App() {
             <Router>
                 <Header />
                 <div className={classes.content}>
+                    {/* prettier-ignore */}
                     <Switch>
+
                         <Route exact path={Routes.Home} component={Landing} />
-                        <RestrictedRoute
-                            exact
-                            path={Routes.Register}
-                            component={Register}
-                        />
-                        <RestrictedRoute
-                            exact
-                            path={Routes.Login}
-                            component={Login}
-                        />
+                        <Route exact path={Routes.Contact} component={Contact} />
+                        <Route path={Routes.Search} component={Search} />
+                       
+                        <RestrictedRoute exact path={Routes.Register} component={Register} />
+                        <RestrictedRoute exact path={Routes.Login} component={Login} />
+                        {/* Private Routes */}
+                        <PrivateRoute path={Routes.Profile} component={Profile} />
+                        {/* Admin Routes */}
+                        <AdminRoute exact path={Routes.Admin} component={Admin} />
+
                     </Switch>
                 </div>
                 <Footer />
