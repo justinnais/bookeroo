@@ -24,7 +24,9 @@ jobs:
       # Then run your tests!
       - run:
           name: Test
-          command: mvn test
+          command: |
+            cd BackEnd/loginmicroservices
+            mvn test
 
 workflows:
   # Below is the definition of your workflow.
