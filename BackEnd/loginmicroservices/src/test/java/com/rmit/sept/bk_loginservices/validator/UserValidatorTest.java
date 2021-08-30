@@ -1,8 +1,10 @@
 package com.rmit.sept.bk_loginservices.validator;
 
 import com.rmit.sept.bk_loginservices.model.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
@@ -14,48 +16,63 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserValidatorTest
 {
+    BindingResult bindingResult;
+    UserValidator validator;
+    User user;
+
+    @BeforeEach
+    private void init()
+    {
+        bindingResult = new MapBindingResult(new HashMap<>(), "bindingResult");
+        validator = new UserValidator();
+        user = new User();
+    }
 
     @Test
     @DisplayName("Test should pass when password has more than 6 characters")
-    void PasswordShouldBeMoreThan6Char()
+    public void PasswordShouldBeMoreThan6Char()
     {
-        User user = new User();
         user.setPassword("aaaaaa");
-        user.setConfirmPassword("aaaaaa");
-
-        UserValidator validator = new UserValidator();
-        MapBindingResult bindingResult = new MapBindingResult(new HashMap<>(), "bindingResult");
-
         validator.validate(user, bindingResult);
 
-        List<ObjectError> errorList = bindingResult.getAllErrors();
-        assertFalse(containsError(errorList, "Length"));
+        assertFalse(containsError(bindingResult, "Length"));
     }
 
     @Test
     @DisplayName("Test should pass when password has less than 6 characters")
-    void PasswordShouldBeLessThan6Char()
+    public void PasswordShouldBeLessThan6Char()
     {
-        User user = new User();
         user.setPassword("aaaaa");
-        user.setConfirmPassword("aaaaa");
-
-        UserValidator validator = new UserValidator();
-        MapBindingResult bindingResult = new MapBindingResult(new HashMap<>(), "bindingResult");
-
         validator.validate(user, bindingResult);
 
-        List<ObjectError> errorList = bindingResult.getAllErrors();
-        assertTrue(containsError(errorList, "Length"));
+        assertTrue(containsError(bindingResult, "Length"));
     }
 
-    private boolean containsError(List<ObjectError> errors, String errorCode)
+    @Test
+    @DisplayName("Test should pass when passwords match")
+    public void PasswordsShouldMatch()
     {
-        for (ObjectError error : errors)
-        {
-            if (error.getCode().equals(errorCode))
-                return true;
-        }
-        return false;
+        user.setPassword("qwerty");
+        user.setConfirmPassword("qwerty");
+        validator.validate(user, bindingResult);
+
+        assertFalse(containsError(bindingResult, "Match"));
+    }
+
+    @Test
+    @DisplayName("Test should pass when passwords don't match")
+    public void PasswordsShouldNotMatch()
+    {
+        user.setPassword("qwerty");
+        user.setConfirmPassword("werty");
+        validator.validate(user, bindingResult);
+
+        assertTrue(containsError(bindingResult, "Match"));
+    }
+
+    private boolean containsError(BindingResult bindingResult, String errorCode)
+    {
+        List<ObjectError> errors = bindingResult.getAllErrors();
+        return errors.stream().anyMatch(error -> error.getCode().equals(errorCode));
     }
 }
