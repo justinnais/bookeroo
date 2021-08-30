@@ -16,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class UserValidatorTest
 {
-    BindingResult bindingResult;
-    UserValidator validator;
-    User user;
+    private BindingResult bindingResult;
+    private UserValidator validator;
+    private User user;
 
     @BeforeEach
     private void init()
