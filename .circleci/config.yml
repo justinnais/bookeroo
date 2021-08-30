@@ -18,7 +18,8 @@ jobs:
       - run:
           name: Build
           command: |
-            cd BackEnd/loginmicroservice
+            ls
+            cd BackEnd/loginmicroservices
             mvn clean
       # Then run your tests!
       - run:
