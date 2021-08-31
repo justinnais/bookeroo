@@ -30,7 +30,7 @@ class UserValidatorTest
 
     @Test
     @DisplayName("Test should pass when password has more than 6 characters")
-    public void PasswordShouldBeMoreThan6Char()
+    public void PasswordMoreThan6Char()
     {
         user.setPassword("aaaaaa");
         validator.validate(user, bindingResult);
@@ -40,7 +40,7 @@ class UserValidatorTest
 
     @Test
     @DisplayName("Test should pass when password has less than 6 characters")
-    public void PasswordShouldBeLessThan6Char()
+    public void PasswordLessThan6Char()
     {
         user.setPassword("aaaaa");
         validator.validate(user, bindingResult);
