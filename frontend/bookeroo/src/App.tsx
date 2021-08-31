@@ -13,6 +13,7 @@ import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
+import { useQuery } from "react-query";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
     const classes = useStyles();
+    // const {} = useQuery('user', () =>)
     return (
         // <Provider store={store}>
         <div className="page-container">

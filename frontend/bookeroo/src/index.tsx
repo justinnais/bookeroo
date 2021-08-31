@@ -5,12 +5,17 @@ import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "./styles/custom.scss";
 import { theme } from "./styles/theme";
+import { QueryClient, QueryClientProvider } from "react-query";
+
+const queryClient = new QueryClient();
 
 ReactDOM.render(
     <React.StrictMode>
-        <ThemeProvider theme={theme}>
-            <App />
-        </ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={theme}>
+                <App />
+            </ThemeProvider>
+        </QueryClientProvider>
     </React.StrictMode>,
     document.getElementById("root")
 );
