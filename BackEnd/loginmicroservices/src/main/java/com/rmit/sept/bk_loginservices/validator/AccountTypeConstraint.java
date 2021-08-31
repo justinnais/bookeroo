@@ -16,11 +16,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = AccountTypeConstraintValidator.class)
-public @interface AccountTypeConstraint {
+public @interface AccountTypeConstraint
+{
 
     AccountType[] anyOf();
+
     boolean nullable() default false;
+
     String message() default "Account type must be one of {anyOf}";
+
     Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default  {};
+
+    Class<? extends Payload>[] payload() default {};
 }

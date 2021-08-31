@@ -11,12 +11,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import java.util.Date;
 import java.util.Collection;
+import java.util.Date;
 
 @Entity
-public class User implements UserDetails {
+public class User implements UserDetails
+{
 
     /**
      * The unique identifier for this user object
@@ -80,7 +80,8 @@ public class User implements UserDetails {
     /**
      * The current status of the account
      */
-    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.OK, AccountStatus.PENDING, AccountStatus.REJECTED, AccountStatus.BANNED, AccountStatus.INACTIVE})
+    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.OK, AccountStatus.PENDING,
+            AccountStatus.REJECTED, AccountStatus.BANNED, AccountStatus.INACTIVE})
     private AccountStatus accountStatus;
 
     /**
@@ -95,96 +96,154 @@ public class User implements UserDetails {
 
     //OneToMany with Project
 
-    public User() {
+    public User()
+    {
     }
 
-    public Long getId() {
+    public Long getId()
+    {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(Long id)
+    {
         this.id = id;
     }
 
-    public String getDisplayName() {
+    public String getDisplayName()
+    {
         return this.displayName;
     }
 
-    public void setDisplayName(String displayName) {
+    public void setDisplayName(String displayName)
+    {
         this.displayName = displayName;
     }
 
-    public String getUsername() { return this.username; }
-
-    public void setUsername(String username) { this.username = username; }
-
-    public String getFullName() {
-        return String.format("%s %s",this.firstName, this.lastName);
+    public String getUsername()
+    {
+        return this.username;
     }
 
-    public String getFirstName() { return this.firstName; }
+    public void setUsername(String username)
+    {
+        this.username = username;
+    }
 
-    public void setFirstName(String firstName) { this.firstName = firstName; }
+    public String getFullName()
+    {
+        return String.format("%s %s", this.firstName, this.lastName);
+    }
 
-    public String getLastName() { return this.lastName; }
+    public String getFirstName()
+    {
+        return this.firstName;
+    }
 
-    public void setLastName(String lastName) {this.lastName = lastName; }
+    public void setFirstName(String firstName)
+    {
+        this.firstName = firstName;
+    }
 
-    public String getPassword() {
+    public String getLastName()
+    {
+        return this.lastName;
+    }
+
+    public void setLastName(String lastName)
+    {
+        this.lastName = lastName;
+    }
+
+    public String getPassword()
+    {
         return this.password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password)
+    {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
+    public String getConfirmPassword()
+    {
         return confirmPassword;
     }
 
-    public void setConfirmPassword(String confirmPassword) {
+    public void setConfirmPassword(String confirmPassword)
+    {
         this.confirmPassword = confirmPassword;
     }
 
-    public Date getDateCreated() {
+    public Date getDateCreated()
+    {
         return this.dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(Date dateCreated)
+    {
         this.dateCreated = dateCreated;
     }
 
-    public Date getLastUpdated() {
+    public Date getLastUpdated()
+    {
         return this.lastUpdated;
     }
 
-    public void setLastUpdated(Date lastUpdated) {
+    public void setLastUpdated(Date lastUpdated)
+    {
         this.lastUpdated = lastUpdated;
     }
 
-    public AccountType getAccountType() { return this.accountType; }
+    public AccountType getAccountType()
+    {
+        return this.accountType;
+    }
 
-    public void setAccountType(AccountType accountType) { this.accountType = accountType; }
+    public void setAccountType(AccountType accountType)
+    {
+        this.accountType = accountType;
+    }
 
-    public AccountStatus getAccountStatus() {return this.accountStatus; }
+    public AccountStatus getAccountStatus()
+    {
+        return this.accountStatus;
+    }
 
-    public void setAccountStatus(AccountStatus accountStatus) { this.accountStatus = accountStatus; }
+    public void setAccountStatus(AccountStatus accountStatus)
+    {
+        this.accountStatus = accountStatus;
+    }
 
-    public String getAbn() { return this.abn; }
+    public String getAbn()
+    {
+        return this.abn;
+    }
 
-    public void setAbn(String abn) { this.abn = abn; }
+    public void setAbn(String abn)
+    {
+        this.abn = abn;
+    }
 
-    public String getCompanyName() { return this.companyName; }
+    public String getCompanyName()
+    {
+        return this.companyName;
+    }
 
-    public void setCompanyName(String companyName) { this.companyName = companyName; }
+    public void setCompanyName(String companyName)
+    {
+        this.companyName = companyName;
+    }
 
     @PrePersist
-    protected void onCreate(){
+    protected void onCreate()
+    {
         this.dateCreated = new Date();
     }
 
     @PreUpdate
-    protected void onUpdate(){
+    protected void onUpdate()
+    {
         this.lastUpdated = new Date();
     }
 
@@ -194,31 +253,36 @@ public class User implements UserDetails {
 
     @Override
     @JsonIgnore
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities()
+    {
         return null;
     }
 
     @Override
     @JsonIgnore
-    public boolean isAccountNonExpired() {
+    public boolean isAccountNonExpired()
+    {
         return true;
     }
 
     @Override
     @JsonIgnore
-    public boolean isAccountNonLocked() {
+    public boolean isAccountNonLocked()
+    {
         return true;
     }
 
     @Override
     @JsonIgnore
-    public boolean isCredentialsNonExpired() {
+    public boolean isCredentialsNonExpired()
+    {
         return true;
     }
 
     @Override
     @JsonIgnore
-    public boolean isEnabled() {
+    public boolean isEnabled()
+    {
         return true;
     }
 }
