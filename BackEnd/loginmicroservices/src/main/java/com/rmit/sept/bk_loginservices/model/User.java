@@ -3,12 +3,15 @@ package com.rmit.sept.bk_loginservices.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rmit.sept.bk_loginservices.utils.AccountStatus;
 import com.rmit.sept.bk_loginservices.utils.AccountType;
+import com.rmit.sept.bk_loginservices.validator.AccountStatusConstraint;
+import com.rmit.sept.bk_loginservices.validator.AccountTypeConstraint;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.Collection;
 
@@ -55,10 +58,9 @@ public class User implements UserDetails {
      * The password of this account. Encrypted in the system,
      * not sent over JSON
      */
-    @JsonIgnore
     @NotBlank(message = "Password field is required")
     private String password;
-    @Transient
+
     private String confirmPassword;
     /**
      * The date this account was created
@@ -72,13 +74,13 @@ public class User implements UserDetails {
     /**
      * Represents the current type of account (ADMIN, BUSINESS, NORMAL USER)
      */
-    @NotBlank
+    @AccountTypeConstraint(anyOf = {AccountType.ADMIN, AccountType.BUSINESS, AccountType.STANDARD})
     private AccountType accountType;
 
     /**
      * The current status of the account
      */
-    @NotBlank
+    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.OK, AccountStatus.PENDING, AccountStatus.REJECTED, AccountStatus.BANNED, AccountStatus.INACTIVE})
     private AccountStatus accountStatus;
 
     /**

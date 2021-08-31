@@ -15,10 +15,12 @@
 * [Google Drive](https://drive.google.com/drive/u/1/folders/1OUPVo1OoOhK8me4Oc5aunNAdwj1d99aG)
 
 	
-## Code documentation - Release 0.1.0 - date
-* feature 1
-* feature 2
-* feature 3
+## Code documentation - Release 0.1.0 - 4 September 2021
+* Landing Page
+* Account creation
+* Login
+* View display of books
+* Contact page
   
 
 To run the application locally : 
