@@ -21,7 +21,7 @@ class UserValidatorTest
     private User user;
 
     @BeforeEach
-    private void init()
+    void setup()
     {
         bindingResult = new MapBindingResult(new HashMap<>(), "bindingResult");
         validator = new UserValidator();
