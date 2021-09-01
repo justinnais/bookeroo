@@ -1,6 +1,9 @@
 package com.rmit.sept.bk_loginservices.controllers;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -13,6 +16,9 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 class LoginControllerTest
@@ -20,13 +26,31 @@ class LoginControllerTest
     @Autowired
     private MockMvc mvc;
 
-    @Test
-    public void test() throws Exception
+    private JSONObject userJson;
+    MockHttpServletRequestBuilder requestBuilder;
+
+    @BeforeEach
+    private void setup()
     {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+        Map<String,String> map = new HashMap<>();
+        map.put("firstName", "");
+        map.put("lastName", "");
+        map.put("password", "");
+        map.put("displayName", "");
+        map.put("accountType", "");
+        map.put("username", "");
+        userJson = new JSONObject(map);
+
+        requestBuilder = MockMvcRequestBuilders
                 .post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{}");
+                .contentType(MediaType.APPLICATION_JSON);
+    }
+
+    @Test
+    @DisplayName("Test should pass when the content is invalid and a 400 is returned")
+    public void AllFieldsEmpty() throws Exception
+    {
+        requestBuilder.content(userJson.toString());
 
         MockHttpServletResponse response = mvc.perform(requestBuilder)
                 .andDo(MockMvcResultHandlers.print())
