@@ -16,10 +16,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.jboss.logging.Logger;
 import javax.validation.Valid;
 
@@ -30,6 +27,7 @@ import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PRE
  */
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin
 public class LoginController {
 
     private static final Logger log = Logger.getLogger(LoginController.class);
