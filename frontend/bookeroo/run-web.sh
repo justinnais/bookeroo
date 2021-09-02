@@ -1,3 +1,4 @@
 #!/bin/bash
-npm install
+cd /opt/codedeploy-agent/bookeroo/frontend/bookeroo &&
+npm install &&
 npm start
