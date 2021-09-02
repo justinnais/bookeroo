@@ -5,5 +5,6 @@ len=`expr "$(docker ps -q)" : '.*'`
 echo $len
 
 if [ $len -gt 1 ]; then
-docker kill $(docker ps -q)
+    touch $HOME/aaaaahhhhh.txt
+    docker stop $(docker ps -q)
 fi
