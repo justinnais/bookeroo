@@ -1,4 +1,4 @@
 #!/bin/bash
-./mvnw clean && ./mvnw package
+mvn clean && mvn package
 docker build -t bookeroo/login-microservice .
 
