@@ -32,6 +32,7 @@ jobs:
               --deployment-group-name bookeroo-deployment \
               --description "CircleCI deployment" \
               --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1 \
+              --file-exists-behavior OVERWRITE
 
         
 
