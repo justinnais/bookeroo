@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: $HOME/eucalyptus-sept/
+    destination: bookeroo/
 hooks: 
   ApplicationStop:
     - location: docker-stop.sh
