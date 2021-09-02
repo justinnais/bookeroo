@@ -32,5 +32,6 @@ workflows:
           deployment-group: bookeroo-deployment
           service-role-arn: arn:aws:iam::092372320935:role/CodeDeploySerivceRole
           bundle-bucket: bookeroo-deployment-bucket
+          bundle-key: arn:aws:kms:ap-southeast-2:092372320935:key/da2e8179-fe8d-4f2f-b54b-99c8a172a67a
 
     
