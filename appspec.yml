@@ -1,0 +1,9 @@
+version: 0.0
+os: linux
+
+hooks: 
+  ApplicationStop:
+    - location: docker-stop.sh
+  ApplicationStart:
+    - location: BackEnd/loginmicroservices/build-run-docker.sh
+    - location: frontend/bookeroo/run-web.sh
