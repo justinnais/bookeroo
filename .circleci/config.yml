@@ -31,7 +31,8 @@ jobs:
               --deployment-config-name CodeDeployDefault.OneAtATime \
               --deployment-group-name bookeroo-deployment \
               --description "Test deployment" \
-              --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1
+              --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1 \
+              --ignore-application-stop-failure
 
         
 
