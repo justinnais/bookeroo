@@ -3,7 +3,7 @@ os: linux
 
 files:
   - source: /
-    destination: ~/eucalyptus-sept/
+    destination: $HOME/eucalyptus-sept/
 hooks: 
   ApplicationStop:
     - location: docker-stop.sh
