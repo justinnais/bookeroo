@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  aws-code-deploy: circleci/aws-code-deploy@2.0.0
+  aws-cli: circleci/aws-cli@2.0
 jobs:
   build-and-test:  
     docker:
@@ -18,7 +18,22 @@ jobs:
           command: |
             cd BackEnd/loginmicroservices/
             mvn test
+  deploy:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+        name: deploy
+        command: |
+          aws deploy create-deployment \
+            --application-name bookeroo \
+            --deployment-config-name CodeDeployDefault.OneAtATime \
+            --deployment-group-name bookeroo-deployment \
+            --description "Test deployment" \
+            --github-location repository=justinnais/eucalyptus-sept,commitId=$CIRCLE_SHA1
 
+        
 
 
 workflows:
@@ -27,11 +42,6 @@ workflows:
       - build-and-test
   deploy:
     jobs:
-      - aws-code-deploy/deploy:
-          application-name: bookeroo
-          deployment-group: bookeroo-deployment
-          service-role-arn: arn:aws:iam::092372320935:role/CodeDeploySerivceRole
-          bundle-bucket: bookeroo-deployment-bucket
-          bundle-key: arn:aws:kms:ap-southeast-2:092372320935:key/da2e8179-fe8d-4f2f-b54b-99c8a172a67a
+      - deploy
 
     
