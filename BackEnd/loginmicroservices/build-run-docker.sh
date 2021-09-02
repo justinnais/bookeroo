@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /otp/codedeploy-agent/bookeroo/BackEnd/loginmicroservices &&
+cd /opt/codedeploy-agent/bookeroo/BackEnd/loginmicroservices &&
 mvn clean && mvn package &&
 docker login &&
 docker build -t bookeroo/login-microservice . &&
