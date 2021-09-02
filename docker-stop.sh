@@ -1,9 +1,9 @@
 #!/bin/bash
 
-len=`expr "$(docker ps -q)" : '.*'`
+len=`expr "$(sudo docker ps -q)" : '.*'`
 
 echo $len
 
 if [ $len -gt 1 ]; then
-docker kill $(docker ps -q)
+docker kill $(sudo docker ps -q)
 fi
