@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd /bookeroo/login-microservice
 mvn clean && mvn package
 docker login
 docker build -t bookeroo/login-microservice .
