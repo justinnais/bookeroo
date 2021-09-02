@@ -31,5 +31,6 @@ workflows:
           application-name: bookeroo
           deployment-group: bookeroo-deployment
           service-role-arn: arn:aws:iam::092372320935:role/CodeDeploySerivceRole
-          
+          bundle-bucket: bookeroo-deployment-bucket
+
     
