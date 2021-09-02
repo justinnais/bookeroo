@@ -6,7 +6,7 @@ files:
     destination: $HOME/eucalyptus-sept/
 hooks: 
   ApplicationStop:
-    - location: docker-stop.sh
+    - location: $HOME/eucalyptus-sept/docker-stop.sh
   ApplicationStart:
-    - location: BackEnd/loginmicroservices/build-run-docker.sh
-    - location: frontend/bookeroo/run-web.sh
+    - location: $HOME/eucalyptus-sept/BackEnd/loginmicroservices/build-run-docker.sh
+    - location: $HOME/eucalyptus-sept/bookeroo/run-web.sh
