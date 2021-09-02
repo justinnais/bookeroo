@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class AbnValidatorTest
 {
     @Test
-    @DisplayName("Test should pass with a valid ABN")
+    @DisplayName("Pass when ABN validator returns true")
     public void ValidABN()
     {
         assertTrue(AbnValidator.validate("51824753556"));
     }
 
     @Test
-    @DisplayName("Test should pass with an invalid ABN")
+    @DisplayName("Pass when ABN validator returns false")
     public void InvalidABN()
     {
         assertFalse(AbnValidator.validate("1234"));

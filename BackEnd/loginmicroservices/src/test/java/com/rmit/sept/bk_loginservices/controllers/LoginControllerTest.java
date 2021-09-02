@@ -65,7 +65,7 @@ class LoginControllerTest
     }
 
     @Test
-    @DisplayName("Test should pass when the content is invalid 400 is returned")
+    @DisplayName("Pass when status 400 is returned")
     public void AllFieldsEmpty()
     {
         MockHttpServletResponse response = getResponse(userJson);
@@ -74,7 +74,7 @@ class LoginControllerTest
     }
 
     @Test
-    @DisplayName("Test should pass when content is valid and 201 is returned")
+    @DisplayName("Pass when status 201 is returned")
     public void ValidUser() throws JSONException, SQLException
     {
         userJson.put("firstName", "firstName");

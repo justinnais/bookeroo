@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_loginservices.validator;
 
 import com.rmit.sept.bk_loginservices.model.User;
+import com.rmit.sept.bk_loginservices.utils.AccountType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.MapBindingResult;
 import org.springframework.validation.ObjectError;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -29,50 +32,58 @@ class UserValidatorTest
     }
 
     @Test
-    @DisplayName("Test should pass when password has more than 6 characters")
+    @DisplayName("Pass when password length error is not returned")
     public void PasswordMoreThan6Char()
     {
         user.setPassword("aaaaaa");
-        validator.validate(user, bindingResult);
 
-        assertFalse(containsError(bindingResult, "Length"));
+        assertFalse(containsError("Length.password"));
     }
 
     @Test
-    @DisplayName("Test should pass when password has less than 6 characters")
+    @DisplayName("Pass when password length error is returned")
     public void PasswordLessThan6Char()
     {
         user.setPassword("aaaaa");
-        validator.validate(user, bindingResult);
 
-        assertTrue(containsError(bindingResult, "Length"));
+        assertTrue(containsError("Length.password"));
     }
 
     @Test
-    @DisplayName("Test should pass when passwords match")
+    @DisplayName("Pass when password mismatch error is not returned")
     public void PasswordsShouldMatch()
     {
         user.setPassword("qwerty");
         user.setConfirmPassword("qwerty");
-        validator.validate(user, bindingResult);
 
-        assertFalse(containsError(bindingResult, "Match"));
+        assertFalse(containsError("Match.confirmPassword"));
     }
 
     @Test
-    @DisplayName("Test should pass when passwords don't match")
+    @DisplayName("Pass when password mismatch error is returned")
     public void PasswordsShouldNotMatch()
     {
         user.setPassword("qwerty");
         user.setConfirmPassword("werty");
-        validator.validate(user, bindingResult);
 
-        assertTrue(containsError(bindingResult, "Match"));
+        assertTrue(containsError("Match.confirmPassword"));
     }
 
-    private boolean containsError(BindingResult bindingResult, String errorCode)
+    @Test
+    @DisplayName("Pass when missing abn error is returned")
+    public void BusinessAccWithoutABN()
     {
+        user.setAccountType(AccountType.BUSINESS);
+
+        assertTrue(containsError("Missing.abn"));
+    }
+
+    private boolean containsError(String errorCode)
+    {
+        validator.validate(user, bindingResult);
         List<ObjectError> errors = bindingResult.getAllErrors();
-        return errors.stream().anyMatch(error -> error.getCode().equals(errorCode));
+
+        return errors.stream().anyMatch(error ->
+                Arrays.asList(Objects.requireNonNull(error.getCodes())).contains(errorCode));
     }
 }
