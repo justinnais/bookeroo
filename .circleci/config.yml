@@ -30,9 +30,8 @@ jobs:
               --application-name bookeroo \
               --deployment-config-name CodeDeployDefault.OneAtATime \
               --deployment-group-name bookeroo-deployment \
-              --description "${CIRCLE_TAG}" \
+              --description "CircleCI deployment" \
               --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1 \
-              --ignore-application-stop-failure
 
         
 
