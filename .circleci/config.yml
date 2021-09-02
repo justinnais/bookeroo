@@ -24,14 +24,14 @@ jobs:
       - checkout
       - aws-cli/setup
       - run:
-        name: deploy
-        command: |
-          aws deploy create-deployment \
-            --application-name bookeroo \
-            --deployment-config-name CodeDeployDefault.OneAtATime \
-            --deployment-group-name bookeroo-deployment \
-            --description "Test deployment" \
-            --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1
+          name: deploy
+          command: |
+            aws deploy create-deployment \
+              --application-name bookeroo \
+              --deployment-config-name CodeDeployDefault.OneAtATime \
+              --deployment-group-name bookeroo-deployment \
+              --description "Test deployment" \
+              --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1
 
         
 
