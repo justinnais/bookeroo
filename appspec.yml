@@ -1,6 +1,9 @@
 version: 0.0
 os: linux
 
+files:
+  - source: /
+    destination: ~/eucalyptus-sept/
 hooks: 
   ApplicationStop:
     - location: docker-stop.sh
