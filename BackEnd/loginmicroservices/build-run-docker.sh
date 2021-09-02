@@ -1,7 +1,5 @@
 #!/bin/bash
 
-chmod +x ./build-docker.sh
-chmod +x ./run-docker.sh
-
-./build-docker.sh
-./run-docker.sh
+mvn clean && mvn package
+docker build -t bookeroo/login-microservice .
+docker run -p 8080:8080 bookeroo/login-microservice
