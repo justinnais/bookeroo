@@ -31,17 +31,25 @@ class LoginControllerTest
     private MockHttpServletRequestBuilder requestBuilder;
     private static Connection db;
 
-    //TODO: Consider creating a new user table specifically for testing
-
     @BeforeAll
     static void dbConnect() throws SQLException
     {
+        // Create database connection for cleaning test users
         Properties connectionProps = new Properties();
         connectionProps.put("user", "admin");
         connectionProps.put("password", "(rN9p:NdKHD:");
-
         db = DriverManager.getConnection("jdbc:mysql://bookeroo-db.cy3gnqvujqx0.ap-southeast-2" +
                 ".rds.amazonaws.com:3306/bookeroo", connectionProps);
+
+        // Ensure no previous test users exist
+        db.prepareStatement("DELETE FROM user WHERE username LIKE '%-test'").execute();
+    }
+
+    @AfterAll
+    static void cleanup() throws SQLException
+    {
+        // Ensures that any users created during tests get cleaned
+        db.prepareStatement("DELETE FROM user WHERE username LIKE '%-test'").execute();
     }
 
     @BeforeEach
@@ -57,14 +65,16 @@ class LoginControllerTest
     }
 
     @Test
-    @DisplayName("Test should pass when the content is invalid and a 400 is returned")
+    @DisplayName("Test should pass when the content is invalid 400 is returned")
     public void AllFieldsEmpty()
     {
-        Assertions.assertEquals(getResponse(userJson).getStatus(), 400);
+        MockHttpServletResponse response = getResponse(userJson);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(response.getStatus(), 400);
     }
 
     @Test
-//    @DisplayName()
+    @DisplayName("Test should pass when content is valid and 201 is returned")
     public void ValidUser() throws JSONException, SQLException
     {
         userJson.put("firstName", "firstName");
@@ -72,12 +82,14 @@ class LoginControllerTest
         userJson.put("password", "password");
         userJson.put("displayName", "displayName");
         userJson.put("confirmPassword", "password");
-        userJson.put("username", "username@username.com");
+        userJson.put("username", "username@username.com-test");
         userJson.put("accountType", AccountType.STANDARD);
 
-        Assertions.assertEquals(getResponse(userJson).getStatus(), 201);
+        MockHttpServletResponse response = getResponse(userJson);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(response.getStatus(), 201);
 
-        db.prepareStatement("DELETE FROM user WHERE username = 'username@username.com'")
+        db.prepareStatement("DELETE FROM user WHERE username = 'username@username.com-test'")
                 .execute();
     }
 
@@ -92,6 +104,7 @@ class LoginControllerTest
         {
             e.printStackTrace();
         }
+
         return null;
     }
 }
