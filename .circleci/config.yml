@@ -20,7 +20,7 @@ jobs:
             mvn package
       
       - store_artifacts:
-        path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+          path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
 
         
 
