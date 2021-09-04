@@ -8,7 +8,7 @@ jobs:
       - checkout
       
       - run:
-          name: test-login
+          name: clean-and-test-login
           command: |
             cd BackEnd/loginmicroservices/
             mvn clean
@@ -18,6 +18,12 @@ jobs:
           command: |
             cd BackEnd/loginmicroservices/
             mvn package
+
+      - run:
+          name: build-FrontEnd
+          command: |
+            cd frontend/bookeroo/
+            npm run build
       
       - store_artifacts:
           path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
