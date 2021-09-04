@@ -2,11 +2,6 @@ version: 0.0
 os: linux
 
 files:
-  - source: /
-    destination: bookeroo/
-hooks: 
-  ApplicationStop:
-    - location: docker-stop.sh
-  ApplicationStart:
-    - location: BackEnd/loginmicroservices/build-run-docker.sh
-    - location: frontend/bookeroo/run-web.sh
+  - source: ./loginmicroservices-0.0.1.jar
+    destination: /tmp
+    

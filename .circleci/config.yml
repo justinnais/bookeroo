@@ -1,38 +1,26 @@
 version: 2.1
-orbs:
-  aws-cli: circleci/aws-cli@2.0
+
 jobs:
-  build-and-test:  
+  build:  
     docker:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
-      - run:
-          name: build-login
-          command: |
-            cd BackEnd/loginmicroservices/
-            mvn clean
-            mvn package
+      
       - run:
           name: test-login
           command: |
             cd BackEnd/loginmicroservices/
+            mvn clean
             mvn test
-  deploy:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup
       - run:
-          name: deploy
+          name: build-login
           command: |
-            aws deploy create-deployment \
-              --application-name bookeroo \
-              --deployment-config-name CodeDeployDefault.OneAtATime \
-              --deployment-group-name bookeroo-deployment \
-              --description "CircleCI deployment" \
-              --github-location repository="justinnais/eucalyptus-sept",commitId=$CIRCLE_SHA1 \
-              --file-exists-behavior OVERWRITE
+            cd BackEnd/loginmicroservices/
+            mvn package
+      
+      - store_artifacts:
+        path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
 
         
 
@@ -40,7 +28,6 @@ jobs:
 workflows:
   build-and-test: 
     jobs:
-      - build-and-test
-      - deploy
+      - build
 
     
