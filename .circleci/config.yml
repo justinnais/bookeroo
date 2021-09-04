@@ -1,10 +1,9 @@
 version: 2.1
 
 jobs:
-  build:  
+  build-backend:  
     docker:
       - image: cimg/openjdk:11.0
-      - image: cimg/ruby:2.7.1-node
     steps:
       - checkout
       
@@ -19,15 +18,21 @@ jobs:
           command: |
             cd BackEnd/loginmicroservices/
             mvn package
-
-      - run:
-          name: build-FrontEnd
-          command: |
-            cd frontend/bookeroo/
-            npm run build
       
       - store_artifacts:
           path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+
+  build-frontend:
+    docker:
+      - image: cimg/node:16.8.0
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: |
+            cd frontend/bookeroo/
+            npm run build
+
 
         
 
@@ -35,6 +40,7 @@ jobs:
 workflows:
   build-and-test: 
     jobs:
-      - build
+      - build-backend
+      - build-frontend
 
     
