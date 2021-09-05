@@ -27,8 +27,6 @@ class LoginControllerTest
     @Autowired
     private MockMvc mvc;
 
-    private JSONObject userJson;
-    private MockHttpServletRequestBuilder requestBuilder;
     private static Connection db;
 
     @BeforeAll
@@ -52,31 +50,29 @@ class LoginControllerTest
         db.prepareStatement("DELETE FROM user WHERE username LIKE '%-test'").execute();
     }
 
-    @BeforeEach
-    void setup() throws JSONException
+    @Test
+    public void RegisterWithAllFieldsEmpty() throws JSONException
     {
-        userJson = new JSONObject();
+        JSONObject userJson = new JSONObject();
         for (String s : Arrays.asList("firstName", "lastName", "password", "displayName",
                 "accountType", "username"))
             userJson.put(s, "");
 
-        requestBuilder = MockMvcRequestBuilders.post("/api/users/register")
-                .contentType(MediaType.APPLICATION_JSON);
-    }
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/users" +
+                "/register").contentType(MediaType.APPLICATION_JSON);
 
-    @Test
-    @DisplayName("Pass when status 400 is returned")
-    public void AllFieldsEmpty()
-    {
-        MockHttpServletResponse response = getResponse(userJson);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(response.getStatus(), 400);
     }
 
     @Test
-    @DisplayName("Pass when status 201 is returned")
-    public void ValidUser() throws JSONException, SQLException
+    public void RegisterWithValidUser() throws JSONException, SQLException
     {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/users/register").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject userJson = new JSONObject();
         userJson.put("firstName", "firstName");
         userJson.put("lastName", "lastName");
         userJson.put("password", "password");
@@ -85,7 +81,7 @@ class LoginControllerTest
         userJson.put("username", "username@username.com-test");
         userJson.put("accountType", AccountType.STANDARD);
 
-        MockHttpServletResponse response = getResponse(userJson);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(response.getStatus(), 201);
 
@@ -93,11 +89,27 @@ class LoginControllerTest
                 .execute();
     }
 
-    private MockHttpServletResponse getResponse(JSONObject userJson)
+    @Test
+    public void LoginWithAllFieldsEmpty() throws JSONException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/users/login").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject userJson = new JSONObject();
+        userJson.put("username", "");
+        userJson.put("password", "");
+
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(response.getStatus(), 400);
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
+                                                String content)
     {
         try
         {
-            return mvc.perform(requestBuilder.content(userJson.toString()))
+            return mvc.perform(requestBuilder.content(content))
                     .andDo(MockMvcResultHandlers.print())
                     .andReturn().getResponse();
         } catch (Exception e)
