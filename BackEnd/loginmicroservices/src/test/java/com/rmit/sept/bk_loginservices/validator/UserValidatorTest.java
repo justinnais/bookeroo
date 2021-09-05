@@ -78,6 +78,16 @@ class UserValidatorTest
         assertTrue(containsError("Missing.abn"));
     }
 
+    @Test
+    @DisplayName("Pass when missing abn error is not returned")
+    public void BusinessAccWithABN()
+    {
+        user.setAccountType(AccountType.BUSINESS);
+        user.setAbn("1234");
+
+        assertFalse(containsError("Missing.abn"));
+    }
+
     private boolean containsError(String errorCode)
     {
         validator.validate(user, bindingResult);
