@@ -1,7 +1,0 @@
-version: 0.0
-os: linux
-
-files:
-  - source: ./loginmicroservices-0.0.1.jar
-    destination: /tmp
-    

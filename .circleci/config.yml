@@ -13,26 +13,26 @@ jobs:
             cd BackEnd/loginmicroservices/
             mvn clean
             mvn test
-      - run:
-          name: build-login
-          command: |
-            cd BackEnd/loginmicroservices/
-            mvn package
+      #- run:
+      #   name: build-login
+      #    command: |
+      #      cd BackEnd/loginmicroservices/
+      #      mvn package
       
-      - store_artifacts:
-          path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+      #- store_artifacts:
+      #    path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
 
-  build-frontend:
-    docker:
-      - image: cimg/node:16.8.0
-    steps:
-      - checkout
-      - run:
-          name: build
-          command: |
-            cd frontend/bookeroo/
-            npm install
-            CI=false npm run build
+  #build-frontend:
+  #  docker:
+  #    - image: cimg/node:16.8.0
+  #  steps:
+  #    - checkout
+  #    - run:
+  #        name: test
+  #        command: |
+  #          cd frontend/bookeroo/
+  #          npm install
+  #          CI=false npm run build
 
 
         
@@ -42,6 +42,6 @@ workflows:
   build-and-test: 
     jobs:
       - build-backend
-      - build-frontend
+    #  - build-frontend
 
     
