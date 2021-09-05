@@ -9,19 +9,23 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.ElementType.TYPE_USE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER, TYPE_USE})
 @Retention(RUNTIME)
 @Documented
 @Constraint(validatedBy = AccountStatusConstraintValidator.class)
-public @interface AccountStatusConstraint {
+public @interface AccountStatusConstraint
+{
 
     AccountStatus[] anyOf();
+
     boolean nullable() default false;
+
     String message() default "Account Status must be one of {anyOf}";
+
     Class<?>[] groups() default {};
-    Class<? extends Payload>[] payload() default  {};
+
+    Class<? extends Payload>[] payload() default {};
 
 }
