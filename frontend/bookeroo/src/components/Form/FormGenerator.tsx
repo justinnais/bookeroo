@@ -8,9 +8,9 @@ import TextInput from "./TextInput";
 import { createYupSchema } from "./yupSchema";
 export interface GeneratedField {
     label: string;
-    type?: "text" | "email" | "password";
     schema: yup.AnySchema;
-    initialValue: string;
+    type?: "text" | "email" | "password";
+    initialValue?: string;
 }
 
 /**
@@ -21,13 +21,13 @@ export interface GeneratedField {
  * @returns form JSX element
  */
 export default function FormGenerator(
+    formId: string,
     fields: GeneratedField[],
-    onSubmit: (values: any) => void,
-    formId: string
+    onSubmit: (values: any) => void
 ) {
     const initialValues: { [key: string]: string } = {};
     fields.forEach((field) => {
-        initialValues[camelCase(field.label)] = field.initialValue;
+        initialValues[camelCase(field.label)] = field.initialValue || "";
     });
     const schema = fields.reduce(createYupSchema, {});
     const validationSchema = yup.object().shape(schema);
