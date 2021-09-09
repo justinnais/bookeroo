@@ -33,7 +33,7 @@ export default function Footer() {
             <Container>
                 <Toolbar className={classes.toolbar} disableGutters>
                     <Button>Team</Button>
-                    <Button>Contact</Button>
+                    <Button to="/contact">Contact</Button>
                     <Button>Help</Button>
                 </Toolbar>
             </Container>
