@@ -36,24 +36,24 @@
         const classes = useStyles();
 
          const ContactDetails = () => (
-               <div className={classes.ContactDetails}>
-                       <Typography variant="h2" component="h2">
-                               Contact Details
-                       </Typography>
+             <div className={classes.ContactDetails}>
+                 <Typography variant="h4" component="h4">
+                     Contact Details
+                 </Typography>
 
-                       <Typography variant="body2" component="p">
-                               Open: 9am-5pm
-                       </Typography>
+                 <Typography variant="body2" component="p">
+                     Open: 9am-5pm
+                 </Typography>
 
-                       <Typography variant="body2" component="p">
-                               Ph: 0412345789
-                       </Typography>
+                 <Typography variant="body2" component="p">
+                     Ph: 0412345789
+                 </Typography>
 
-                       <Typography variant="body2" component="p">
-                               Email: bookeroo@help.bookeroo.com
-                       </Typography>
-               </div>
-          );
+                 <Typography variant="body2" component="p">
+                     Email: bookeroo@help.bookeroo.com
+                 </Typography>
+             </div>
+         );
 
         const contactCard: IGridItem[] = [
             {
