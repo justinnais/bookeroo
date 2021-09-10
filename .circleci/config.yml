@@ -35,8 +35,8 @@ jobs:
             scp BackEnd/loginmicroservices/Dockerfile ubuntu@$BOOK_AWS:~/login/Dockerfile
             ssh ubuntu@$BOOK_AWS '(
               cd login/ && 
-              docker build -t bookeroo/login-microservice . &&
-              docker run -d -p 8080:8080 bookeroo/login-microservice
+              sudo docker build -t bookeroo/login-microservice . &&
+              sudo docker run -d -p 8080:8080 bookeroo/login-microservice
             )'
 
 
