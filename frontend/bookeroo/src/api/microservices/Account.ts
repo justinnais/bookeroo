@@ -2,7 +2,7 @@ import { AccountStatus, AccountType } from "../../util/enums";
 
 interface IAccountBase {
     id: number; // ? maybe string with uuid
-    email: string;
+    username: string;
     dateCreated: number;
     lastUpdated: number;
     accountType: AccountType;
@@ -10,6 +10,7 @@ interface IAccountBase {
 }
 
 export interface IAccount extends IAccountBase {
+    displayName: string;
     firstName: string;
     lastName: string;
 }

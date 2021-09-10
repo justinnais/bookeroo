@@ -61,7 +61,6 @@ public class User implements UserDetails
     @NotBlank(message = "Password field is required")
     private String password;
 
-    private String confirmPassword;
     /**
      * The date this account was created
      */
@@ -163,16 +162,6 @@ public class User implements UserDetails
     public void setPassword(String password)
     {
         this.password = password;
-    }
-
-    public String getConfirmPassword()
-    {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword)
-    {
-        this.confirmPassword = confirmPassword;
     }
 
     public Date getDateCreated()
