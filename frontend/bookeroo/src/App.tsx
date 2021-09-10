@@ -9,7 +9,7 @@ import AddPerson from "./components/Persons/AddPerson";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
@@ -19,6 +19,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Profile from "./pages/Profile";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
+import Books from "./pages/Books";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +43,7 @@ function App() {
 
                         <Route exact path={Routes.Home} component={Landing} />
                         <Route exact path={Routes.Contact} component={Contact} />
+                        <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
                        
                         <RestrictedRoute exact path={Routes.Register} component={Register} />

@@ -8,6 +8,7 @@ import {
 import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
+import { Routes } from "../../routes/Routes";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -53,7 +54,7 @@ export default function Header() {
         <>
             <div className={classes.navButtons}>
                 <Button>Search</Button>
-                <Button>Books</Button>
+                <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
             </div>
             <div className={classes.navButtons}>

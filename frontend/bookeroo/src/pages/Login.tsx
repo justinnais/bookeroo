@@ -1,6 +1,5 @@
 import {
     CircularProgress,
-    Container,
     createStyles,
     makeStyles,
     Theme,
@@ -13,6 +12,7 @@ import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
 import SubmitButton from "../components/Button/SubmitButton";
+import Container from "../components/Layout/Container";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

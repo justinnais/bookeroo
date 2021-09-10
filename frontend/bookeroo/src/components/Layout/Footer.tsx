@@ -1,13 +1,7 @@
-import {
-    AppBar,
-    Container,
-    createStyles,
-    makeStyles,
-    Theme,
-    Toolbar,
-} from "@material-ui/core";
+import { createStyles, makeStyles, Theme, Toolbar } from "@material-ui/core";
 import React from "react";
 import Button from "../Button/Button";
+import Container from "./Container";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -30,7 +24,7 @@ export default function Footer() {
     return (
         <div className={classes.root}>
             {/* <AppBar className={classes.root}> */}
-            <Container>
+            <Container noMargin>
                 <Toolbar className={classes.toolbar} disableGutters>
                     <Button>Team</Button>
                     <Button>Contact</Button>

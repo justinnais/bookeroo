@@ -1,13 +1,4 @@
-import {
-    Container,
-    createStyles,
-    Grid,
-    GridSpacing,
-    makeStyles,
-    Paper,
-    Theme,
-    Typography,
-} from "@material-ui/core";
+import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import Image from "material-ui-image";
@@ -15,6 +6,7 @@ import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
 import GridLayout, { IGridItem } from "../components/Layout/GridLayout";
 import TextCard from "../components/TextCard";
+import Container from "../components/Layout/Container";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -110,18 +102,26 @@ export default function Landing() {
     // TODO IGridItem is clunky and needs reworking
     return (
         <div>
-            <GridLayout
-                items={firstCard}
-                spacing={2}
-                background={theme.palette.primary.main}
-                reverseLayout={true}
-            />
-            <GridLayout
-                items={secondCard}
-                spacing={2}
-                background={theme.palette.common.white}
-                reverseLayout={false}
-            />
+            <Container
+                noMargin
+                style={{ backgroundColor: theme.palette.primary.main }}
+            >
+                <GridLayout
+                    items={firstCard}
+                    spacing={2}
+                    reverseLayout={true}
+                />
+            </Container>
+            <Container
+                noMargin
+                style={{ backgroundColor: theme.palette.common.white }}
+            >
+                <GridLayout
+                    items={secondCard}
+                    spacing={2}
+                    reverseLayout={false}
+                />
+            </Container>
         </div>
     );
 }
