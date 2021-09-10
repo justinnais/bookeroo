@@ -3,7 +3,7 @@ version: 2.1
 
 commands:
   deploy-microservice:
-    paramters:
+    parameters:
       git-folder:
         type: string
       target-folder:
@@ -29,12 +29,12 @@ commands:
       - run:
           name: deploy-<<parameters.docker-container>>
           commands: |
-            scp BackEnd/<<parameters.git-folder>>/target/<<paramters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<paramters.jar>>
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>>
             scp BackEnd/<<parameters.git-folder>><<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile
             ssh ubuntu@$BOOK_AWS '(
               cd <<parameters.target-folder>>/ && 
               sudo docker build -t bookeroo/<<parameters.docker-container>> . &&
-              sudo docker run -d -p <<paramters.port>>:8080 bookeroo/<<parameters.docker-container>>
+              sudo docker run -d -p <<parameters.port>>:8080 bookeroo/<<parameters.docker-container>>
             )'
             
 
