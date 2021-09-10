@@ -17,20 +17,15 @@ commands:
     steps:
       - run:
           name: clean-and-test-<<parameters.docker-container>>
-          commands: |
-            cd Backend/<<parameters.git-folder>>/
-            mvn clean
-            mvn test
+          command: cd Backend/<<parameters.git-folder>>/ && mvn clean && mvn test
       - run:
           name: build-<<parameters.docker-container>>
-          commands: |
-            cd Backend/<<parameters.git-folder>>/
-            mvn package
+          command: cd Backend/<<parameters.git-folder>>/ && mvn package
       - run:
           name: deploy-<<parameters.docker-container>>
-          commands: |
-            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>>
-            scp BackEnd/<<parameters.git-folder>><<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile
+          command:
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>> &&
+            scp BackEnd/<<parameters.git-folder>><<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile &&
             ssh ubuntu@$BOOK_AWS '(
               cd <<parameters.target-folder>>/ && 
               sudo docker build -t bookeroo/<<parameters.docker-container>> . &&
