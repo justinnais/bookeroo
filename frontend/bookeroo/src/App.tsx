@@ -10,7 +10,7 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
-import Profile from "./pages/Profile";
+import Profile, { Book } from "./pages/Profile";
 import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
@@ -25,6 +25,19 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+const exampleBooks: Book[] = [
+    {
+        title: "Harry Potter and the Philosopher's Stone",
+        condtion: "Lightly Used",
+        price: "23.00",
+    },
+    {
+        title: "The Great Gatbsy",
+        condtion: "Well Worn",
+        price: "16.00",
+    },
+];
+
 function App() {
     const classes = useStyles();
     return (
@@ -35,8 +48,18 @@ function App() {
                 <div className={classes.content}>
                     <Switch>
                         <Route exact path={Routes.Home} component={Landing} />
-                        <Route exact path={Routes.Contact} component={Contact} />
-                        <Route exact path={Routes.Profile} component={Profile} />
+                        <Route
+                            exact
+                            path={Routes.Contact}
+                            component={Contact}
+                        />
+                        <Route exact path={Routes.Profile}>
+                            <Profile
+                                name="John Smith"
+                                rating="4.65"
+                                books={exampleBooks}
+                            />
+                        </Route>
                         <RestrictedRoute
                             exact
                             path={Routes.Register}

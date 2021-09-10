@@ -18,9 +18,21 @@ import { ThemeProvider } from "@material-ui/styles";
 import React from "react";
 import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
-import GridLayout, { IGridItem } from "../components/Layout/GridLayout";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
+
+// TODO this is just temp interface
+export interface Book {
+    title: string;
+    condtion: string;
+    price: string;
+}
+
+interface Props {
+    name: string;
+    rating: string;
+    books: Book[];
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -35,37 +47,26 @@ const useStyles = makeStyles((theme: Theme) =>
             flexDirection: "column",
             gap: "2rem",
         },
-        link: {
-            textAlign: "center",
-        },
-        UserDetails: {
+        userDetails: {
             display: "flex",
             alignItems: "left",
             justifyContent: "left",
             flexDirection: "column",
-        },
-        BookDetails: {
-            display: "flex",
-            alignItems: "left",
-            justifyContent: "left",
-            flexDirection: "column",
-            paddingTop: "1vh",
-            paddingRight: "20vh",
         },
     })
 );
 
-export default function Profile() {
+export default function Profile(props: Props) {
     const classes = useStyles();
 
     const UserDetails = () => (
-        <div className={classes.UserDetails}>
+        <div className={classes.userDetails}>
             <div>
                 <Typography variant="h4" component="h4">
-                    Account Name
+                    {props.name}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    User Rating 4.65
+                    {props.rating} Rating
                 </Typography>
             </div>
         </div>
@@ -84,48 +85,28 @@ export default function Profile() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <TableRow>
-                            <TableCell component="th" scope="row">
-                                Harry Potter and the Philosopher's Stone
-                            </TableCell>
-                            <TableCell align="right">Lightly Used</TableCell>
-                            <TableCell align="right">$23.00</TableCell>
-                            <TableCell align="right">
-                                <Button variant="contained" color="secondary">
-                                    Add to cart
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell component="th" scope="row">
-                                The Great Gatbsy
-                            </TableCell>
-                            <TableCell align="right">Well Worn</TableCell>
-                            <TableCell align="right">$16.00</TableCell>
-                            <TableCell align="right">
-                                <Button variant="contained" color="secondary">
-                                    Add to cart
-                                </Button>
-                            </TableCell>
-                        </TableRow>
-                    </TableBody>
-                    {/* <TableBody>
-                        {rows.map((row) => (
-                            <TableRow key={row.name}>
+                        {props.books.map((book, key) => (
+                            <TableRow key={key}>
                                 <TableCell component="th" scope="row">
-                                    {row.name}
+                                    {book.title}
                                 </TableCell>
                                 <TableCell align="right">
-                                    {row.calories}
+                                    {book.condtion}
                                 </TableCell>
-                                <TableCell align="right">{row.fat}</TableCell>
-                                <TableCell align="right">{row.carbs}</TableCell>
                                 <TableCell align="right">
-                                    {row.protein}
+                                    ${book.price}
+                                </TableCell>
+                                <TableCell align="right">
+                                    <Button
+                                        variant="contained"
+                                        color="secondary"
+                                    >
+                                        Add to cart
+                                    </Button>
                                 </TableCell>
                             </TableRow>
                         ))}
-                    </TableBody> */}
+                    </TableBody>
                 </Table>
             </TableContainer>
         );
