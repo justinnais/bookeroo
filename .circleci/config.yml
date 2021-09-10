@@ -31,10 +31,9 @@ jobs:
       - run:
           name: deploy-login
           command: |
-            ls ~/.ssh/
-            scp BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar $BOOK_AWS:~/login/target/loginmicroservices-0.0.1.jar
-            scp BackEnd/loginmicroservices/Dockerfile $BOOK_AWS:~/login/Dockerfile
-            ssh $BOOK_AWS '(cd login/ && ls)'
+            scp BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar ubuntu@$BOOK_AWS:~/login/target/loginmicroservices-0.0.1.jar
+            scp BackEnd/loginmicroservices/Dockerfile ubuntu@$BOOK_AWS:~/login/Dockerfile
+            ssh ubuntu@$BOOK_AWS '(cd login/ && ls)'
 
 
 
