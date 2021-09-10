@@ -15,7 +15,7 @@ import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
-import Searchbar from "../Searchbar";
+import Searchbar from "./Searchbar";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component

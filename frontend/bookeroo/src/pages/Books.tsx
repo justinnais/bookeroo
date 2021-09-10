@@ -13,8 +13,8 @@ import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";
 import TextInput from "../components/Form/TextInput";
 import Container from "../components/Layout/Container";
-import Searchbar from "../components/Searchbar";
-import TextCard from "../components/TextCard";
+import Searchbar from "../components/Layout/Searchbar";
+import TextCard from "../components/Layout/TextCard";
 import { theme } from "../styles/theme";
 
 const useStyles = makeStyles((theme: Theme) =>
