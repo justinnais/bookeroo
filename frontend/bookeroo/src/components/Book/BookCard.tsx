@@ -16,15 +16,16 @@ export interface IBookCard {
 
 const useStyles = makeStyles({
     root: {
-        maxWidth: "15rem",
+        width: "16rem",
     },
     media: {
-        height: "10rem",
+        height: "16rem",
     },
 });
 export default function BookCard(props: IBookCard) {
     const classes = useStyles();
 
+    // TODO card action area not extending
     return (
         <Card className={classes.root}>
             <CardActionArea>
