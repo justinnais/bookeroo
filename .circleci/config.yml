@@ -33,7 +33,11 @@ jobs:
           command: |
             scp BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar ubuntu@$BOOK_AWS:~/login/target/loginmicroservices-0.0.1.jar
             scp BackEnd/loginmicroservices/Dockerfile ubuntu@$BOOK_AWS:~/login/Dockerfile
-            ssh ubuntu@$BOOK_AWS '(cd login/ && ls)'
+            ssh ubuntu@$BOOK_AWS '(
+              cd login/ && 
+              docker build -t bookeroo/login-microservice . &&
+              docker run -d -p 8080:8080 bookeroo/login-microservice
+            )'
 
 
 
