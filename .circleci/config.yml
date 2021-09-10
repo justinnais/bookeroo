@@ -17,10 +17,10 @@ commands:
     steps:
       - run:
           name: clean-and-test-<<parameters.docker-container>>
-          command: cd Backend/<<parameters.git-folder>>/ && mvn clean && mvn test
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean && mvn test
       - run:
           name: build-<<parameters.docker-container>>
-          command: cd Backend/<<parameters.git-folder>>/ && mvn package
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn package
       - run:
           name: deploy-<<parameters.docker-container>>
           command:
