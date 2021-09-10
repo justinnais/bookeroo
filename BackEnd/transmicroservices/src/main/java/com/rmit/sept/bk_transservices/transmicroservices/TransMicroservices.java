@@ -6,10 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class TransMicroservices
 {
-
     public static void main(String[] args)
     {
         SpringApplication.run(TransMicroservices.class, args);
     }
-
 }
