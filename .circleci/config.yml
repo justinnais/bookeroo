@@ -18,9 +18,9 @@ jobs:
             mvn clean
             mvn test
       - run:
-         name: build-login
+          name: build-login
           command: |
-           cd BackEnd/loginmicroservices/
+            cd BackEnd/loginmicroservices/
             mvn package
       
       - store_artifacts:
