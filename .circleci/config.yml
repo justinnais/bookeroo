@@ -57,7 +57,7 @@ jobs:
           git-folder: loginmicroservices
           target-folder: login
           jar: loginmicroservices-0.0.1.jar
-          port: 8080
+          port: "8080"
           docker-container: login-microservice
       
       #- run:
