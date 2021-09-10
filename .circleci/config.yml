@@ -42,6 +42,8 @@ jobs:
     steps:
       - checkout
 
+      - run: docker container rm $(docker container ls -aq) -f
+
       - add_ssh_keys:
           fingerprints:
             - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
