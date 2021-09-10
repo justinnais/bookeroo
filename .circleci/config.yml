@@ -42,13 +42,13 @@ jobs:
     steps:
       - checkout
 
-      - run: docker container rm $(docker container ls -aq) -f
-
       - add_ssh_keys:
           fingerprints:
             - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
 
       - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+
+      - run: ssh ubuntu@$BOOK_AWS '(sudo docker container rm $(sudo docker container ls -aq) -f)'
 
       - deploy-microservice:
           git-folder: loginmicroservices
