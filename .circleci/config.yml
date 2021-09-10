@@ -15,7 +15,6 @@ commands:
       docker-container:
         type: string
     steps:
-
       - run:
           name: clean-and-test-<<parameters.docker-container>>
           commands: |
