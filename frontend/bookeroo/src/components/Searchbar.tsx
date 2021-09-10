@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme: Theme) =>
         search: {
             position: "relative",
             marginLeft: 0,
-            width: "100%",
+            // width: "100%",
             border: "1px solid",
             borderColor: theme.palette.secondary.main,
         },
@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
             transition: theme.transitions.create("background", {
                 duration: theme.transitions.duration.standard,
             }),
-            width: "100%",
+            // width: "100%",
             "&:hover": {
                 background: alpha(theme.palette.primary.dark, 0.2),
             },
