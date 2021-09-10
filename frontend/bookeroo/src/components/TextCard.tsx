@@ -16,24 +16,47 @@ interface Props {
     // body?: string;
     buttons?: React.ReactNode[];
     children: React.ReactNode;
+    align?: "center" | "right";
 }
 
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
-        card: {
+const useStyles = makeStyles((theme: Theme) => {
+    const textAlign = (props: Props) => {
+        switch (props.align) {
+            case "center":
+                return "center";
+            case "right":
+                return "right";
+            default:
+                return "left";
+        }
+    };
+    const alignItems = (props: Props) => {
+        switch (props.align) {
+            case "center":
+                return "center";
+            case "right":
+                return "flex-end";
+            default:
+                return "flex-start";
+        }
+    };
+
+    return createStyles({
+        root: {
             display: "flex",
             flexDirection: "column",
-            alignItems: "flex-start",
+            alignItems,
             height: "16rem",
             justifyContent: "space-between",
+            textAlign,
         },
-    })
-);
+    });
+});
 
 export default function TextCard(props: Props) {
-    const classes = useStyles();
+    const classes = useStyles(props);
     return (
-        <div className={classes.card}>
+        <div className={classes.root}>
             <div>
                 <Typography color="textSecondary" gutterBottom>
                     {props.pretitle}
