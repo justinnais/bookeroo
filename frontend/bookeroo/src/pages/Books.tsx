@@ -1,6 +1,7 @@
 import {
     createStyles,
     Input,
+    InputBase,
     makeStyles,
     TextField,
     Theme,
@@ -9,8 +10,10 @@ import {
 import React from "react";
 import BookCard from "../components/Book/BookCard";
 import BookDisplay from "../components/Book/BookDisplay";
+import Button from "../components/Button/Button";
 import TextInput from "../components/Form/TextInput";
 import Container from "../components/Layout/Container";
+import Searchbar from "../components/Searchbar";
 import TextCard from "../components/TextCard";
 import { theme } from "../styles/theme";
 
@@ -23,6 +26,21 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         text: {
             maxWidth: "40rem",
+        },
+        searchbar: {
+            display: "flex",
+            flexDirection: "row",
+            gap: theme.spacing(2),
+        },
+        inputInput: {
+            padding: theme.spacing(1, 1, 1, 0),
+            // vertical padding + font size from searchIcon
+            paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+            transition: theme.transitions.create("width"),
+            width: "100%",
+            [theme.breakpoints.up("md")]: {
+                width: "20ch",
+            },
         },
     })
 );
@@ -115,7 +133,17 @@ export default function Books() {
                             similique error pariatur earum consequatur
                             doloremque at cumque?
                         </Typography>
-                        <TextField variant="outlined" color="secondary" />
+                        <div className={classes.searchbar}>
+                            <Searchbar />
+                            {/* <TextField
+                                variant="outlined"
+                                color="secondary"
+                                placeholder="Search"
+                            /> */}
+                            <Button variant="contained" color="secondary">
+                                Filter
+                            </Button>
+                        </div>
                     </TextCard>
                 </div>
             </Container>
