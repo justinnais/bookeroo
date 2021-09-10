@@ -8,11 +8,11 @@
 		<version>2.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.rmit.sept.bk_transactionservices</groupId>
-	<artifactId>transactionmicroservices</artifactId>
+	<groupId>com.rmit.sept.bk_transservices</groupId>
+	<artifactId>transmicroservices</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>transactionmicroservices</name>
-	<description>transactionmicroservices</description>
+	<name>transmicroservices</name>
+	<description>transmicroservices</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>

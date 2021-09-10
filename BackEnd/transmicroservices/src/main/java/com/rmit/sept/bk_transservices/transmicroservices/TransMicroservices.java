@@ -1,15 +1,15 @@
-package com.rmit.sept.bk_transactionservices.transactionmicroservices;
+package com.rmit.sept.bk_transservices.transmicroservices;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TransactionmicroservicesApplication
+public class TransMicroservices
 {
 
     public static void main(String[] args)
     {
-        SpringApplication.run(TransactionmicroservicesApplication.class, args);
+        SpringApplication.run(TransMicroservices.class, args);
     }
 
 }
