@@ -6,6 +6,10 @@ jobs:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
       
       - run:
           name: clean-and-test-login
@@ -13,14 +17,23 @@ jobs:
             cd BackEnd/loginmicroservices/
             mvn clean
             mvn test
-      #- run:
-      #   name: build-login
-      #    command: |
-      #      cd BackEnd/loginmicroservices/
-      #      mvn package
+      - run:
+         name: build-login
+          command: |
+           cd BackEnd/loginmicroservices/
+            mvn package
       
-      #- store_artifacts:
-      #    path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+      - store_artifacts:
+          path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+
+      - run:
+          name: deploy-login
+          command: |
+            scp BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar $BOOK_AWS:~/login/target/loginmicroservices-0.0.1.jar
+            scp BackEnd/loginmicroservices/Dockerfile $BOOK_AWS:~/login/Dockerfile
+            ssh $BOOK_AWS '(cd login/ && ls)'
+
+
 
   #build-frontend:
   #  docker:
