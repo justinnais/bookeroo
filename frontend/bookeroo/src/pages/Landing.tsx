@@ -14,19 +14,13 @@ import Image from "material-ui-image";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
 import GridLayout, { IGridItem } from "../components/Layout/GridLayout";
+import TextCard from "../components/TextCard";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         displayImage: {
             width: "100%",
             height: "auto",
-        },
-        welcomeCard: {
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "flex-start",
-            height: "16rem",
-            justifyContent: "space-between",
         },
     })
 );
@@ -35,29 +29,26 @@ export default function Landing() {
     const classes = useStyles();
 
     const WelcomeCard = () => (
-        <div className={classes.welcomeCard}>
-            <div>
-                <Typography color="textSecondary" gutterBottom>
-                    Welcome to
-                </Typography>
-
-                <Typography variant="h2" component="h2">
-                    Bookeroo
-                </Typography>
-            </div>
+        <TextCard
+            title="Bookeroo"
+            titleSize="h2"
+            pretitle="Welcome to"
+            buttons={[
+                <Button color="secondary" variant="outlined">
+                    Sign Up
+                </Button>,
+            ]}
+        >
             <Typography variant="body2" component="p">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
                 Delectus cum quod, doloribus quasi atque rem ratione ipsum
                 quaerat a explicabo velit? Velit similique error pariatur earum
                 consequatur doloremque at cumque?
             </Typography>
-            <Button color="secondary" variant="outlined">
-                Sign Up
-            </Button>
-        </div>
+        </TextCard>
     );
 
-    const welcomeItems = [
+    const firstCard = [
         {
             size: 7,
             node: (
@@ -71,13 +62,11 @@ export default function Landing() {
         { size: 5, node: <WelcomeCard /> },
     ];
 
-    const Foo = () => (
-        <div className={classes.welcomeCard}>
-            <div>
-                <Typography variant="h4" component="h4">
-                    The number one book store on this side of the equator
-                </Typography>
-            </div>
+    const SecondTab = () => (
+        <TextCard
+            title="The number one book store on this side of the equator"
+            titleSize="h4"
+        >
             <GridLayout
                 // TODO this is kinda buggy needs a fix
                 spacing={2}
@@ -102,11 +91,11 @@ export default function Landing() {
                     },
                 ]}
             />
-        </div>
+        </TextCard>
     );
 
     const secondCard: IGridItem[] = [
-        { node: <Foo /> },
+        { node: <SecondTab /> },
         {
             node: (
                 <img
@@ -122,7 +111,7 @@ export default function Landing() {
     return (
         <div>
             <GridLayout
-                items={welcomeItems}
+                items={firstCard}
                 spacing={2}
                 background={theme.palette.primary.main}
                 reverseLayout={true}
@@ -131,7 +120,7 @@ export default function Landing() {
                 items={secondCard}
                 spacing={2}
                 background={theme.palette.common.white}
-                reverseLayout={true}
+                reverseLayout={false}
             />
         </div>
     );
