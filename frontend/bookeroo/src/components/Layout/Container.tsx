@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme: Theme) =>
         root: {
             marginTop: (props: Props) =>
                 props.noMargin ? theme.spacing(0) : theme.spacing(12),
+            marginBottom: (props: Props) =>
+                props.noMargin ? theme.spacing(0) : theme.spacing(12),
         },
     })
 );
