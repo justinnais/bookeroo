@@ -65,7 +65,7 @@ export default function TextCard(props: Props) {
     return (
         <div className={classes.root}>
             <div>
-                <Typography color="textSecondary" gutterBottom>
+                <Typography color="textSecondary" variant="subtitle1">
                     {props.pretitle}
                 </Typography>
 
@@ -76,7 +76,7 @@ export default function TextCard(props: Props) {
                     {props.title}
                 </Typography>
 
-                <Typography color="textSecondary" gutterBottom>
+                <Typography color="textSecondary" variant="subtitle1">
                     {props.subtitle}
                 </Typography>
             </div>
