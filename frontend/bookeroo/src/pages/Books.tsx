@@ -26,11 +26,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         text: {
             maxWidth: "40rem",
+            marginBottom: theme.spacing(2),
         },
         searchbar: {
             display: "flex",
             flexDirection: "row",
             gap: theme.spacing(2),
+            justifyContent: "center",
         },
     })
 );
