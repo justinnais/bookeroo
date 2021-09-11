@@ -6,6 +6,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import React from "react";
+import Container from "../components/Layout/Container";
 import GridLayout from "../components/Layout/GridLayout";
 import TextCard from "../components/Layout/TextCard";
 
@@ -35,7 +36,7 @@ export default function Book(props: Props) {
         />,
         <TextCard
             title={props.title}
-            titleSize="h2"
+            titleSize="h3"
             subtitle={props.author}
             buttons={[
                 <Button color="secondary" variant="contained">
@@ -52,8 +53,8 @@ export default function Book(props: Props) {
         </TextCard>,
     ];
     return (
-        <div>
-            <GridLayout items={firstCard} />
-        </div>
+        <Container>
+            <GridLayout items={firstCard} spacing={2} />
+        </Container>
     );
 }

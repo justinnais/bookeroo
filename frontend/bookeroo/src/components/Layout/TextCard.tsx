@@ -46,9 +46,16 @@ const useStyles = makeStyles((theme: Theme) => {
             display: "flex",
             flexDirection: "column",
             alignItems,
-            height: "16rem",
             justifyContent: "space-between",
             textAlign,
+        },
+        buttons: {
+            display: "flex",
+            gap: theme.spacing(2),
+            flexDirection: "row",
+        },
+        children: {
+            marginBottom: theme.spacing(6),
         },
     });
 });
@@ -76,11 +83,13 @@ export default function TextCard(props: Props) {
             {/* <Typography variant="body2" component="p">
                 {props.body}
             </Typography> */}
-            {props.children}
-            {props.buttons &&
-                props.buttons.map((button) => {
-                    return button;
-                })}
+            <div className={classes.children}>{props.children}</div>
+            <div className={classes.buttons}>
+                {props.buttons &&
+                    props.buttons.map((button) => {
+                        return button;
+                    })}
+            </div>
         </div>
     );
 }

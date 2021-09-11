@@ -3,6 +3,7 @@ export enum Routes {
     Login = "/login",
     Register = "/register",
     Books = "/books",
+    Book = "/book",
     Search = "/result/:query",
     Contact = "/contact",
     Profile = "/account/:id?",

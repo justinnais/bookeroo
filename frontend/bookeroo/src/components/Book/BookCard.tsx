@@ -7,6 +7,8 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import { Link as RouterLink } from "react-router-dom";
+import { Routes } from "../../routes/Routes";
 
 export interface IBookCard {
     title: string;
@@ -28,7 +30,7 @@ export default function BookCard(props: IBookCard) {
     // TODO card action area not extending
     return (
         <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea component={RouterLink} to={Routes.Book}>
                 <CardMedia
                     className={classes.media}
                     image={props.image}
