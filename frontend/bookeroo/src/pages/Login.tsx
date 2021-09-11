@@ -33,11 +33,9 @@ export default function Login() {
     const [isSubmitting, setSubmitting] = useState(false);
     const classes = useStyles();
     const formId = "loginForm";
-
     const fields: GeneratedField[] = [
         {
             label: "Email",
-            initialValue: "",
             type: "email",
             schema: yup
                 .string()
@@ -46,13 +44,12 @@ export default function Login() {
         },
         {
             label: "Password",
-            initialValue: "",
             type: "password",
             schema: yup.string().required("Password is required"),
         },
     ];
     const onSubmit = (values: any) => console.table(values);
-    const form = FormGenerator(fields, onSubmit, formId);
+    const form = FormGenerator(formId, fields, onSubmit);
     const buttons = [
         <SubmitButton formId={formId} isSubmitting={isSubmitting}>
             Sign In

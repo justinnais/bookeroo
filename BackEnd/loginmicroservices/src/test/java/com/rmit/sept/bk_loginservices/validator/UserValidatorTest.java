@@ -50,26 +50,6 @@ class UserValidatorTest
     }
 
     @Test
-    @DisplayName("Pass when password mismatch error is not returned")
-    public void PasswordsShouldMatch()
-    {
-        user.setPassword("qwerty");
-        user.setConfirmPassword("qwerty");
-
-        assertFalse(containsError("Match.confirmPassword"));
-    }
-
-    @Test
-    @DisplayName("Pass when password mismatch error is returned")
-    public void PasswordsShouldNotMatch()
-    {
-        user.setPassword("qwerty");
-        user.setConfirmPassword("werty");
-
-        assertTrue(containsError("Match.confirmPassword"));
-    }
-
-    @Test
     @DisplayName("Pass when missing abn error is returned")
     public void BusinessAccWithoutABN()
     {

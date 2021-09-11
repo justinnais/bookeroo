@@ -30,7 +30,7 @@ import Container from "../components/Layout/Container";
 interface RegisterForm {
     firstName: string;
     lastName: string;
-    email: string;
+    username: string;
     password: string;
     confirmPassword: string;
 }
@@ -55,21 +55,23 @@ export default function Register() {
     const classes = useStyles();
     const fields: GeneratedField[] = [
         {
+            label: "Display Name",
+            type: "text",
+            schema: yup.string().required("Display Name is required"),
+        },
+        {
             label: "First Name",
             type: "text",
-            initialValue: "",
             schema: yup.string().required("First Name is required"),
         },
         {
             label: "Last Name",
             type: "text",
-            initialValue: "",
             schema: yup.string().required("Last Name is required"),
         },
         {
             label: "Email",
             type: "email",
-            initialValue: "",
             schema: yup
                 .string()
                 .email("Email must be a valid email")
@@ -78,14 +80,14 @@ export default function Register() {
         {
             label: "Password",
             type: "password",
-            initialValue: "",
-            schema: yup.string().required("Password is required"),
-            // .min(8, 'Password is too short'), // todo uncomment after testing and add regex,
+            schema: yup
+                .string()
+                .required("Password is required")
+                .min(6, "Password is too short"),
         },
         {
             label: "Confirm Password",
             type: "password",
-            initialValue: "",
             schema: yup
                 .string()
                 .required("Please confirm password")
@@ -100,12 +102,13 @@ export default function Register() {
         if (duplicate) {
             // if exists, global alert error
         } else {
-            const { confirmPassword, ...other } = values; // omits confirmPassword from values
+            const { email, confirmPassword, ...other } = values; // omits confirmPassword and email from values
             console.table(values);
 
             const request: CreateAccountRequest = {
                 ...other,
-                type: "user/register",
+                username: values.email,
+                type: "users/register",
                 accountType: AccountType.STANDARD,
             };
             const response = post(request);
@@ -113,13 +116,13 @@ export default function Register() {
         }
         setSubmitting(false);
     };
-    const form = FormGenerator(fields, onSubmit, "registerForm");
+    const form = FormGenerator("registerForm", fields, onSubmit);
 
     const buttons = [
         <Button
             variant="contained"
             color="secondary"
-            form="register"
+            form="registerForm"
             disabled={isSubmitting}
             type="submit"
         >

@@ -81,7 +81,6 @@ class LoginControllerTest
         userJson.put("lastName", "lastName");
         userJson.put("password", "password");
         userJson.put("displayName", "displayName");
-        userJson.put("confirmPassword", "password");
         userJson.put("username", "username@registertest.com-test");
         userJson.put("accountType", AccountType.STANDARD);
 
@@ -170,7 +169,6 @@ class LoginControllerTest
             userJson.put("lastName", "lastName");
             userJson.put("password", "password");
             userJson.put("displayName", "displayName");
-            userJson.put("confirmPassword", "password");
             userJson.put("username", username);
             userJson.put("accountType", AccountType.STANDARD);
         } catch (JSONException e)

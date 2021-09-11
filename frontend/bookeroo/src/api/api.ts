@@ -11,7 +11,8 @@ type PostResponse = UserPostResponse;
 type GetRequest = UserGetRequest;
 type GetResponse = UserGetResponse;
 
-const REST_URL = "http://bookeroo-api.danieljmills.com/api/";
+// const REST_URL = "http://bookeroo-api.danieljmills.com/api/";
+const REST_URL = "http://localhost:8080/api";
 
 /**
  * Post API function
