@@ -9,13 +9,9 @@ import AddPerson from "./components/Persons/AddPerson";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-<<<<<<< HEAD
 import Contact from "./pages/Contact";
 import Profile, { Book } from "./pages/Profile";
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
-=======
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
->>>>>>> origin
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
