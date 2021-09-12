@@ -6,6 +6,12 @@ export type TransRequests =
 export type TransPostRequest = CreateTransactionRequest;
 
 export interface CreateTransactionRequest extends BookerooRequest {
-    listing_price_map: Map<string, string>
+    listings: Array<Listing>
     buyer_id: string;
+}
+
+// This probably belongs elsewhere, but I'm lost as it is
+export interface Listing {
+    listing_id: string
+    price: string
 }
