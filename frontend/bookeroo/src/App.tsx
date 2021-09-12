@@ -15,10 +15,8 @@ import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
-import Contact from "./pages/Contact";
 import Search from "./pages/Search";
 import PrivateRoute from "./routes/PrivateRoute";
-import Profile from "./pages/Profile";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
 import Books from "./pages/Books";
@@ -67,6 +65,13 @@ function App() {
                             path={Routes.Register}
                             component={Register}
                         />
+                         <Route exact path={Routes.Profile}>
+                                                    <Profile
+                                                        name="John Smith"
+                                                        rating="4.65"
+                                                        books={exampleBooks}
+                                                    />
+                                                </Route>
                         <RestrictedRoute
                             exact
                             path={Routes.Login}

@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
     import {
         Container,
         createStyles,
@@ -64,12 +64,12 @@
         ];
 
         return(
+            <Container style={{backgroundColor: theme.palette.common.white}}>
             <GridLayout
                 items={contactCard}
                 spacing = {2}
-                background={theme.palette.common.white}
                 reverseLayout={true}
             />
-
+            </Container>
         );
     }
