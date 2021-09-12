@@ -19,6 +19,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Profile from "./pages/Profile";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
+import PayPal from "./pages/PayPal"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,6 +51,8 @@ function App() {
                         <PrivateRoute path={Routes.Profile} component={Profile} />
                         {/* Admin Routes */}
                         <AdminRoute exact path={Routes.Admin} component={Admin} />
+
+                        <Route exact path={"/paypal"} component={PayPal} />
 
                     </Switch>
                 </div>
