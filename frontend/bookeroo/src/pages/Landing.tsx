@@ -8,6 +8,7 @@ import GridLayout, { IGridItem } from "../components/Layout/GridLayout";
 import TextCard from "../components/TextCard";
 import Container from "../components/Layout/Container";
 
+
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         displayImage: {
