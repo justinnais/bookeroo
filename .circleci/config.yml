@@ -1,0 +1,48 @@
+version: 2.1
+
+jobs:
+  build-backend:  
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+      
+      - run:
+          name: clean-and-test-login
+          command: |
+            cd BackEnd/loginmicroservices/
+            mvn clean
+            mvn test
+      #- run:
+      #   name: build-login
+      #    command: |
+      #      cd BackEnd/loginmicroservices/
+      #      mvn package
+      
+      #- store_artifacts:
+      #    path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+
+  #build-frontend:
+  #  docker:
+  #    - image: cimg/node:16.8.0
+  #  steps:
+  #    - checkout
+  #    - run:
+  #        name: test
+  #        command: |
+  #          cd frontend/bookeroo/
+  #          npm install
+  #          CI=false npm run build
+
+
+        
+
+
+workflows:
+  build-and-test: 
+    jobs:
+      - build-backend
+    #  - build-frontend
+
+    
+

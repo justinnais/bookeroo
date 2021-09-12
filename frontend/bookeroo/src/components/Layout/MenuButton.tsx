@@ -7,8 +7,13 @@ import {
     Theme,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
+import {
+    Link as RouterLink,
+    LinkProps as RouterLinkProps,
+} from "react-router-dom";
 
 import React from "react";
+import { Routes } from "../../routes/Routes";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,8 +57,20 @@ export default function MenuButton() {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-                <MenuItem onClick={handleClose}>Sign In</MenuItem>
-                <MenuItem onClick={handleClose}>Sign Up</MenuItem>
+                <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to={Routes.Login}
+                >
+                    Sign In
+                </MenuItem>
+                <MenuItem
+                    onClick={handleClose}
+                    component={RouterLink}
+                    to={Routes.Register}
+                >
+                    Sign Up
+                </MenuItem>
             </Menu>
         </div>
     );

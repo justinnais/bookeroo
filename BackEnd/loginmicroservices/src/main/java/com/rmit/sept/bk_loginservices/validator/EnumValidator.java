@@ -5,20 +5,22 @@ import javax.validation.ConstraintValidatorContext;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
-public abstract class EnumValidator<T extends Annotation, U> implements ConstraintValidator<T, U> {
+public abstract class EnumValidator<T extends Annotation, U> implements ConstraintValidator<T, U>
+{
     private U[] subset;
     private boolean nullable;
 
-    protected void initialize(U[] subset, boolean nullable) {
+    protected void initialize(U[] subset, boolean nullable)
+    {
         this.subset = subset;
         this.nullable = nullable;
     }
 
     @Override
-    public boolean isValid(U value, ConstraintValidatorContext context) {
-        if (value == null) {
+    public boolean isValid(U value, ConstraintValidatorContext context)
+    {
+        if (value == null)
             return nullable;
-        }
         return Arrays.asList(subset).contains(value);
     }
 

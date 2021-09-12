@@ -1,3 +1,4 @@
+<<<<<<< HEAD
     import {
         Container,
         createStyles,
@@ -72,4 +73,3 @@
 
         );
     }
-

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
     Container,
     createStyles,
@@ -126,4 +127,5 @@ export default function Profile(props: Props) {
             <BookTable />
         </Container>
     );
+
 }

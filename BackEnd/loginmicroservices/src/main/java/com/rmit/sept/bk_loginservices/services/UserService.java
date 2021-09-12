@@ -50,8 +50,6 @@ public class UserService {
             newUser.setAccountStatus(AccountStatus.OK);
         }
 
-        //Clear the "confirm password" then save and return the user
-        newUser.setConfirmPassword("");
         return userRepository.save(newUser);
 
     }
