@@ -1,26 +1,86 @@
 version: 2.1
 
+
+commands:
+  deploy-microservice:
+    parameters:
+      git-folder:
+        type: string
+      target-folder:
+        type: string
+      jar:
+        type: string
+      port:
+        type: string
+      docker-container:
+        type: string
+    steps:
+      - run:
+          name: clean-and-test-<<parameters.docker-container>>
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean && mvn test
+      - run:
+          name: build-<<parameters.docker-container>>
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn package
+      - run:
+          name: deploy-<<parameters.docker-container>>
+          command:
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>> &&
+            scp BackEnd/<<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile &&
+            ssh ubuntu@$BOOK_AWS '(
+              cd <<parameters.target-folder>>/ && 
+              sudo docker build -t bookeroo/<<parameters.docker-container>> . &&
+              sudo docker run -d -p <<parameters.port>>:8080 bookeroo/<<parameters.docker-container>>
+            )'
+            
+
+
+
 jobs:
   build-backend:  
     docker:
       - image: cimg/openjdk:11.0
     steps:
       - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
+
+      - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+
+      - run: ssh ubuntu@$BOOK_AWS '(sudo docker container rm $(sudo docker container ls -aq) -f)'
+
+      - deploy-microservice:
+          git-folder: loginmicroservices
+          target-folder: login
+          jar: loginmicroservices-0.0.1.jar
+          port: "8080"
+          docker-container: login-microservice
       
-      - run:
-          name: clean-and-test-login
-          command: |
-            cd BackEnd/loginmicroservices/
-            mvn clean
-            mvn test
       #- run:
-      #   name: build-login
+      #    name: clean-and-test-login
+      #    command: |
+      #      cd BackEnd/loginmicroservices/
+      #      mvn clean
+      #      mvn test
+      #- run:
+      #    name: build-login
       #    command: |
       #      cd BackEnd/loginmicroservices/
       #      mvn package
-      
-      #- store_artifacts:
-      #    path: BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar
+
+      #- run:
+      #    name: deploy-login
+      #    command: |
+      #      scp BackEnd/loginmicroservices/target/loginmicroservices-0.0.1.jar ubuntu@$BOOK_AWS:~/login/target/loginmicroservices-0.0.1.jar
+      #      scp BackEnd/loginmicroservices/Dockerfile ubuntu@$BOOK_AWS:~/login/Dockerfile
+      #      ssh ubuntu@$BOOK_AWS '(
+      #        cd login/ && 
+      #        sudo docker build -t bookeroo/login-microservice . &&
+      #        sudo docker run -d -p 8080:8080 bookeroo/login-microservice
+      #      )'
+
+
 
   #build-frontend:
   #  docker:
