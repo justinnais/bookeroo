@@ -7,6 +7,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import React from "react";
@@ -21,6 +22,7 @@ import {
     GridValueGetterParams,
 } from "@material-ui/data-grid";
 import SellerTable from "../components/SellerTable";
+import Image from "../components/Image";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -48,11 +50,7 @@ export default function Book(props: Props) {
     const classes = useStyles();
 
     const firstCard = [
-        <img
-            className={classes.displayImage}
-            src="https://via.placeholder.com/540x440"
-            alt="placeholder"
-        />,
+        <Image src="https://via.placeholder.com/400x400" alt="placeholder" />,
         <TextCard
             title={props.title}
             titleSize="h3"
@@ -73,23 +71,28 @@ export default function Book(props: Props) {
     ];
 
     const details = (
-        <List className={classes.details}>
-            <ListItem>
-                <ListItemText primary="1st" secondary="Edition" />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary="26 June 1997" secondary="Published" />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary="Bloomsberry" secondary="Publisher" />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary="0-7475-3269-9" secondary="ISBN" />
-            </ListItem>
-            <ListItem>
-                <ListItemText primary="223" secondary="Page Count" />
-            </ListItem>
-        </List>
+        <Paper>
+            <List className={classes.details}>
+                <ListItem>
+                    <ListItemText primary="1st" secondary="Edition" />
+                </ListItem>
+                <ListItem>
+                    <ListItemText
+                        primary="26 June 1997"
+                        secondary="Published"
+                    />
+                </ListItem>
+                <ListItem>
+                    <ListItemText primary="Bloomsberry" secondary="Publisher" />
+                </ListItem>
+                <ListItem>
+                    <ListItemText primary="0-7475-3269-9" secondary="ISBN" />
+                </ListItem>
+                <ListItem>
+                    <ListItemText primary="223" secondary="Page Count" />
+                </ListItem>
+            </List>
+        </Paper>
     );
     const quote = (
         <div>
