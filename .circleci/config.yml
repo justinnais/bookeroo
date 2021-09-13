@@ -60,7 +60,7 @@ jobs:
       - deploy-microservice:
           git-folder: listingmicroservice
           target-folder: listing
-          jar: listingmicroservices-0.0.1.jar
+          jar: listingmicroservice-0.0.1.jar
           port: "8083"
           docker-container: listing-microservice
       
