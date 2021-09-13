@@ -69,7 +69,7 @@ jobs:
           port: "8082"
           docker-container: transaction-microservice
           
-       - deploy-microservice:   
+      - deploy-microservice:   
           git-folder: listingmicroservice
           target-folder: listing
           jar: listingmicroservice-0.0.1.jar
