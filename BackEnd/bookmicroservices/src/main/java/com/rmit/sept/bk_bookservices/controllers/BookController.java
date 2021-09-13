@@ -57,5 +57,14 @@ public class BookController {
 
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllBooks() {
+
+
+        return new ResponseEntity<>(bookService.getAll(),HttpStatus.OK);
+
+
+    }
+
 
 }
