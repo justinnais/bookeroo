@@ -23,7 +23,7 @@ import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
 
 // TODO this is just temp interface
-export interface Book {
+export interface IBook {
     title: string;
     condtion: string;
     price: string;
@@ -32,7 +32,7 @@ export interface Book {
 interface Props {
     name: string;
     rating: string;
-    books: Book[];
+    books: IBook[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>

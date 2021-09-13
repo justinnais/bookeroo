@@ -9,7 +9,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import Container from "../components/Layout/Container";
-import TextCard from "../components/TextCard";
+import TextCard from "../components/Layout/TextCard";
 import { theme } from "../styles/theme";
 
 const useStyles = makeStyles((theme: Theme) =>

@@ -10,7 +10,7 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
-import Profile, { Book } from "./pages/Profile";
+import Profile, { IBook } from "./pages/Profile";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-const exampleBooks: Book[] = [
+const exampleBooks: IBook[] = [
     {
         title: "Harry Potter and the Philosopher's Stone",
         condtion: "Lightly Used",
