@@ -9,6 +9,8 @@ import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
+import Alert from "../Alert";
+import { useAlertStore } from "../../stores/useAlertStore";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -46,6 +48,11 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export default function Header() {
     const classes = useStyles();
+    const setAlert = useAlertStore((state) => state.setAlert);
+    // TODO need to improve this
+    const toast = (message: string, variant?: string) => {
+        setAlert(message, variant);
+    };
 
     /**
      * Navigation links that show on large screens
@@ -56,6 +63,9 @@ export default function Header() {
                 <Button>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
+                <Button onClick={() => toast("this is an alert")}>
+                    Snackbar
+                </Button>
             </div>
             <div className={classes.navButtons}>
                 <Button to="/login">Sign In</Button>
@@ -76,7 +86,6 @@ export default function Header() {
             Bookeroo
         </Typography>
     );
-
     /**
      * This is what is rendered by the component, we can see that it has the AppBar and Toolbar,
      * which contain the Logo, NavButtons and MenuButton components we created above
@@ -86,6 +95,7 @@ export default function Header() {
             <Container>
                 <Toolbar className={classes.toolbar} disableGutters>
                     <Logo />
+                    <Alert />
                     {/* <MiddleNavButtons /> */}
                     <NavButtons />
                     <MenuButton />
