@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/books")
@@ -42,19 +43,10 @@ public class BookController {
     }
 
     @GetMapping("/search/title/{title}")
-    public ResponseEntity<?> searchByTitle(@PathVariable String title, @RequestParam(name="pageSize",defaultValue="20") String pageSizeString) {
+    public ResponseEntity<?> searchByTitle(@PathVariable String title) {
 
-        int pageSize = 20;
 
-        log.info("Page size string was " + pageSizeString);
-
-        try {
-            pageSize = Integer.parseInt(pageSizeString);
-        } catch (NumberFormatException e) {
-            log.warn("Invalid page size, using 20");
-        }
-
-        List<Book> books = bookService.searchByTitle(title,pageSize);
+        Set<Book> books = bookService.searchByTitle(title);
 
         if (books.size() > 0) {
             return new ResponseEntity<>(books, HttpStatus.OK);

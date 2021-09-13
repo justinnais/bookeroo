@@ -181,4 +181,14 @@ public class Book {
     public void setAuthors(String authors) {
         this.authors = authors;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        return (other.hashCode()==this.hashCode());
+    }
+
+    @Override
+    public int hashCode() {
+        return this.isbn.hashCode();
+    }
 }
