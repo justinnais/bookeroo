@@ -20,6 +20,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
 import Books from "./pages/Books";
+import Book from "./pages/Book";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -78,6 +79,12 @@ function App() {
                             component={Login}
                         />
                         <Route exact path={Routes.Contact} component={Contact} />
+                        <Route exact path={Routes.Book}>
+                            <Book title="Harry Potter and the Philosopher's Stone" author="J. K. Rowling." description='Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Delectus cum quod, doloribus quasi atque rem ratione ipsum
+                quaerat a explicabo velit? Velit similique error pariatur earum
+                consequatur doloremque at cumque?'/>
+                            </Route>
                         <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
                         {/* Private Routes */}
