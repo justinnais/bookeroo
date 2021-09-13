@@ -1,4 +1,4 @@
-package com.rmit.sept.bk_listingservice.listingmicroservice.repository;
+package com.rmit.sept.bk_listingservice.listingmicroservice.repositories;
 
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.SellListing;
 import org.springframework.data.repository.CrudRepository;

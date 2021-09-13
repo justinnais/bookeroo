@@ -3,13 +3,17 @@ package com.rmit.sept.bk_listingservice.listingmicroservice.controller;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.Listing;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.ListingApiBody;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.SellListing;
-import com.rmit.sept.bk_listingservice.listingmicroservice.repository.ListingRepository;
-import com.rmit.sept.bk_listingservice.listingmicroservice.repository.SellListingRepository;
+import com.rmit.sept.bk_listingservice.listingmicroservice.repositories.ListingRepository;
+import com.rmit.sept.bk_listingservice.listingmicroservice.repositories.SellListingRepository;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/listing")
@@ -51,5 +55,25 @@ public class ListingController
         }
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/list/{bookId}")
+    public ResponseEntity<?> listListings(@PathVariable("bookId") Long bookId)
+    {
+        JSONArray listings = new JSONArray();
+        List<Object[]> listingByBookId = listingRepository.getListingByBookId(bookId);
+
+        for (Object[] details : listingByBookId)
+        {
+            JSONObject listing = new JSONObject();
+            listing.put("cond", details[0]);
+            listing.put("condDesc", details[1]);
+            listing.put("used", details[2]);
+            listing.put("price", details[3]);
+
+            listings.put(listing);
+        }
+
+        return ResponseEntity.ok(listings.toString());
     }
 }
