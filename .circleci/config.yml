@@ -33,8 +33,6 @@ commands:
             )'
             
 
-
-
 jobs:
   build-backend:  
     docker:
@@ -56,6 +54,21 @@ jobs:
           jar: loginmicroservices-0.0.1.jar
           port: "8080"
           docker-container: login-microservice
+
+      - deploy-microservice:
+          git-folder: bookmicroservices
+          target-folder: book
+          jar: bookmicroservices-0.0.1.jar
+          port: "8081"
+          docker-container: book-microservice
+
+      - deploy-microservice:
+          git-folder: transmicroservices
+          target-folder: trans
+          jar: transmicroservices-0.0.1.jar
+          port: "8082"
+          docker-container: transaction-microservice
+      
       
       #- run:
       #    name: clean-and-test-login
