@@ -1,6 +1,7 @@
+import { TransRequests } from "./microservices/trans";
 import { UserRequests } from "./microservices/user";
 
-type Request = UserRequests;
+type Request = UserRequests | TransRequests;
 
 /**
  * Generic interface for API requests

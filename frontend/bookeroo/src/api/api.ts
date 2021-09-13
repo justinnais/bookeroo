@@ -1,4 +1,5 @@
 import axios from "axios";
+import { TransPostRequest } from "./microservices/trans";
 import {
     UserGetRequest,
     UserGetResponse,
@@ -6,7 +7,7 @@ import {
     UserPostResponse,
 } from "./microservices/user";
 
-type PostRequest = UserPostRequest;
+type PostRequest = UserPostRequest | TransPostRequest;
 type PostResponse = UserPostResponse;
 type GetRequest = UserGetRequest;
 type GetResponse = UserGetResponse;
