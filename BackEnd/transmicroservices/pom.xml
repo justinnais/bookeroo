@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>com.rmit.sept.bk_transservices</groupId>
 	<artifactId>transmicroservices</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 	<name>transmicroservices</name>
 	<description>transmicroservices</description>
 	<properties>
