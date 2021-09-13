@@ -78,11 +78,11 @@
 			<version>3.8.1</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.paypal.sdk/checkout-sdk -->
+		<!-- https://mvnrepository.com/artifact/org.json/json -->
 		<dependency>
-			<groupId>com.paypal.sdk</groupId>
-			<artifactId>checkout-sdk</artifactId>
-			<version>1.0.4</version>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
 		</dependency>
 	</dependencies>
 
