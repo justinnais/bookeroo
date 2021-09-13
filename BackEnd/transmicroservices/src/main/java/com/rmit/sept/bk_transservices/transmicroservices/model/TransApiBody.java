@@ -5,15 +5,6 @@ import java.util.Map;
 
 public class TransApiBody
 {
-    public String buyer_id;
-    public List<Map<String, String>> listings;
-
-    @Override
-    public String toString()
-    {
-        return "Transaction{" +
-                "buyer_id='" + buyer_id + '\'' +
-                ", listings=" + listings +
-                '}';
-    }
+    public Long buyer_id;
+    public List<Map<String, Long>> listings;
 }
