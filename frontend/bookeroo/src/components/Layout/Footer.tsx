@@ -27,7 +27,7 @@ export default function Footer() {
             <Container noMargin>
                 <Toolbar className={classes.toolbar} disableGutters>
                     <Button>Team</Button>
-                    <Button>Contact</Button>
+                    <Button to="/contact">Contact</Button>
                     <Button>Help</Button>
                 </Toolbar>
             </Container>
