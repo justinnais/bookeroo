@@ -12,7 +12,6 @@ import Button from "../components/Button/Button";
 import { Form, Formik, useFormik } from "formik";
 import React, { useState } from "react";
 import FormCard from "../components/Form/FormCard";
-import { Container } from "@material-ui/core";
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
@@ -26,6 +25,7 @@ import { AccountType } from "../util/enums";
 import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
+import Container from "../components/Layout/Container";
 
 interface RegisterForm {
     firstName: string;

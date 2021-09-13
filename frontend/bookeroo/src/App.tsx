@@ -9,16 +9,17 @@ import AddPerson from "./components/Persons/AddPerson";
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import { Container, createStyles, makeStyles, Theme } from "@material-ui/core";
+import Contact from "./pages/Contact";
+import Profile, { Book } from "./pages/Profile";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
 import RestrictedRoute from "./routes/RestrictedRoute";
-import Contact from "./pages/Contact";
 import Search from "./pages/Search";
 import PrivateRoute from "./routes/PrivateRoute";
-import Profile from "./pages/Profile";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
+import Books from "./pages/Books";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -28,6 +29,19 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
+
+const exampleBooks: Book[] = [
+    {
+        title: "Harry Potter and the Philosopher's Stone",
+        condtion: "Lightly Used",
+        price: "23.00",
+    },
+    {
+        title: "The Great Gatbsy",
+        condtion: "Well Worn",
+        price: "16.00",
+    },
+];
 
 function App() {
     const classes = useStyles();
@@ -41,11 +55,31 @@ function App() {
                     <Switch>
 
                         <Route exact path={Routes.Home} component={Landing} />
+                        <Route
+                            exact
+                            path={Routes.Contact}
+                            component={Contact}
+                        />
+                        <RestrictedRoute
+                            exact
+                            path={Routes.Register}
+                            component={Register}
+                        />
+                         <Route exact path={Routes.Profile}>
+                                                    <Profile
+                                                        name="John Smith"
+                                                        rating="4.65"
+                                                        books={exampleBooks}
+                                                    />
+                                                </Route>
+                        <RestrictedRoute
+                            exact
+                            path={Routes.Login}
+                            component={Login}
+                        />
                         <Route exact path={Routes.Contact} component={Contact} />
+                        <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
-                       
-                        <RestrictedRoute exact path={Routes.Register} component={Register} />
-                        <RestrictedRoute exact path={Routes.Login} component={Login} />
                         {/* Private Routes */}
                         <PrivateRoute path={Routes.Profile} component={Profile} />
                         {/* Admin Routes */}
