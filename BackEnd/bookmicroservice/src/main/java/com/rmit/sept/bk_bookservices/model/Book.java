@@ -50,19 +50,17 @@ public class Book {
 
     public static Book fromJson(JSONObject json) throws JsonProcessingException {
 
-        JSONObject bookJson = json.getJSONObject("book");
-
         String authors = "Unknown";
 
-        if (bookJson.has("authors")) {
-            authors = bookJson.getJSONArray("authors").join("|").replaceAll("\\\"","");
+        if (json.has("authors")) {
+            authors = json.getJSONArray("authors").join("|").replaceAll("\\\"","");
         }
 
-        bookJson.remove("authors");
+        json.remove("authors");
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        Book book = objectMapper.readValue(bookJson.toString(), Book.class);
+        Book book = objectMapper.readValue(json.toString(), Book.class);
 
         book.setAuthors(authors);
 

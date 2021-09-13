@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/books")
 @CrossOrigin(origins="http://localhost:3000")
@@ -30,8 +32,36 @@ public class BookController {
 
         Book book = bookService.findByIsbn(isbn);
 
+        if (book == null) {
+            return new ResponseEntity<>("No book exists with this isbn", HttpStatus.NOT_FOUND);
+        }
+
 
         return new ResponseEntity<>(book, HttpStatus.OK);
+
+    }
+
+    @GetMapping("/search/title/{title}")
+    public ResponseEntity<?> searchByTitle(@PathVariable String title, @RequestParam(name="pageSize",defaultValue="20") String pageSizeString) {
+
+        int pageSize = 20;
+
+        log.info("Page size string was " + pageSizeString);
+
+        try {
+            pageSize = Integer.parseInt(pageSizeString);
+        } catch (NumberFormatException e) {
+            log.warn("Invalid page size, using 20");
+        }
+
+        List<Book> books = bookService.searchByTitle(title,pageSize);
+
+        if (books.size() > 0) {
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No books found", HttpStatus.NOT_FOUND);
+        }
+
 
     }
 
