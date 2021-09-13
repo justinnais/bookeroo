@@ -56,6 +56,13 @@ jobs:
           jar: loginmicroservices-0.0.1.jar
           port: "8080"
           docker-container: login-microservice
+
+      - deploy-microservice:
+          git-folder: listingmicroservice
+          target-folder: listing
+          jar: listingmicroservices-0.0.1.jar
+          port: "8083"
+          docker-container: listing-microservice
       
       #- run:
       #    name: clean-and-test-login
