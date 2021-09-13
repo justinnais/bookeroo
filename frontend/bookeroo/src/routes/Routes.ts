@@ -6,9 +6,9 @@ export enum Routes {
     Book = "/book",
     Search = "/result/:query",
     Contact = "/contact",
-//    Profile = "/account/:id?",
+    //    Profile = "/account/:id?",
     // This will change to the one above
-    Profile = '/profile',
+    Profile = "/profile",
     Admin = "/admin",
 }
 
