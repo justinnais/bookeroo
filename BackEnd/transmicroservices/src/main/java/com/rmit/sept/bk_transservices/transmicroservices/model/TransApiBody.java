@@ -6,5 +6,5 @@ import java.util.Map;
 public class TransApiBody
 {
     public Long buyer_id;
-    public List<Map<String, Long>> listings;
+    public List<Map<String, Double>> listings;
 }

@@ -32,10 +32,10 @@ public class TransController
         transaction.setBuyerId(transApiBody.buyer_id);
         transactionRepository.save(transaction);
 
-        for (Map<String, Long> map : transApiBody.listings)
+        for (Map<String, Double> map : transApiBody.listings)
         {
             TransactionItem transItem = new TransactionItem();
-            transItem.setTransactionId(transaction.getId());
+            transItem.setTransactionId(transaction.getTransactionId());
             transItem.setAmount(map.get("price"));
             transItem.setListingId(map.get("listing_id"));
 
@@ -45,8 +45,8 @@ public class TransController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<?> list(@RequestParam("user_id") Long buyerId, BindingResult result)
+    @GetMapping(value="/list/{buyerId}")
+    public ResponseEntity<?> list(@PathVariable("buyerId") Long buyerId, BindingResult result)
     {
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -7,23 +7,24 @@ import javax.persistence.Id;
 public class TransactionItem
 {
     @Id
-    private Long listingId;
+    private double listingId;
 
-    private Long transactionId;
+    // TODO: This could be properly annotated with "ManyToOne" and a "JoinColumn"
+    private double transactionId;
 
     private double amount;
 
-    public Long getListingId()
+    public double getListingId()
     {
         return listingId;
     }
 
-    public void setListingId(Long listingId)
+    public void setListingId(double listingId)
     {
         this.listingId = listingId;
     }
 
-    public Long getTransactionId()
+    public double getTransactionId()
     {
         return transactionId;
     }

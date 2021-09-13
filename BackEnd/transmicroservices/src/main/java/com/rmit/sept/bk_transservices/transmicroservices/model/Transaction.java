@@ -10,9 +10,19 @@ public class Transaction
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long transactionId;
 
     private Long buyerId;
+
+    public Long getTransactionId()
+    {
+        return transactionId;
+    }
+
+    public void setTransactionId(Long transactionId)
+    {
+        this.transactionId = transactionId;
+    }
 
     public Long getBuyerId()
     {
@@ -22,16 +32,5 @@ public class Transaction
     public void setBuyerId(Long buyerId)
     {
         this.buyerId = buyerId;
-    }
-
-
-    public Long getId()
-    {
-        return id;
-    }
-
-    public void setId(Long id)
-    {
-        this.id = id;
     }
 }
