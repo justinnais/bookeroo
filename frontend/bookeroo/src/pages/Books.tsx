@@ -42,7 +42,7 @@ export default function Books() {
 
     const books = [
         {
-            title: "Harry Potter and the Philosopher's Stone",
+            title: "Harry Potter and the Philosopher's Stone Philosopher's Stone",
             author: "J. K. Rowling.",
         },
         {

@@ -24,6 +24,7 @@ const useStyles = makeStyles({
         width: "16rem",
         background: "transparent",
         textAlign: "center",
+        maxHeight: "24rem", // TODO not sure about this
     },
     media: {
         height: "16rem",
@@ -46,7 +47,11 @@ export default function BookCard(props: IBookCard) {
 
     return (
         <Card className={classes.root} elevation={0}>
-            <CardActionArea component={RouterLink} to={Routes.Book}>
+            <CardActionArea
+                component={RouterLink}
+                to={Routes.Book}
+                style={{ minHeight: "24rem" }}
+            >
                 <Media />
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h2">
@@ -56,6 +61,7 @@ export default function BookCard(props: IBookCard) {
                             props.title
                         )}
                     </Typography>
+
                     <Typography
                         variant="body2"
                         color="textSecondary"
