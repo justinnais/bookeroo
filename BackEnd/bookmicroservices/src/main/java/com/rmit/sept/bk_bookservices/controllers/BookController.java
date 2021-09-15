@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/book")
 @CrossOrigin(origins="http://localhost:3000")
 public class BookController {
 
@@ -22,24 +22,28 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @GetMapping("/{isbn}")
-    public ResponseEntity<?> findByIsbn(@PathVariable String isbn) {
+    // LIST
+    @GetMapping("/")
+    public ResponseEntity<?> listBooks() {
+        return new ResponseEntity<>(bookService.listBooks(),HttpStatus.OK);
+    }
 
-        log.info("Got request for " + isbn);
+    // GET
+    @GetMapping("/{isbn}")
+    public ResponseEntity<?> getBook(@PathVariable String isbn) {
+        log.info("Get request for " + isbn);
 
         if (isbn.length() != 10 && isbn.length() != 13) {
             return new ResponseEntity<>("ISBN must be 10 or 13 characters", HttpStatus.BAD_REQUEST);
         }
 
-        Book book = bookService.findByIsbn(isbn);
+        Book book = bookService.getBook(isbn);
 
         if (book == null) {
             return new ResponseEntity<>("No book exists with this isbn", HttpStatus.NOT_FOUND);
         }
 
-
         return new ResponseEntity<>(book, HttpStatus.OK);
-
     }
 
     @GetMapping("/search/title/{title}")
@@ -57,14 +61,7 @@ public class BookController {
 
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<?> getAllBooks() {
-
-
-        return new ResponseEntity<>(bookService.getAll(),HttpStatus.OK);
-
-
-    }
+    
 
 
 }
