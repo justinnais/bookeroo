@@ -8,6 +8,8 @@ import {
     Typography,
 } from "@material-ui/core";
 import React from "react";
+import { get } from "../api/api";
+import { ListBookRequest } from "../api/microservices/book";
 import BookCard from "../components/Book/BookCard";
 import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";
@@ -39,6 +41,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Books() {
     const classes = useStyles();
+    const allBooks = get({ type: "books/all" });
+    console.table(allBooks);
 
     const books = [
         {
