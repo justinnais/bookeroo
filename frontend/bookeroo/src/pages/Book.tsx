@@ -24,6 +24,7 @@ import SellerTable from "../components/SellerTable";
 import { api } from "../api/api";
 import { IBook } from "../api/models/Book";
 import { useParams } from "react-router";
+import parse from "html-react-parser";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +47,6 @@ export default function Book() {
     const [loading, setLoading] = useState(true);
     const [book, setBook] = useState<IBook>();
     const { isbn } = useParams<{ isbn: string }>();
-    console.log(isbn);
     const getBook = async () => {
         const { data } = await api.get(`/book/${isbn}`);
         setBook(data);
@@ -68,7 +68,7 @@ export default function Book() {
         <TextCard
             title={book.title}
             titleSize="h3"
-            subtitle={authors.join(", ")}
+            subtitle={authors.join(" - ")}
             buttons={[
                 <Button color="secondary" variant="contained">
                     View Sellers
@@ -79,7 +79,7 @@ export default function Book() {
             ]}
         >
             <Typography variant="body2" component="p">
-                {book.synopsys}
+                {book.synopsys && parse(book.synopsys)}
             </Typography>
         </TextCard>,
     ];
@@ -87,19 +87,25 @@ export default function Book() {
     const details = (
         <List className={classes.details}>
             <ListItem>
-                <ListItemText primary="1st" secondary="Edition" />
+                <ListItemText primary={book.edition} secondary="Edition" />
             </ListItem>
             <ListItem>
-                <ListItemText primary="26 June 1997" secondary="Published" />
+                <ListItemText
+                    primary={book.datePublished}
+                    secondary="Published"
+                />
             </ListItem>
             <ListItem>
-                <ListItemText primary="Bloomsberry" secondary="Publisher" />
+                <ListItemText primary={book.publisher} secondary="Publisher" />
             </ListItem>
             <ListItem>
-                <ListItemText primary="0-7475-3269-9" secondary="ISBN" />
+                <ListItemText
+                    primary={book.isbn || book.isbn13}
+                    secondary="ISBN"
+                />
             </ListItem>
             <ListItem>
-                <ListItemText primary="223" secondary="Page Count" />
+                <ListItemText primary={book.pages} secondary="Page Count" />
             </ListItem>
         </List>
     );
