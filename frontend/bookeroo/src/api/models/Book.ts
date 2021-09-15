@@ -11,6 +11,6 @@ export interface IBook {
     dimensions: string;
     image: string;
     synopsys: string;
-    authors: string[];
+    authors: string;
     pages: number;
 }

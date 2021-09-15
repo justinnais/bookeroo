@@ -9,7 +9,7 @@ import {
     ListItemText,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../components/Layout/Container";
 import GridLayout from "../components/Layout/GridLayout";
 import TextCard from "../components/Layout/TextCard";
@@ -21,6 +21,9 @@ import {
     GridValueGetterParams,
 } from "@material-ui/data-grid";
 import SellerTable from "../components/SellerTable";
+import { api } from "../api/api";
+import { IBook } from "../api/models/Book";
+import { useParams } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -38,25 +41,34 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface Props {
-    title: string;
-    author: string;
-    description: string;
-}
-
-export default function Book(props: Props) {
+export default function Book() {
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [book, setBook] = useState<IBook>();
+    const { isbn } = useParams<{ isbn: string }>();
+    console.log(isbn);
+    const getBook = async () => {
+        const { data } = await api.get(`/book/${isbn}`);
+        setBook(data);
+    };
+    useEffect(() => {
+        getBook().finally(() => setLoading(false));
+    }, []);
 
+    if (!book) {
+        return <div>no book</div>;
+    }
+    const authors = book.authors.split("|");
     const firstCard = [
         <img
             className={classes.displayImage}
-            src="https://via.placeholder.com/540x440"
+            src={book.image}
             alt="placeholder"
         />,
         <TextCard
-            title={props.title}
+            title={book.title}
             titleSize="h3"
-            subtitle={props.author}
+            subtitle={authors.join(", ")}
             buttons={[
                 <Button color="secondary" variant="contained">
                     View Sellers
@@ -67,7 +79,7 @@ export default function Book(props: Props) {
             ]}
         >
             <Typography variant="body2" component="p">
-                {props.description}
+                {book.synopsys}
             </Typography>
         </TextCard>,
     ];

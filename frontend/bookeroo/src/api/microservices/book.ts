@@ -15,6 +15,6 @@ interface GetBookResponse extends BookerooResponse {
 
 export interface ListBookRequest extends BookerooRequest {}
 
-interface ListBookResponse extends BookerooResponse {
+export interface ListBookResponse extends BookerooResponse {
     books: IBook[];
 }

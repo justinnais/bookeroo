@@ -9,12 +9,7 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Link as RouterLink } from "react-router-dom";
 import { Routes } from "../../routes/Routes";
-
-export interface IBookCard {
-    title: string;
-    author: string;
-    image: string;
-}
+import { IBook } from "../../api/models/Book";
 
 const useStyles = makeStyles({
     root: {
@@ -24,28 +19,32 @@ const useStyles = makeStyles({
         height: "16rem",
     },
 });
-export default function BookCard(props: IBookCard) {
+export default function BookCard(book: IBook) {
     const classes = useStyles();
+    const authors = book.authors.split("|");
 
     // TODO card action area not extending
     return (
         <Card className={classes.root}>
-            <CardActionArea component={RouterLink} to={Routes.Book}>
+            <CardActionArea
+                component={RouterLink}
+                to={`book/${book.isbn || book.isbn13}`}
+            >
                 <CardMedia
                     className={classes.media}
-                    image={props.image}
-                    title={props.title}
+                    image={book.image}
+                    title={book.title}
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        {props.title}
+                        {book.title}
                     </Typography>
                     <Typography
                         variant="body2"
                         color="textSecondary"
                         component="p"
                     >
-                        {props.author}
+                        {authors[0]}
                     </Typography>
                 </CardContent>
             </CardActionArea>

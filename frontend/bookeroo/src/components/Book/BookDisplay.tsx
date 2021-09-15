@@ -1,9 +1,10 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import React from "react";
-import BookCard, { IBookCard } from "./BookCard";
+import { IBook } from "../../api/models/Book";
+import BookCard from "./BookCard";
 
 interface Props {
-    books: IBookCard[];
+    books: IBook[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,13 +24,7 @@ export default function BookDisplay(props: Props) {
     return (
         <div className={classes.root}>
             {props.books.map((book) => {
-                return (
-                    <BookCard
-                        title={book.title}
-                        author={book.author}
-                        image={book.image}
-                    />
-                );
+                return <BookCard {...book} />;
             })}
         </div>
     );

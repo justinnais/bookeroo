@@ -67,24 +67,19 @@ function App() {
                             component={Register}
                         />
                          <Route exact path={Routes.Profile}>
-                                                    <Profile
-                                                        name="John Smith"
-                                                        rating="4.65"
-                                                        books={exampleBooks}
-                                                    />
-                                                </Route>
+                            <Profile
+                                name="John Smith"
+                                rating="4.65"
+                                books={exampleBooks}
+                            />
+                        </Route>
                         <RestrictedRoute
                             exact
                             path={Routes.Login}
                             component={Login}
                         />
                         <Route exact path={Routes.Contact} component={Contact} />
-                        <Route exact path={Routes.Book}>
-                            <Book title="Harry Potter and the Philosopher's Stone" author="J. K. Rowling." description='Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus cum quod, doloribus quasi atque rem ratione ipsum
-                quaerat a explicabo velit? Velit similique error pariatur earum
-                consequatur doloremque at cumque?'/>
-                            </Route>
+                        <Route exact path={Routes.Book} component={Book} />
                         <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
                         {/* Private Routes */}

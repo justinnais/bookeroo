@@ -7,10 +7,8 @@ import {
     Theme,
     Typography,
 } from "@material-ui/core";
-import React from "react";
-import { get } from "../api/api";
-import { ListBookRequest } from "../api/microservices/book";
-import BookCard from "../components/Book/BookCard";
+import React, { useEffect, useState } from "react";
+import { api, get } from "../api/api";
 import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";
 import TextInput from "../components/Form/TextInput";
@@ -41,71 +39,17 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Books() {
     const classes = useStyles();
-    const allBooks = get({ type: "book" });
-    console.table(allBooks);
+    const [loading, setLoading] = useState(true);
+    const [books, setBooks] = useState([]);
+    const getBooks = async () => {
+        const { data } = await api.get("/book");
+        setBooks(data);
+    };
+    useEffect(() => {
+        getBooks().finally(() => setLoading(false));
+    }, []);
 
-    const books = [
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-            image: "https://via.placeholder.com/200x200",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-            image: "https://via.placeholder.com/400x600",
-        },
-    ];
+    console.log(books);
     return (
         <div>
             <Container
