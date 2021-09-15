@@ -1,7 +1,8 @@
+import { BookRequests } from "./microservices/book";
 import { TransRequests } from "./microservices/trans";
 import { UserRequests } from "./microservices/user";
 
-type Request = UserRequests | TransRequests;
+type Request = UserRequests | TransRequests | BookRequests;
 
 /**
  * Generic interface for API requests

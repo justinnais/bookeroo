@@ -1,4 +1,5 @@
 import axios from "axios";
+import { BookGetRequest } from "./microservices/book";
 import { TransPostRequest } from "./microservices/trans";
 import {
     UserGetRequest,
@@ -9,11 +10,11 @@ import {
 
 type PostRequest = UserPostRequest | TransPostRequest;
 type PostResponse = UserPostResponse;
-type GetRequest = UserGetRequest;
+type GetRequest = UserGetRequest | BookGetRequest;
 type GetResponse = UserGetResponse;
 
-// const REST_URL = "http://bookeroo-api.danieljmills.com/api/";
-const REST_URL = "http://localhost:8080/api";
+const REST_URL = "https://bookeroo-api.danieljmills.com/api";
+// const REST_URL = "http://localhost:8080/api";
 
 /**
  * Post API function
@@ -31,6 +32,6 @@ export async function post(item: PostRequest) {
  */
 export async function get(item: GetRequest) {
     // if the request type has an id, pass it through the request
-    const id = "id" in item ? item.id : undefined;
-    return await axios.get(`${REST_URL}/${item.type}/${id}`);
+    const id = "id" in item ? `/${item.id}` : "";
+    return await axios.get(`${REST_URL}/${item.type}${id}`);
 }

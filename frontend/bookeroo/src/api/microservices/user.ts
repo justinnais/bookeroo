@@ -1,7 +1,6 @@
 import { AccountType } from "../../util/enums";
-import { IAccount, IBusinessAccount } from "./Account";
+import { IAccount, IBusinessAccount } from "../models/Account";
 import { BookerooRequest, BookerooResponse } from "../apiInterfaces";
-import { string } from "yup/lib/locale";
 
 // request types exported to the apiInterface.ts
 export type UserRequests =
