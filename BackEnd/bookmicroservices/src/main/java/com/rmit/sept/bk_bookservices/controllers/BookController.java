@@ -23,7 +23,7 @@ public class BookController {
     private BookService bookService;
 
     // LIST
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> listBooks() {
         return new ResponseEntity<>(bookService.listBooks(),HttpStatus.OK);
     }

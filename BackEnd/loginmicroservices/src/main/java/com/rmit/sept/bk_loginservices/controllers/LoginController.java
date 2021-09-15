@@ -52,7 +52,7 @@ public class LoginController
     private UserValidator userValidator;
 
     // LIST
-    @GetMapping("/")
+    @GetMapping("")
     public ResponseEntity<?> listUsers() {
         return new ResponseEntity<>(userService.listUsers(),HttpStatus.OK);
     }

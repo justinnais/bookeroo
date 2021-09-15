@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Books() {
     const classes = useStyles();
-    const allBooks = get({ type: "books/all" });
+    const allBooks = get({ type: "book" });
     console.table(allBooks);
 
     const books = [

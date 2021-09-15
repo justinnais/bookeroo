@@ -1,7 +1,7 @@
 import { BookerooRequest, BookerooResponse } from "../apiInterfaces";
 import { IBook } from "../models/Book";
 
-export type BookRequests = "books" | "books/all" | "books/search/title";
+export type BookRequests = "book" | "book/search/title";
 export type BookGetRequest = GetBookRequest | ListBookRequest;
 export type BookGetResponse = GetBookResponse | ListBookResponse;
 
