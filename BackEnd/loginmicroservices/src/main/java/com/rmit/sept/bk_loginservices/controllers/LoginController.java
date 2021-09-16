@@ -36,7 +36,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = "http://localhost:3000") // allows for CORS when testing locally
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"}) // allows for CORS when testing locally
 public class LoginController
 {
 

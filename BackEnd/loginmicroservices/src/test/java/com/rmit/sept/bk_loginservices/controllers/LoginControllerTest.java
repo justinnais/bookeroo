@@ -178,7 +178,7 @@ class LoginControllerTest
         }
 
         MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), false);
-        System.out.println(response.getErrorMessage());
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+response.getErrorMessage());
         return response != null && response.getStatus() == 201;
     }
 
