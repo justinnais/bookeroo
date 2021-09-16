@@ -10,7 +10,7 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
-import Profile, { IBook } from "./pages/Profile";
+import Profile from "./pages/Profile";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
@@ -30,19 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
-const exampleBooks: IBook[] = [
-    {
-        title: "Harry Potter and the Philosopher's Stone",
-        condtion: "Lightly Used",
-        price: "23.00",
-    },
-    {
-        title: "The Great Gatbsy",
-        condtion: "Well Worn",
-        price: "16.00",
-    },
-];
 
 function App() {
     const classes = useStyles();
@@ -70,7 +57,7 @@ function App() {
                             <Profile
                                 name="John Smith"
                                 rating="4.65"
-                                books={exampleBooks}
+                                books={[]}
                             />
                         </Route>
                         <RestrictedRoute

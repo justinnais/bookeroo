@@ -9,6 +9,7 @@ import {
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { api, get } from "../api/api";
+import { IBook } from "../api/models/Book";
 import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";
 import TextInput from "../components/Form/TextInput";
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Books() {
     const classes = useStyles();
     const [loading, setLoading] = useState(true);
-    const [books, setBooks] = useState([]);
+    const [books, setBooks] = useState<Array<IBook>>([]);
     const getBooks = async () => {
         const { data } = await api.get("/book");
         setBooks(data);

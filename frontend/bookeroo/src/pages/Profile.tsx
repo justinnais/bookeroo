@@ -21,13 +21,7 @@ import { Link } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
-
-// TODO this is just temp interface
-export interface IBook {
-    title: string;
-    condtion: string;
-    price: string;
-}
+import { IBook } from "../api/models/Book";
 
 interface Props {
     name: string;
@@ -80,8 +74,8 @@ export default function Profile(props: Props) {
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
-                            <TableCell align="right">Condtion</TableCell>
-                            <TableCell align="right">Price</TableCell>
+                            <TableCell align="right">Edition</TableCell>
+                            <TableCell align="right">Pages</TableCell>
                             <TableCell align="right"></TableCell>
                         </TableRow>
                     </TableHead>
@@ -92,10 +86,10 @@ export default function Profile(props: Props) {
                                     {book.title}
                                 </TableCell>
                                 <TableCell align="right">
-                                    {book.condtion}
+                                    {book.edition}
                                 </TableCell>
                                 <TableCell align="right">
-                                    ${book.price}
+                                    ${book.pages}
                                 </TableCell>
                                 <TableCell align="right">
                                     <Button
@@ -127,5 +121,4 @@ export default function Profile(props: Props) {
             <BookTable />
         </Container>
     );
-
 }

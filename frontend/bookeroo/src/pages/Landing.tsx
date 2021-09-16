@@ -1,5 +1,5 @@
 import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
@@ -8,6 +8,8 @@ import TextCard from "../components/Layout/TextCard";
 import Container from "../components/Layout/Container";
 import Image from "../components/Image";
 import BookDisplay from "../components/Book/BookDisplay";
+import { api } from "../api/api";
+import { IBook } from "../api/models/Book";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -80,24 +82,15 @@ export default function Landing() {
         />,
     ];
 
-    const books = [
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-    ];
+    const [books, setBooks] = useState<Array<IBook>>([]);
+    const [loading, setLoading] = useState(true);
+    const getBooks = async () => {
+        const { data } = await api.get("/book");
+        setBooks(data);
+    };
+    useEffect(() => {
+        getBooks().finally(() => setLoading(false));
+    }, []);
 
     return (
         <div>
@@ -123,7 +116,7 @@ export default function Landing() {
                 />
             </Container>
             <Container style={{ backgroundColor: theme.palette.primary.main }}>
-                <BookDisplay books={books} />
+                <BookDisplay books={books.slice(0, 4)} />
             </Container>
         </div>
     );
