@@ -75,7 +75,7 @@ jobs:
           git-folder: listingmicroservice
           target-folder: listing
           jar: listingmicroservice-0.0.1.jar
-          port: "8083"
+          port: "8084"
           docker-container: listing-microservice
       
       #- run:

@@ -37,7 +37,7 @@ public class ListingController
 
         Listing listing = new Listing();
         listing.setUserId(body.userId);
-        listing.setBookId(body.bookId);
+        listing.setbookIsbn(body.bookIsbn);
         listing.setUsed(body.used);
         listing.setCond(body.cond);
         listing.setCondDesc(body.condDesc);
@@ -57,13 +57,13 @@ public class ListingController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list/{bookId}")
-    public ResponseEntity<?> listListings(@PathVariable("bookId") Long bookId)
+    @GetMapping("/list/{bookIsbn}")
+    public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
         JSONArray listings = new JSONArray();
-        List<Object[]> listingByBookId = listingRepository.getListingByBookId(bookId);
+        List<Object[]> listingBybookIsbn = listingRepository.getListingBybookIsbn(bookIsbn);
 
-        for (Object[] details : listingByBookId)
+        for (Object[] details : listingBybookIsbn)
         {
             JSONObject listing = new JSONObject();
             listing.put("cond", details[0]);
@@ -81,9 +81,9 @@ public class ListingController
     public ResponseEntity<?> listListings()
     {
         JSONArray listings = new JSONArray();
-        List<Object[]> listingByBookId = listingRepository.getAllListings();
+        List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
 
-        for (Object[] details : listingByBookId)
+        for (Object[] details : listingBybookIsbn)
         {
             JSONObject listing = new JSONObject();
             listing.put("cond", details[0]);

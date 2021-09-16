@@ -11,7 +11,7 @@ public class Listing
 
     private Long userId;
 
-    private Long bookId;
+    private Long bookIsbn;
 
     private boolean used;
 
@@ -40,14 +40,14 @@ public class Listing
         this.userId = userId;
     }
 
-    public Long getBookId()
+    public Long getbookIsbn()
     {
-        return bookId;
+        return bookIsbn;
     }
 
-    public void setBookId(Long bookId)
+    public void setbookIsbn(Long bookIsbn)
     {
-        this.bookId = bookId;
+        this.bookIsbn = bookIsbn;
     }
 
     public boolean isUsed()
