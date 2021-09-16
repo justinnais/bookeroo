@@ -21,6 +21,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BookDisplay(props: Props) {
     const classes = useStyles();
 
+    if (props.books.length === 0) {
+        return <div>No books :(</div>;
+    }
+
     return (
         <div className={classes.root}>
             {props.books.map((book) => {
