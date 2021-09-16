@@ -48,6 +48,8 @@ jobs:
 
       - run: ssh ubuntu@$BOOK_AWS '(sudo docker container rm $(sudo docker container ls -aq) -f)'
 
+      - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
+
       - deploy-microservice:
           git-folder: loginmicroservices
           target-folder: login

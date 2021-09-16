@@ -14,6 +14,12 @@ public interface ListingRepository extends CrudRepository<Listing, Long>
             "JOIN SellListing sl ON l.id = sl.listingId " +
             "WHERE l.bookId = :bookId")
     List<Object[]> getListingByBookId(@Param("bookId") Long bookId);
+
+    @Query("SELECT l.cond, l.condDesc, l.used, sl.price " +
+            "FROM Listing l " +
+            "JOIN SellListing sl ON l.id = sl.listingId ")
+    List<Object[]> getAllListings();
+
     // TODO: Create an object to hold the response rather than using an array
     // TODO: Consider if swap listings should be returned here
 }

@@ -76,4 +76,24 @@ public class ListingController
 
         return ResponseEntity.ok(listings.toString());
     }
+
+    @GetMapping("/list/all")
+    public ResponseEntity<?> listListings()
+    {
+        JSONArray listings = new JSONArray();
+        List<Object[]> listingByBookId = listingRepository.getAllListings();
+
+        for (Object[] details : listingByBookId)
+        {
+            JSONObject listing = new JSONObject();
+            listing.put("cond", details[0]);
+            listing.put("condDesc", details[1]);
+            listing.put("used", details[2]);
+            listing.put("price", details[3]);
+
+            listings.put(listing);
+        }
+
+        return ResponseEntity.ok(listings.toString());
+    }
 }
