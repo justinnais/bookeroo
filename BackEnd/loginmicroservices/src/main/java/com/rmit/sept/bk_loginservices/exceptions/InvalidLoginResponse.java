@@ -4,9 +4,10 @@ public class InvalidLoginResponse {
 
         private String username;
         private String password;
+        private String error;
 
         public InvalidLoginResponse() {
-            this.username = "Invalid Username";
+            this.username = "Invalid Username(Email)";
             this.password = "Invalid Password";
         }
 
@@ -24,6 +25,14 @@ public class InvalidLoginResponse {
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public void setError(String error) {
+            this.error = error;
+        }
+
+        public String getError() {
+            return this.error;
         }
     }
 
