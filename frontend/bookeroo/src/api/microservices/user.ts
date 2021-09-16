@@ -1,14 +1,9 @@
 import { AccountType } from "../../util/enums";
-import { IAccount, IBusinessAccount } from "./Account";
+import { IAccount, IBusinessAccount } from "../models/Account";
 import { BookerooRequest, BookerooResponse } from "../apiInterfaces";
-import { string } from "yup/lib/locale";
 
 // request types exported to the apiInterface.ts
-export type UserRequests =
-    | "users/register"
-    | "users/login"
-    | "users/get"
-    | "users/list";
+export type UserRequests = "user/register" | "user/login" | "user";
 
 /*
     POST - requests and responses exported to api.ts
@@ -31,7 +26,7 @@ export interface CreateAccountRequest extends BookerooRequest {
 interface CreateAccountResponse extends BookerooResponse {
     id: number;
 }
-interface LoginAccountRequest extends BookerooRequest {
+export interface LoginAccountRequest extends BookerooRequest {
     username: string;
     password: string;
 }

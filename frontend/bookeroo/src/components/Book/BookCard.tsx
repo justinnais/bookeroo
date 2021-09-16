@@ -9,16 +9,10 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Link as RouterLink } from "react-router-dom";
 import { Routes } from "../../routes/Routes";
+import { IBook } from "../../api/models/Book";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Logo from "../../assets/image.svg";
 import { theme } from "../../styles/theme";
-export interface IBookCard {
-    title: string;
-    author: string;
-    image?: string;
-    loading?: boolean;
-}
-
 const useStyles = makeStyles({
     root: {
         width: "16rem",
@@ -31,35 +25,31 @@ const useStyles = makeStyles({
         backgroundColor: alpha(theme.palette.primary.dark, 0.2),
     },
 });
-export default function BookCard(props: IBookCard) {
+export default function BookCard(book: IBook, loading: boolean) {
     const classes = useStyles();
+    const authors = book.authors.split("|");
 
     const Media = () =>
-        props.loading ? (
+        loading ? (
             <Skeleton variant="rect" className={classes.media} />
         ) : (
             <CardMedia
                 className={classes.media}
-                image={props.image || Logo}
-                title={props.title}
+                image={book.image}
+                title={book.title}
             />
         );
 
     return (
-        <Card className={classes.root} elevation={0}>
+        <Card className={classes.root}>
             <CardActionArea
                 component={RouterLink}
-                to={Routes.Book}
-                style={{ minHeight: "24rem" }}
+                to={`book/${book.isbn || book.isbn13}`}
             >
                 <Media />
                 <CardContent>
                     <Typography gutterBottom variant="h6" component="h2">
-                        {props.loading ? (
-                            <Skeleton variant="text" />
-                        ) : (
-                            props.title
-                        )}
+                        {loading ? <Skeleton variant="text" /> : book.title}
                     </Typography>
 
                     <Typography
@@ -67,11 +57,7 @@ export default function BookCard(props: IBookCard) {
                         color="textSecondary"
                         component="p"
                     >
-                        {props.loading ? (
-                            <Skeleton variant="text" />
-                        ) : (
-                            props.author
-                        )}
+                        {loading ? <Skeleton variant="text" /> : authors[0]}
                     </Typography>
                 </CardContent>
             </CardActionArea>

@@ -7,8 +7,9 @@ import {
     Theme,
     Typography,
 } from "@material-ui/core";
-import React from "react";
-import BookCard from "../components/Book/BookCard";
+import React, { useEffect, useState } from "react";
+import { api, get } from "../api/api";
+import { IBook } from "../api/models/Book";
 import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";
 import TextInput from "../components/Form/TextInput";
@@ -39,57 +40,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Books() {
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [books, setBooks] = useState<Array<IBook>>([]);
+    const getBooks = async () => {
+        const { data } = await api.get("/book");
+        setBooks(data);
+    };
+    useEffect(() => {
+        getBooks().finally(() => setLoading(false));
+    }, []);
 
-    const books = [
-        {
-            title: "Harry Potter and the Philosopher's Stone Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-        {
-            title: "Harry Potter and the Philosopher's Stone",
-            author: "J. K. Rowling.",
-        },
-        {
-            title: "The Great Gatbsy",
-            author: "F. Scott Fitzgerald",
-        },
-    ];
     return (
         <div>
             <Container

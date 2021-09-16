@@ -106,7 +106,7 @@ export default function Register() {
             const request: CreateAccountRequest = {
                 ...other,
                 username: values.email,
-                type: "users/register",
+                type: "user/register",
                 accountType: AccountType.STANDARD,
             };
             const response = post(request);

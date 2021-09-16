@@ -10,7 +10,7 @@ import Landing from "./pages/Landing";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
-import Profile, { IBook } from "./pages/Profile";
+import Profile from "./pages/Profile";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
@@ -30,19 +30,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
-const exampleBooks: IBook[] = [
-    {
-        title: "Harry Potter and the Philosopher's Stone",
-        condtion: "Lightly Used",
-        price: "23.00",
-    },
-    {
-        title: "The Great Gatbsy",
-        condtion: "Well Worn",
-        price: "16.00",
-    },
-];
 
 function App() {
     const classes = useStyles();
@@ -67,24 +54,19 @@ function App() {
                             component={Register}
                         />
                          <Route exact path={Routes.Profile}>
-                                                    <Profile
-                                                        name="John Smith"
-                                                        rating="4.65"
-                                                        books={exampleBooks}
-                                                    />
-                                                </Route>
+                            <Profile
+                                name="John Smith"
+                                rating="4.65"
+                                books={[]}
+                            />
+                        </Route>
                         <RestrictedRoute
                             exact
                             path={Routes.Login}
                             component={Login}
                         />
                         <Route exact path={Routes.Contact} component={Contact} />
-                        <Route exact path={Routes.Book}>
-                            <Book title="Harry Potter and the Philosopher's Stone" author="J. K. Rowling." description='Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus cum quod, doloribus quasi atque rem ratione ipsum
-                quaerat a explicabo velit? Velit similique error pariatur earum
-                consequatur doloremque at cumque?'/>
-                            </Route>
+                        <Route exact path={Routes.Book} component={Book} />
                         <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
                         {/* Private Routes */}

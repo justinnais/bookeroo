@@ -10,7 +10,7 @@ import {
     Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "../components/Layout/Container";
 import GridLayout from "../components/Layout/GridLayout";
 import TextCard from "../components/Layout/TextCard";
@@ -22,6 +22,10 @@ import {
     GridValueGetterParams,
 } from "@material-ui/data-grid";
 import SellerTable from "../components/SellerTable";
+import { api } from "../api/api";
+import { IBook } from "../api/models/Book";
+import { useParams } from "react-router";
+import parse from "html-react-parser";
 import Image from "../components/Image";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -40,21 +44,29 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-interface Props {
-    title: string;
-    author: string;
-    description: string;
-}
-
-export default function Book(props: Props) {
+export default function Book() {
     const classes = useStyles();
+    const [loading, setLoading] = useState(true);
+    const [book, setBook] = useState<IBook>();
+    const { isbn } = useParams<{ isbn: string }>();
+    const getBook = async () => {
+        const { data } = await api.get(`/book/${isbn}`);
+        setBook(data);
+    };
+    useEffect(() => {
+        getBook().finally(() => setLoading(false));
+    }, []);
 
+    if (!book) {
+        return <div>no book</div>;
+    }
+    const authors = book.authors.split("|");
     const firstCard = [
-        <Image src="https://via.placeholder.com/400x400" alt="placeholder" />,
+        <Image src={book.image} alt="placeholder" />,
         <TextCard
-            title={props.title}
+            title={book.title}
             titleSize="h3"
-            subtitle={props.author}
+            subtitle={authors.join(" - ")}
             buttons={[
                 <Button color="secondary" variant="contained">
                     View Sellers
@@ -65,34 +77,35 @@ export default function Book(props: Props) {
             ]}
         >
             <Typography variant="body2" component="p">
-                {props.description}
+                {book.synopsys && parse(book.synopsys)}
             </Typography>
         </TextCard>,
     ];
 
     const details = (
-        <Paper>
-            <List className={classes.details}>
-                <ListItem>
-                    <ListItemText primary="1st" secondary="Edition" />
-                </ListItem>
-                <ListItem>
-                    <ListItemText
-                        primary="26 June 1997"
-                        secondary="Published"
-                    />
-                </ListItem>
-                <ListItem>
-                    <ListItemText primary="Bloomsberry" secondary="Publisher" />
-                </ListItem>
-                <ListItem>
-                    <ListItemText primary="0-7475-3269-9" secondary="ISBN" />
-                </ListItem>
-                <ListItem>
-                    <ListItemText primary="223" secondary="Page Count" />
-                </ListItem>
-            </List>
-        </Paper>
+        <List className={classes.details}>
+            <ListItem>
+                <ListItemText primary={book.edition} secondary="Edition" />
+            </ListItem>
+            <ListItem>
+                <ListItemText
+                    primary={book.datePublished}
+                    secondary="Published"
+                />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={book.publisher} secondary="Publisher" />
+            </ListItem>
+            <ListItem>
+                <ListItemText
+                    primary={book.isbn || book.isbn13}
+                    secondary="ISBN"
+                />
+            </ListItem>
+            <ListItem>
+                <ListItemText primary={book.pages} secondary="Page Count" />
+            </ListItem>
+        </List>
     );
     const quote = (
         <div>

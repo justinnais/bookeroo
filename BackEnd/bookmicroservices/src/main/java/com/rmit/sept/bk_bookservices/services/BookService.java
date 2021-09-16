@@ -33,9 +33,15 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    // LIST
+    public Set<Book> listBooks() {
+        Set<Book> titles = new HashSet<>();
+        titles.addAll(bookRepository.findAll());
+        return titles;
+    }
 
-    public Book findByIsbn(String isbn) {
-
+    // GET
+    public Book getBook(String isbn) {
         Book book;
         if (isbn.length() == 10) {
             book = bookRepository.findByIsbn(isbn);
@@ -43,50 +49,23 @@ public class BookService {
             book = bookRepository.findByIsbn13(isbn);
         }
 
-
         if (book == null) {
             log.warn("Couldn't find book with isbn: " + isbn + ", checking isbndb");
-
             try {
                 HttpResponse<JsonNode> response = Unirest.get(isbndbUrl+"/book/"+isbn).header("Authorization",isbndbKey).asJson();
-
                 if (response.getStatus() != 200) {
                     log.error("Book not found, returning null");
                     return null;
                 } else {
-
                     book = Book.fromJson(response.getBody().getObject().getJSONObject("book"));
-
                     log.info("Found book: "+ book.getTitle() +", saving!");
-
                     bookRepository.save(book);
-
-
                 }
-
             } catch (UnirestException | JsonProcessingException e) {
                 e.printStackTrace();
             }
-
         }
-
-
         return book;
-
-
-    }
-
-    public Set<Book> getAll() {
-
-        Set<Book> titles = new HashSet<>();
-
-        titles.addAll(bookRepository.findAll());
-
-        return titles;
-
-
-
-
     }
 
     @Transactional

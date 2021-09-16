@@ -13,6 +13,8 @@ import FormGenerator, {
 } from "../components/Form/FormGenerator";
 import SubmitButton from "../components/Button/SubmitButton";
 import Container from "../components/Layout/Container";
+import { post } from "../api/api";
+import { LoginAccountRequest } from "../api/microservices/user";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -49,7 +51,16 @@ export default function Login() {
             schema: yup.string().required("Password is required"),
         },
     ];
-    const onSubmit = (values: any) => console.table(values);
+    const onSubmit = (values: any) => {
+        const request: LoginAccountRequest = {
+            type: "user/login",
+            username: values.email,
+            password: values.password,
+        };
+        console.log(request);
+        const response = post(request);
+        console.log(response);
+    };
     const form = FormGenerator(formId, fields, onSubmit);
     const buttons = [
         <SubmitButton formId={formId} isSubmitting={isSubmitting}>
