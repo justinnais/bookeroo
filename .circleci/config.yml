@@ -46,7 +46,7 @@ jobs:
 
       - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
 
-      - run: ssh ubuntu@$BOOK_AWS '(sudo docker container rm $(sudo docker container ls -aq) -f)'
+      - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
 
       - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
 
