@@ -49,7 +49,6 @@ export default function Books() {
         getBooks().finally(() => setLoading(false));
     }, []);
 
-    console.log(books);
     return (
         <div>
             <Container

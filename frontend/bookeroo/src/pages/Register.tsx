@@ -37,12 +37,10 @@ interface RegisterForm {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        pageContainer: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            paddingTop: "15vh",
+        center: {
+            display: "grid",
+            placeItems: "center",
+            minHeight: "50vh",
         },
         link: {
             textAlign: "center",
@@ -131,8 +129,10 @@ export default function Register() {
     ];
 
     return (
-        <Container className={classes.pageContainer}>
-            <FormCard title="Sign Up" form={form} buttons={buttons} />
+        <Container>
+            <div className={classes.center}>
+                <FormCard title="Sign Up" form={form} buttons={buttons} />
+            </div>
         </Container>
     );
 }

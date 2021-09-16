@@ -7,6 +7,7 @@ import {
     List,
     ListItem,
     ListItemText,
+    Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import React, { useEffect, useState } from "react";
@@ -25,6 +26,7 @@ import { api } from "../api/api";
 import { IBook } from "../api/models/Book";
 import { useParams } from "react-router";
 import parse from "html-react-parser";
+import Image from "../components/Image";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -60,11 +62,7 @@ export default function Book() {
     }
     const authors = book.authors.split("|");
     const firstCard = [
-        <img
-            className={classes.displayImage}
-            src={book.image}
-            alt="placeholder"
-        />,
+        <Image src={book.image} alt="placeholder" />,
         <TextCard
             title={book.title}
             titleSize="h3"

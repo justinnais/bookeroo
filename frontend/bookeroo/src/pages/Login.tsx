@@ -18,12 +18,13 @@ import { LoginAccountRequest } from "../api/microservices/user";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        pageContainer: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            paddingTop: "15vh",
+        center: {
+            display: "grid",
+            placeItems: "center",
+            minHeight: "50vh",
+            // alignItems: "center",
+            // justifyContent: "center",
+            // flexDirection: "column",
         },
         link: {
             textAlign: "center",
@@ -67,8 +68,10 @@ export default function Login() {
         </SubmitButton>,
     ];
     return (
-        <Container className={classes.pageContainer}>
-            <FormCard title="Sign In" form={form} buttons={buttons} />
+        <Container>
+            <div className={classes.center}>
+                <FormCard title="Sign In" form={form} buttons={buttons} />
+            </div>
         </Container>
     );
 }

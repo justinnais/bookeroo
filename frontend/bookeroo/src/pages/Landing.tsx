@@ -1,13 +1,13 @@
 import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
-import Image from "material-ui-image";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
 import GridLayout from "../components/Layout/GridLayout";
 import TextCard from "../components/Layout/TextCard";
 import Container from "../components/Layout/Container";
-
+import Image from "../components/Image";
+import BookDisplay from "../components/Book/BookDisplay";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,10 +42,10 @@ export default function Landing() {
     );
 
     const firstCard = [
-        <img
-            className={classes.displayImage}
+        <Image
             src="https://via.placeholder.com/635x512"
             alt="placeholder"
+            aspectRatio={1.4}
         />,
         <WelcomeCard />,
     ];
@@ -73,11 +73,30 @@ export default function Landing() {
 
     const secondCard = [
         <SecondTab />,
-        <img
-            className={classes.displayImage}
+        <Image
             src="https://via.placeholder.com/540x440"
             alt="placeholder"
+            aspectRatio={1.2}
         />,
+    ];
+
+    const books = [
+        {
+            title: "Harry Potter and the Philosopher's Stone",
+            author: "J. K. Rowling.",
+        },
+        {
+            title: "The Great Gatbsy",
+            author: "F. Scott Fitzgerald",
+        },
+        {
+            title: "Harry Potter and the Philosopher's Stone",
+            author: "J. K. Rowling.",
+        },
+        {
+            title: "The Great Gatbsy",
+            author: "F. Scott Fitzgerald",
+        },
     ];
 
     return (
@@ -102,6 +121,9 @@ export default function Landing() {
                     spacing={2}
                     reverseLayout={false}
                 />
+            </Container>
+            <Container style={{ backgroundColor: theme.palette.primary.main }}>
+                <BookDisplay books={books} />
             </Container>
         </div>
     );
