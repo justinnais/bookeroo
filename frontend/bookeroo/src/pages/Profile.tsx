@@ -13,6 +13,7 @@ import { getUser, listUsers } from "../api/stores/user";
 import { useQuery } from "react-query";
 import { IAccount } from "../api/models/Account";
 import { Skeleton } from "@material-ui/lab";
+import ProfileBooks from "../components/ProfileBooks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -85,6 +86,11 @@ export default function Profile() {
             <Typography variant="h5" component="h5">
                 Books For Sale
             </Typography>
+            {isLoading ? (
+                <Skeleton variant="rect" height={400} />
+            ) : (
+                <ProfileBooks userId={profile.id} />
+            )}
         </Container>
     );
 }
