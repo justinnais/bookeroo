@@ -27,8 +27,8 @@ export default function BookDisplay(props: Props) {
 
     return (
         <div className={classes.root}>
-            {props.books.map((book) => {
-                return <BookCard {...book} />;
+            {props.books.map((book, key) => {
+                return <BookCard {...book} key={key} />;
             })}
         </div>
     );
