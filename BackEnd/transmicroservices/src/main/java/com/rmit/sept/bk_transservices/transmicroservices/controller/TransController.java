@@ -27,6 +27,7 @@ public class TransController
     @Autowired
     TransactionRepository transactionRepository;
 
+    // TODO update this to match other apis
     @PostMapping("/transaction")
     public ResponseEntity<?> transaction(@RequestBody TransApiBody transApiBody,
                                          BindingResult result)

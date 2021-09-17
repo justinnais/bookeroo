@@ -19,3 +19,20 @@ export interface IBusinessAccount extends IAccountBase {
     abn: string;
     companyName: string;
 }
+
+export interface CreateAccountRequest {
+    username: string;
+    password: string;
+    accountType: AccountType;
+    // ? not sure about these optional, maybe split into seperate requests
+    displayName?: string;
+    firstName?: string;
+    lastName?: string;
+    abn?: string;
+    companyName?: string;
+}
+
+export interface LoginAccountRequest {
+    username: string;
+    password: string;
+}

@@ -1,20 +1,14 @@
-import {
-    CircularProgress,
-    createStyles,
-    makeStyles,
-    Theme,
-} from "@material-ui/core";
+import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import React, { useState } from "react";
 import FormCard from "../components/Form/FormCard";
-import Button from "../components/Button/Button";
 import * as yup from "yup";
 import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
 import SubmitButton from "../components/Button/SubmitButton";
 import Container from "../components/Layout/Container";
-import { post } from "../api/api";
-import { LoginAccountRequest } from "../api/microservices/user";
+import { loginUser } from "../api/stores/user";
+import { LoginAccountRequest } from "../api/models/Account";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -52,13 +46,12 @@ export default function Login() {
         },
     ];
     const onSubmit = (values: any) => {
-        const request: LoginAccountRequest = {
-            type: "user/login",
+        const auth: LoginAccountRequest = {
             username: values.email,
             password: values.password,
         };
-        console.log(request);
-        const response = post(request);
+        console.log(auth);
+        const response = loginUser(auth);
         console.log(response);
     };
     const form = FormGenerator(formId, fields, onSubmit);

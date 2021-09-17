@@ -1,39 +1,20 @@
 import {
     CircularProgress,
     createStyles,
-    Grid,
-    Link,
     makeStyles,
-    Paper,
-    TextField,
     Theme,
 } from "@material-ui/core";
 import Button from "../components/Button/Button";
-import { Form, Formik, useFormik } from "formik";
 import React, { useState } from "react";
 import FormCard from "../components/Form/FormCard";
-import {
-    Link as RouterLink,
-    LinkProps as RouterLinkProps,
-} from "react-router-dom";
-import TextInput from "../components/Form/TextInput";
-import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
-import { post } from "../api/api";
-import { CreateAccountRequest } from "../api/microservices/user";
 import { AccountType } from "../util/enums";
 import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
 import Container from "../components/Layout/Container";
-
-interface RegisterForm {
-    firstName: string;
-    lastName: string;
-    username: string;
-    password: string;
-    confirmPassword: string;
-}
+import { registerUser } from "../api/stores/user";
+import { CreateAccountRequest } from "../api/models/Account";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -106,10 +87,9 @@ export default function Register() {
             const request: CreateAccountRequest = {
                 ...other,
                 username: values.email,
-                type: "user/register",
                 accountType: AccountType.STANDARD,
             };
-            const response = post(request);
+            const response = registerUser(request);
             console.table(response);
         }
         setSubmitting(false);

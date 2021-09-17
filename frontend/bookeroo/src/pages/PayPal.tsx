@@ -1,10 +1,13 @@
 import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { post } from "../api/api";
-import { CreateTransactionRequest } from "../api/microservices/trans";
-import { Listing } from "../api/microservices/trans";
+import { Listing, CreateTransactionRequest } from "../api/models/Listing";
+import { createTrans } from "../api/stores/trans";
 
-export default function PayPal(price: string, listings: Array<Listing>, buyer_id: string) {
+export default function PayPal(
+    price: string,
+    listings: Array<Listing>,
+    buyer_id: string
+) {
     return (
         <div>
             <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
@@ -12,11 +15,10 @@ export default function PayPal(price: string, listings: Array<Listing>, buyer_id
                 amount={price}
                 onSuccess={() => {
                     const request: CreateTransactionRequest = {
-                        type: "trans/transaction",
                         listings: listings,
                         buyer_id: buyer_id,
                     };
-                    post(request);
+                    createTrans(request);
                 }}
             />
         </div>
