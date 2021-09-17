@@ -44,11 +44,11 @@ jobs:
           fingerprints:
             - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
 
-      - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+     # - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
 
-      - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
+     # - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
 
-      - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
+     # - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
 
       - deploy-microservice:
           git-folder: loginmicroservices
