@@ -6,7 +6,7 @@ import Button from "../components/Button/Button";
 import GridLayout from "../components/Layout/GridLayout";
 import TextCard from "../components/Layout/TextCard";
 import Container from "../components/Layout/Container";
-import Image from "../components/Image";
+import Image from "../components/Layout/Image";
 import BookDisplay from "../components/Book/BookDisplay";
 import { api } from "../api/api";
 import { IBook } from "../api/models/Book";
@@ -116,7 +116,7 @@ export default function Landing() {
                 />
             </Container>
             <Container style={{ backgroundColor: theme.palette.primary.main }}>
-                <BookDisplay books={books.slice(0, 4)} />
+                <BookDisplay count={4} />
             </Container>
         </div>
     );

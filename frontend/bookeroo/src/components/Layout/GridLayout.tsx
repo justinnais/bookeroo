@@ -47,7 +47,7 @@ export default function GridLayout(props: Props) {
                         ? props.size[index]
                         : 12 / arr.length;
                     return (
-                        <Grid item sm={size as GridSize}>
+                        <Grid item sm={size as GridSize} key={index}>
                             {item}
                         </Grid>
                     );

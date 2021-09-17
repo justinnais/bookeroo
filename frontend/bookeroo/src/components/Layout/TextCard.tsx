@@ -86,8 +86,8 @@ export default function TextCard(props: Props) {
             <div className={classes.children}>{props.children}</div>
             <div className={classes.buttons}>
                 {props.buttons &&
-                    props.buttons.map((button) => {
-                        return button;
+                    props.buttons.map((button, key) => {
+                        return <div key={key}>{button}</div>; // todo check this extra div doesn't break things
                     })}
             </div>
         </div>
