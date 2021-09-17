@@ -82,16 +82,6 @@ export default function Landing() {
         />,
     ];
 
-    const [books, setBooks] = useState<Array<IBook>>([]);
-    const [loading, setLoading] = useState(true);
-    const getBooks = async () => {
-        const { data } = await api.get("/book");
-        setBooks(data);
-    };
-    useEffect(() => {
-        getBooks().finally(() => setLoading(false));
-    }, []);
-
     return (
         <div>
             <Container
