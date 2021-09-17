@@ -15,10 +15,10 @@ interface Props extends ContainerProps {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
-            marginTop: (props: Props) =>
-                props.noMargin ? theme.spacing(0) : theme.spacing(12),
-            marginBottom: (props: Props) =>
-                props.noMargin ? theme.spacing(0) : theme.spacing(12),
+            paddingTop: (props: Props) =>
+                props.noMargin ? theme.spacing(0) : theme.spacing(8),
+            paddingBottom: (props: Props) =>
+                props.noMargin ? theme.spacing(0) : theme.spacing(8),
         },
     })
 );

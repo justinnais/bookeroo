@@ -1,5 +1,11 @@
-import React from "react";
-import { AppBar, Toolbar, Typography, Container } from "@material-ui/core";
+import React, { useState } from "react";
+import {
+    AppBar,
+    Toolbar,
+    Typography,
+    Container,
+    Collapse,
+} from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
     Link as RouterLink,
@@ -11,6 +17,7 @@ import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
 import Alert from "../Alert";
 import { useAlertStore } from "../../stores/useAlertStore";
+import Searchbar from "./Searchbar";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
@@ -40,6 +47,13 @@ const useStyles = makeStyles((theme: Theme) =>
             color: theme.palette.secondary.main,
             textDecoration: "inherit",
         },
+        searchbar: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            background: theme.palette.primary.main,
+            gap: theme.spacing(2),
+        },
     })
 );
 
@@ -53,14 +67,18 @@ export default function Header() {
     const toast = (message: string, variant?: string) => {
         setAlert(message, variant);
     };
+    const [showSearch, setShowSearch] = useState(false);
+
+    const toggleSearch = () => setShowSearch(!showSearch);
 
     /**
      * Navigation links that show on large screens
      */
+    // TODO center buttons correctly
     const NavButtons = () => (
         <>
             <div className={classes.navButtons}>
-                <Button>Search</Button>
+                <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
                 <Button onClick={() => toast("this is an alert")}>
@@ -91,16 +109,25 @@ export default function Header() {
      * which contain the Logo, NavButtons and MenuButton components we created above
      */
     return (
-        <AppBar position="static" className={classes.root}>
-            <Container>
-                <Toolbar className={classes.toolbar} disableGutters>
-                    <Logo />
-                    <Alert />
-                    {/* <MiddleNavButtons /> */}
-                    <NavButtons />
-                    <MenuButton />
-                </Toolbar>
-            </Container>
-        </AppBar>
+        <div>
+            <AppBar position="static" className={classes.root}>
+                <Container>
+                    <Toolbar className={classes.toolbar} disableGutters>
+                        <Logo />
+                        {/* <MiddleNavButtons /> */}
+                        <NavButtons />
+                        <MenuButton />
+                    </Toolbar>
+                </Container>
+            </AppBar>
+            <Collapse in={showSearch}>
+                <div className={classes.searchbar}>
+                    <Searchbar />
+                    <Button variant="contained" color="secondary">
+                        Search
+                    </Button>
+                </div>
+            </Collapse>
+        </div>
     );
 }

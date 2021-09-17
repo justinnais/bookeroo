@@ -7,6 +7,10 @@ import com.rmit.sept.bk_loginservices.exceptions.InvalidAbnException;
 import com.rmit.sept.bk_loginservices.exceptions.MissingFieldException;
 import com.rmit.sept.bk_loginservices.exceptions.UsernameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.repositories.UserRepository;
+
+import java.util.List;
+import java.util.Optional;
+
 import com.rmit.sept.bk_loginservices.exceptions.DisplayNameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.model.User;
 import com.rmit.sept.bk_loginservices.utils.AccountStatus;
@@ -19,11 +23,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Service
 public class UserService {
 
+    
+
     @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    // LIST
+    public Iterable<User> listUsers() {
+        return userRepository.findAll();
+    }
+
+    // GET
+    public Optional<User> getUser(Long id) {
+        return userRepository.findById(id);
+    }
 
     public User saveUser (User newUser){
 

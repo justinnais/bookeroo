@@ -57,7 +57,7 @@ class LoginControllerTest
     @Test
     public void RegisterWithAllFieldsEmpty() throws JSONException
     {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/users" +
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/user" +
                 "/register").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
@@ -74,7 +74,7 @@ class LoginControllerTest
     public void RegisterWithValidUser() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/users/register").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
         userJson.put("firstName", "firstName");
@@ -95,7 +95,7 @@ class LoginControllerTest
     public void LoginWithAllFieldsEmpty() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/users/login").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
         userJson.put("username", "");
@@ -110,7 +110,7 @@ class LoginControllerTest
     public void LoginWithNonEmptyFields() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/users/login").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
         userJson.put("username", "asdf");
@@ -127,7 +127,7 @@ class LoginControllerTest
         Assertions.assertTrue(createUser("username@logintest.com-test"));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/users/login").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
         userJson.put("username", "username@logintest.com-test");
@@ -160,7 +160,7 @@ class LoginControllerTest
     private boolean createUser(String username)
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/users/register").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject userJson = new JSONObject();
         try
@@ -178,6 +178,7 @@ class LoginControllerTest
         }
 
         MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), false);
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+response.getErrorMessage());
         return response != null && response.getStatus() == 201;
     }
 

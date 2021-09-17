@@ -1,13 +1,15 @@
 import { createStyles, makeStyles, Theme, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import Image from "material-ui-image";
 import { theme } from "../styles/theme";
 import Button from "../components/Button/Button";
-import GridLayout, { IGridItem } from "../components/Layout/GridLayout";
-import TextCard from "../components/TextCard";
+import GridLayout from "../components/Layout/GridLayout";
+import TextCard from "../components/Layout/TextCard";
 import Container from "../components/Layout/Container";
-
+import Image from "../components/Layout/Image";
+import BookDisplay from "../components/Book/BookDisplay";
+import { api } from "../api/api";
+import { IBook } from "../api/models/Book";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,17 +44,12 @@ export default function Landing() {
     );
 
     const firstCard = [
-        {
-            size: 7,
-            node: (
-                <img
-                    className={classes.displayImage}
-                    src="https://via.placeholder.com/635x512"
-                    alt="placeholder"
-                />
-            ),
-        },
-        { size: 5, node: <WelcomeCard /> },
+        <Image
+            src="https://via.placeholder.com/635x512"
+            alt="placeholder"
+            aspectRatio={1.4}
+        />,
+        <WelcomeCard />,
     ];
 
     const SecondTab = () => (
@@ -61,46 +58,30 @@ export default function Landing() {
             titleSize="h4"
         >
             <GridLayout
-                // TODO this is kinda buggy needs a fix
                 spacing={2}
                 items={[
-                    {
-                        node: (
-                            <Typography variant="body2" component="p">
-                                Lorem ipsum dolor sit, amet consectetur
-                                adipisicing elit. Porro quos doloribus dolorum
-                                quis labore?
-                            </Typography>
-                        ),
-                    },
-                    {
-                        node: (
-                            <Typography variant="body2" component="p">
-                                Lorem ipsum dolor sit, amet consectetur
-                                adipisicing elit. Porro quos doloribus dolorum
-                                quis labore?
-                            </Typography>
-                        ),
-                    },
+                    <Typography variant="body2" component="p">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Porro quos doloribus dolorum quis labore?
+                    </Typography>,
+                    <Typography variant="body2" component="p">
+                        Lorem ipsum dolor sit, amet consectetur adipisicing
+                        elit. Porro quos doloribus dolorum quis labore?
+                    </Typography>,
                 ]}
             />
         </TextCard>
     );
 
-    const secondCard: IGridItem[] = [
-        { node: <SecondTab /> },
-        {
-            node: (
-                <img
-                    className={classes.displayImage}
-                    src="https://via.placeholder.com/540x440"
-                    alt="placeholder"
-                />
-            ),
-        },
+    const secondCard = [
+        <SecondTab />,
+        <Image
+            src="https://via.placeholder.com/540x440"
+            alt="placeholder"
+            aspectRatio={1.2}
+        />,
     ];
 
-    // TODO IGridItem is clunky and needs reworking
     return (
         <div>
             <Container
@@ -109,6 +90,7 @@ export default function Landing() {
             >
                 <GridLayout
                     items={firstCard}
+                    size={[7, 5]}
                     spacing={2}
                     reverseLayout={true}
                 />
@@ -122,6 +104,9 @@ export default function Landing() {
                     spacing={2}
                     reverseLayout={false}
                 />
+            </Container>
+            <Container style={{ backgroundColor: theme.palette.primary.main }}>
+                <BookDisplay count={4} />
             </Container>
         </div>
     );

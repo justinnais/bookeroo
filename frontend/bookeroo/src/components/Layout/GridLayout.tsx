@@ -8,18 +8,16 @@ import {
 import { createStyles } from "@material-ui/styles";
 import React from "react";
 
-export interface IGridItem {
-    size?: number;
-    node: React.ReactNode;
-}
 interface Props {
-    items: IGridItem[];
-    // items: IGridItem[] | React.ReactNode[];
-    spacing?: GridSpacing;
-    reverseLayout?: boolean;
+    items: React.ReactNode[]; // items to display in the grid
+    size?: number[]; // optional sizing if wanting uneven grid - array of numbers should add up to 12
+    spacing?: GridSpacing; // space between items
+    reverseLayout?: boolean; // reverse layout when small screen
 }
-const useStyles = makeStyles((theme: Theme) =>
-    createStyles({
+const useStyles = makeStyles((theme: Theme) => {
+    const flexDirection = (props: Props) =>
+        props.reverseLayout ? "column-reverse" : "column";
+    return createStyles({
         root: {
             flexGrow: 1,
             paddingTop: theme.spacing(8),
@@ -29,12 +27,11 @@ const useStyles = makeStyles((theme: Theme) =>
             justifyContent: "space-evenly",
             alignItems: "center",
             [theme.breakpoints.down("xs")]: {
-                flexDirection: "column-reverse",
+                flexDirection,
             }, // on small screens, reverse grid order to show text first
-            // TODO get this working with conditional props.reverseLayout
         },
-    })
-);
+    });
+});
 
 export default function GridLayout(props: Props) {
     const classes = useStyles(props);
@@ -46,10 +43,12 @@ export default function GridLayout(props: Props) {
                 className={classes.gridContainer}
             >
                 {props.items.map((item, index, arr) => {
-                    const size = item.size ? item.size : 12 / arr.length;
+                    const size = props.size
+                        ? props.size[index]
+                        : 12 / arr.length;
                     return (
-                        <Grid item sm={size as GridSize}>
-                            {item.node}
+                        <Grid item sm={size as GridSize} key={index}>
+                            {item}
                         </Grid>
                     );
                 })}
