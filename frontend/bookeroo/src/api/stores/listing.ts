@@ -13,5 +13,5 @@ export function getListing(id: number) {
 
 // TODO implement in backend
 export function listBookListings(isbn: string) {
-    return apiListing.get(`/book/${isbn}`);
+    return apiListing.get(`/list/${isbn}`);
 }

@@ -26,6 +26,7 @@ import GridLayout from "../Layout/GridLayout";
 import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
+import { listBookListings, listListings } from "../../api/stores/listing";
 
 interface Props {
     book: IBook;
@@ -49,6 +50,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
+    const { isLoading, data } = useQuery("listBookListings", () =>
+        listBookListings(props.book.isbn || props.book.isbn)
+    );
+    // const { data } = useQuery("listListings", () => listListings());
+
+    console.log("listing", data);
 
     const firstCard = [
         <Image src={props.book.image} alt="placeholder" />,

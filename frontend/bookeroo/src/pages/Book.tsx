@@ -52,9 +52,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Book() {
     const classes = useStyles();
     const { isbn } = useParams<{ isbn: string }>();
-    const { isLoading, data } = useQuery("getBooks", () => getBook(isbn));
+    const { isLoading, data } = useQuery("getBook", () => getBook(isbn));
 
-    let book = data ? (data.data as IBook) : undefined;
+    let book: IBook = data ? data.data : undefined;
+    if (data) {
+        book = data.data;
+        book.datePublished = data.data.date_published;
+    }
 
     // TODO fix skeleton
     return isLoading || !book ? <BookSkeleton /> : <BookTemplate book={book} />;
