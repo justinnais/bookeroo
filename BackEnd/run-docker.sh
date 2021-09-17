@@ -25,7 +25,7 @@ boot () {
 service=$1
 boot="NO"
 
-if [[ "$service" == "login"] || "$service" == "all" ]]
+if [[ "$service" == "login" || "$service" == "all" ]]
 then
     boot loginmicroservices login-microservice 8080
     boot="YES"
