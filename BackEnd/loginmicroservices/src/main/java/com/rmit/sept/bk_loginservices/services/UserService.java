@@ -37,8 +37,8 @@ public class UserService {
     }
 
     // GET
-    public Optional<User> getUser(Long id) {
-        return userRepository.findById(id);
+    public User getUser(String displayName) {
+        return userRepository.findByDisplayName(displayName);
     }
 
     public User saveUser (User newUser){

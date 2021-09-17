@@ -55,13 +55,7 @@ function App() {
                             path={Routes.Register}
                             component={Register}
                         />
-                         <Route exact path={Routes.Profile}>
-                            <Profile
-                                name="John Smith"
-                                rating="4.65"
-                                books={[]}
-                            />
-                        </Route>
+                         <Route exact path={Routes.Profile} component={Profile}/>
                         <RestrictedRoute
                             exact
                             path={Routes.Login}
