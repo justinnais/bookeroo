@@ -3,6 +3,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { api } from "../../api/api";
 import { IBook } from "../../api/models/Book";
+import { listBooks } from "../../api/stores/book";
 import BookCard from "./BookCard";
 
 interface Props {
@@ -26,10 +27,7 @@ export default function BookDisplay(props: Props) {
 
     // load books through react query
     // TODO maybe factor out into store?
-    const { isLoading, data } = useQuery(
-        "getBooks",
-        async () => await api.get("/book")
-    );
+    const { isLoading, data } = useQuery("listBooks", listBooks);
 
     let books = data ? (data.data as IBook[]) : [];
 

@@ -8,7 +8,6 @@ import {
     Typography,
 } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { api, get } from "../api/api";
 import { IBook } from "../api/models/Book";
 import BookDisplay from "../components/Book/BookDisplay";
 import Button from "../components/Button/Button";

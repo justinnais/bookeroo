@@ -19,13 +19,13 @@ import {
 import TextInput from "../components/Form/TextInput";
 import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
-import { post } from "../api/api";
 import { CreateAccountRequest } from "../api/microservices/user";
 import { AccountType } from "../util/enums";
 import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
 import Container from "../components/Layout/Container";
+import { registerUser } from "../api/stores/user";
 
 interface RegisterForm {
     firstName: string;
@@ -106,10 +106,9 @@ export default function Register() {
             const request: CreateAccountRequest = {
                 ...other,
                 username: values.email,
-                type: "user/register",
                 accountType: AccountType.STANDARD,
             };
-            const response = post(request);
+            const response = registerUser(request);
             console.table(response);
         }
         setSubmitting(false);

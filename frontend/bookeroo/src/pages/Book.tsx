@@ -31,6 +31,7 @@ import { useQuery } from "react-query";
 import Skeleton from "@material-ui/lab/Skeleton";
 import BookTemplate from "../components/Book/BookTemplate";
 import BookSkeleton from "../components/Book/BookSkeleton";
+import { getBook } from "../api/stores/book";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,11 +51,8 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Book() {
     const classes = useStyles();
-    const { isLoading, data } = useQuery(
-        "getBooks",
-        async () => await api.get(`/book/${isbn}`)
-    );
     const { isbn } = useParams<{ isbn: string }>();
+    const { isLoading, data } = useQuery("getBooks", () => getBook(isbn));
 
     let book = data ? (data.data as IBook) : undefined;
 
