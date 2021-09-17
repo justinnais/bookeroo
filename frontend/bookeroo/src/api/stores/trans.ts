@@ -1,7 +1,7 @@
 // transaction microservice store
 
 import { apiTrans } from "../api";
-import { CreateTransactionRequest } from "../microservices/trans";
+import { CreateTransactionRequest } from "../models/Listing";
 
 export function listTrans() {
     return apiTrans.get("");

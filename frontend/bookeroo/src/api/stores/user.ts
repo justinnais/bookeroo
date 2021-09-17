@@ -1,12 +1,7 @@
 // book microservice store
 
-import { AccountType } from "../../util/enums";
-import { api, apiLogin } from "../api";
-import {
-    CreateAccountRequest,
-    LoginAccountRequest,
-} from "../microservices/user";
-import { IAccount, IBusinessAccount } from "../models/Account";
+import { apiLogin } from "../api";
+import { CreateAccountRequest, LoginAccountRequest } from "../models/Account";
 
 export function listUsers() {
     return apiLogin.get("");

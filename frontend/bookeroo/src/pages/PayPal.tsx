@@ -1,7 +1,6 @@
 import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { CreateTransactionRequest } from "../api/microservices/trans";
-import { Listing } from "../api/microservices/trans";
+import { Listing, CreateTransactionRequest } from "../api/models/Listing";
 import { createTrans } from "../api/stores/trans";
 
 export default function PayPal(
