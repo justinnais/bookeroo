@@ -1,5 +1,9 @@
 import axios from "axios";
-import { GET_ERRORS, GET_PERSONS, GET_PERSON } from "../util/types";
+import {
+    GET_ERRORS,
+    GET_PERSONS,
+    GET_PERSON,
+} from "../api/microservices/Account";
 
 // TODO - replace these APIs in api.ts file, not sure what the types of params are yet
 

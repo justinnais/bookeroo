@@ -12,7 +12,6 @@ import Button from "../components/Button/Button";
 import { Form, Formik, useFormik } from "formik";
 import React, { useState } from "react";
 import FormCard from "../components/Form/FormCard";
-import { Container } from "@material-ui/core";
 import {
     Link as RouterLink,
     LinkProps as RouterLinkProps,
@@ -21,28 +20,27 @@ import TextInput from "../components/Form/TextInput";
 import { camelCase } from "../util/stringManipulation";
 import * as yup from "yup";
 import { post } from "../api/api";
-import { CreateAccountRequest } from "../api/account";
+import { CreateAccountRequest } from "../api/microservices/user";
 import { AccountType } from "../util/enums";
 import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
+import Container from "../components/Layout/Container";
 
 interface RegisterForm {
     firstName: string;
     lastName: string;
-    email: string;
+    username: string;
     password: string;
     confirmPassword: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        pageContainer: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            paddingTop: "15vh",
+        center: {
+            display: "grid",
+            placeItems: "center",
+            minHeight: "50vh",
         },
         link: {
             textAlign: "center",
@@ -55,21 +53,23 @@ export default function Register() {
     const classes = useStyles();
     const fields: GeneratedField[] = [
         {
+            label: "Display Name",
+            type: "text",
+            schema: yup.string().required("Display Name is required"),
+        },
+        {
             label: "First Name",
             type: "text",
-            initialValue: "",
             schema: yup.string().required("First Name is required"),
         },
         {
             label: "Last Name",
             type: "text",
-            initialValue: "",
             schema: yup.string().required("Last Name is required"),
         },
         {
             label: "Email",
             type: "email",
-            initialValue: "",
             schema: yup
                 .string()
                 .email("Email must be a valid email")
@@ -78,14 +78,14 @@ export default function Register() {
         {
             label: "Password",
             type: "password",
-            initialValue: "",
-            schema: yup.string().required("Password is required"),
-            // .min(8, 'Password is too short'), // todo uncomment after testing and add regex,
+            schema: yup
+                .string()
+                .required("Password is required")
+                .min(6, "Password is too short"),
         },
         {
             label: "Confirm Password",
             type: "password",
-            initialValue: "",
             schema: yup
                 .string()
                 .required("Please confirm password")
@@ -100,12 +100,13 @@ export default function Register() {
         if (duplicate) {
             // if exists, global alert error
         } else {
-            const { confirmPassword, ...other } = values; // omits confirmPassword from values
+            const { email, confirmPassword, ...other } = values; // omits confirmPassword and email from values
             console.table(values);
 
             const request: CreateAccountRequest = {
                 ...other,
-                type: "register",
+                username: values.email,
+                type: "user/register",
                 accountType: AccountType.STANDARD,
             };
             const response = post(request);
@@ -113,13 +114,13 @@ export default function Register() {
         }
         setSubmitting(false);
     };
-    const form = FormGenerator(fields, onSubmit, "registerForm");
+    const form = FormGenerator("registerForm", fields, onSubmit);
 
     const buttons = [
         <Button
             variant="contained"
             color="secondary"
-            form="register"
+            form="registerForm"
             disabled={isSubmitting}
             type="submit"
         >
@@ -128,8 +129,10 @@ export default function Register() {
     ];
 
     return (
-        <Container className={classes.pageContainer}>
-            <FormCard title="Sign Up" form={form} buttons={buttons} />
+        <Container>
+            <div className={classes.center}>
+                <FormCard title="Sign Up" form={form} buttons={buttons} />
+            </div>
         </Container>
     );
 }

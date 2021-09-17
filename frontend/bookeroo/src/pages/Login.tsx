@@ -1,6 +1,5 @@
 import {
     CircularProgress,
-    Container,
     createStyles,
     makeStyles,
     Theme,
@@ -13,15 +12,19 @@ import FormGenerator, {
     GeneratedField,
 } from "../components/Form/FormGenerator";
 import SubmitButton from "../components/Button/SubmitButton";
+import Container from "../components/Layout/Container";
+import { post } from "../api/api";
+import { LoginAccountRequest } from "../api/microservices/user";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
-        pageContainer: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            paddingTop: "15vh",
+        center: {
+            display: "grid",
+            placeItems: "center",
+            minHeight: "50vh",
+            // alignItems: "center",
+            // justifyContent: "center",
+            // flexDirection: "column",
         },
         link: {
             textAlign: "center",
@@ -33,11 +36,9 @@ export default function Login() {
     const [isSubmitting, setSubmitting] = useState(false);
     const classes = useStyles();
     const formId = "loginForm";
-
     const fields: GeneratedField[] = [
         {
             label: "Email",
-            initialValue: "",
             type: "email",
             schema: yup
                 .string()
@@ -46,21 +47,31 @@ export default function Login() {
         },
         {
             label: "Password",
-            initialValue: "",
             type: "password",
             schema: yup.string().required("Password is required"),
         },
     ];
-    const onSubmit = (values: any) => console.table(values);
-    const form = FormGenerator(fields, onSubmit, formId);
+    const onSubmit = (values: any) => {
+        const request: LoginAccountRequest = {
+            type: "user/login",
+            username: values.email,
+            password: values.password,
+        };
+        console.log(request);
+        const response = post(request);
+        console.log(response);
+    };
+    const form = FormGenerator(formId, fields, onSubmit);
     const buttons = [
         <SubmitButton formId={formId} isSubmitting={isSubmitting}>
             Sign In
         </SubmitButton>,
     ];
     return (
-        <Container className={classes.pageContainer}>
-            <FormCard title="Sign In" form={form} buttons={buttons} />
+        <Container>
+            <div className={classes.center}>
+                <FormCard title="Sign In" form={form} buttons={buttons} />
+            </div>
         </Container>
     );
 }

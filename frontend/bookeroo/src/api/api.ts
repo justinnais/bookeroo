@@ -1,45 +1,71 @@
-import axios from "axios";
-import { CreateAccountRequest } from "./account";
+import axios, { AxiosResponse } from "axios";
+import { BookerooResponse } from "./apiInterfaces";
+import { BookGetRequest, BookGetResponse } from "./microservices/book";
+import { TransPostRequest } from "./microservices/trans";
+import {
+    UserGetRequest,
+    UserGetResponse,
+    UserPostRequest,
+    UserPostResponse,
+} from "./microservices/user";
 
-const REST_URL = "http://localhost:8080/api/";
+type PostRequest = UserPostRequest | TransPostRequest;
+type PostResponse = UserPostResponse;
+type GetRequest = UserGetRequest | BookGetRequest;
+type GetResponse = UserGetResponse | BookGetResponse;
 
-type RequestTypes = "register" | "login";
-type RequestInterfaces = CreateAccountRequest;
-type Identifier = string | number | undefined;
+// const REST_URL = "https://bookeroo-api.danieljmills.com/api";
 
-// export namespace API {
+export const api = axios.create({
+    baseURL: "http://localhost:8080/api",
+});
 
-export async function post(item: RequestInterfaces) {
-    try {
-        const response = await axios.post(`${REST_URL}/${item.type}`, item);
-        switch (response.status) {
-            case 200:
-                console.log(response);
-                break;
-
-            default:
-                break;
-        }
-    } catch (error) {
-        console.error(error);
-    }
+/**
+ * Post API function
+ * @param item Post Request item that is being sent to backend
+ * @returns Axios response
+ */
+export async function post(item: PostRequest) {
+    return await api.post(`/${item.type}`, item);
 }
 
-export async function get(requestType: RequestTypes, identifier: Identifier) {
-    try {
-        const response = await axios.get(
-            `${REST_URL}/${requestType}/${identifier}`
+/**
+ * Get API function
+ * @param item Get Request item that is being sent to backend
+ * @returns Axios response
+ */
+export async function get(item: GetRequest): Promise<AxiosResponse> {
+    // if the request type has an id, pass it through the request
+    const id = "id" in item ? `/${item.id}` : "";
+    return await api.get(`/${item.type}${id}`).then(
+        (res) => res,
+        (err) => err.response
+    );
+
+    /* try {
+        const res_1 = await api.get(`/${item.type}${id}`);
+        return res_1.data;
+    } catch (error) {
+        console.error(error);
+    } */
+    /*  try {
+        return await axios.get(`${REST_URL}/${item.type}${id}`).then(
+            (response) => ({
+                data: response.data,
+                status: response.status,
+                statusText: response.statusText,
+            }),
+            (error) => ({
+                error: error.response.data,
+                status: error.response.status,
+                statusText: error.response.statusText,
+            })
         );
-        switch (response.status) {
-            case 200:
-                console.log(response);
-                break;
-
-            default:
-                break;
-        }
     } catch (error) {
         console.error(error);
+        return error;
     }
+    return await (
+        await axios.get(`${REST_URL}/${item.type}${id}`)
+    ).data; */
 }
-// }
