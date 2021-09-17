@@ -13,6 +13,12 @@ import { IBook } from "../../api/models/Book";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Logo from "../../assets/image.svg";
 import { theme } from "../../styles/theme";
+
+interface IBookCard {
+    book: IBook;
+    loading: boolean;
+}
+
 const useStyles = makeStyles({
     root: {
         width: "16rem",
@@ -25,18 +31,17 @@ const useStyles = makeStyles({
         backgroundColor: alpha(theme.palette.primary.dark, 0.2),
     },
 });
-export default function BookCard(book: IBook, loading: boolean) {
+export default function BookCard(props: IBookCard) {
     const classes = useStyles();
-    const authors = book.authors.split("|");
 
     const Media = () =>
-        loading ? (
+        props.loading ? (
             <Skeleton variant="rect" className={classes.media} />
         ) : (
             <CardMedia
                 className={classes.media}
-                image={book.image}
-                title={book.title}
+                image={props.book.image}
+                title={props.book.title}
             />
         );
 
@@ -44,20 +49,32 @@ export default function BookCard(book: IBook, loading: boolean) {
         <Card className={classes.root}>
             <CardActionArea
                 component={RouterLink}
-                to={`book/${book.isbn || book.isbn13}`}
+                to={
+                    props.loading
+                        ? ""
+                        : `book/${props.book.isbn || props.book.isbn13}`
+                }
             >
                 <Media />
                 <CardContent>
-                    <Typography gutterBottom variant="h6" component="h2">
-                        {loading ? <Skeleton variant="text" /> : book.title}
+                    <Typography gutterBottom variant="body1">
+                        {props.loading ? (
+                            <Skeleton variant="text" />
+                        ) : (
+                            props.book.title
+                        )}
                     </Typography>
 
                     <Typography
-                        variant="body2"
+                        variant="subtitle2"
                         color="textSecondary"
                         component="p"
                     >
-                        {loading ? <Skeleton variant="text" /> : authors[0]}
+                        {props.loading ? (
+                            <Skeleton variant="text" />
+                        ) : (
+                            props.book.authors.split("|")[0]
+                        )}
                     </Typography>
                 </CardContent>
             </CardActionArea>

@@ -1,10 +1,12 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import React from "react";
+import { useQuery } from "react-query";
+import { api } from "../../api/api";
 import { IBook } from "../../api/models/Book";
 import BookCard from "./BookCard";
 
 interface Props {
-    books: IBook[];
+    count?: number;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,17 +20,33 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
+
 export default function BookDisplay(props: Props) {
     const classes = useStyles();
 
-    if (props.books.length === 0) {
-        return <div>No books :(</div>;
+    // load books through react query
+    // TODO maybe factor out into store?
+    const { isLoading, data } = useQuery(
+        "getBooks",
+        async () => await api.get("/book")
+    );
+
+    let books = data ? (data.data as IBook[]) : [];
+
+    // if data is loading, create dummy books so loading skeleton works
+    if (isLoading) {
+        books = Array(props.count || 8).fill(undefined);
+    }
+
+    // if there is a number provided, show that number of books in the display
+    if (props.count) {
+        books = books.slice(0, props.count);
     }
 
     return (
         <div className={classes.root}>
-            {props.books.map((book, key) => {
-                return <BookCard {...book} key={key} />;
+            {books.map((book, key) => {
+                return <BookCard book={book} key={key} loading={isLoading} />;
             })}
         </div>
     );

@@ -116,7 +116,7 @@ export default function Landing() {
                 />
             </Container>
             <Container style={{ backgroundColor: theme.palette.primary.main }}>
-                <BookDisplay books={books.slice(0, 4)} />
+                <BookDisplay count={4} />
             </Container>
         </div>
     );

@@ -17,6 +17,8 @@ import Container from "../components/Layout/Container";
 import Searchbar from "../components/Layout/Searchbar";
 import TextCard from "../components/Layout/TextCard";
 import { theme } from "../styles/theme";
+import { useQuery } from "react-query";
+import BookCard from "../components/Book/BookCard";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,15 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Books() {
     const classes = useStyles();
-    const [loading, setLoading] = useState(true);
-    const [books, setBooks] = useState<Array<IBook>>([]);
-    const getBooks = async () => {
-        const { data } = await api.get("/book");
-        setBooks(data);
-    };
-    useEffect(() => {
-        getBooks().finally(() => setLoading(false));
-    }, []);
 
     return (
         <div>
@@ -83,7 +76,7 @@ export default function Books() {
                 </div>
             </Container>
             <Container>
-                <BookDisplay books={books} />
+                <BookDisplay />
             </Container>
         </div>
     );
