@@ -18,19 +18,19 @@ commands:
       - run:
           name: clean-and-test-<<parameters.docker-container>>
           command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean && mvn test
-      - run:
-          name: build-<<parameters.docker-container>>
-          command: cd BackEnd/<<parameters.git-folder>>/ && mvn package
-      - run:
-          name: deploy-<<parameters.docker-container>>
-          command:
-            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>> &&
-            scp BackEnd/<<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile &&
-            ssh ubuntu@$BOOK_AWS '(
-              cd <<parameters.target-folder>>/ && 
-              sudo docker build -t bookeroo/<<parameters.docker-container>> . &&
-              sudo docker run -d -p <<parameters.port>>:8080 bookeroo/<<parameters.docker-container>>
-            )'
+      #- run:
+      #    name: build-<<parameters.docker-container>>
+      #    command: cd BackEnd/<<parameters.git-folder>>/ && mvn package
+      #- run:
+      #    name: deploy-<<parameters.docker-container>>
+      #    command:
+      #      scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/target/<<parameters.jar>> &&
+      #      scp BackEnd/<<parameters.git-folder>>/Dockerfile ubuntu@$BOOK_AWS:~/<<parameters.target-folder>>/Dockerfile &&
+      #      ssh ubuntu@$BOOK_AWS '(
+      #        cd <<parameters.target-folder>>/ && 
+      #        sudo docker build -t bookeroo/<<parameters.docker-container>> . &&
+      #        sudo docker run -d -p <<parameters.port>>:8080 bookeroo/<<parameters.docker-container>>
+      #      )'
             
 
 jobs:
@@ -44,11 +44,11 @@ jobs:
           fingerprints:
             - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
 
-      - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+     # - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
 
-      - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
+     # - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
 
-      - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
+     # - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
 
       - deploy-microservice:
           git-folder: loginmicroservices
