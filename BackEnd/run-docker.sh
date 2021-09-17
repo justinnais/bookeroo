@@ -23,23 +23,34 @@ boot () {
 
 
 service=$1
+boot="NO"
 
 if [[ "$service" == "login"] || "$service" == "all" ]]
 then
     boot loginmicroservices login-microservice 8080
-elif [[ "$service" == "book" ||  "$service" == "all" ]]
+    boot="YES"
+fi
+if [[ "$service" == "book" ||  "$service" == "all" ]]
 then
     boot bookmicroservices book-microservice 8081
-elif [[ "$service" == "trans" ||  "$service" == "all" ]]
+    boot="YES"
+fi
+if [[ "$service" == "trans" ||  "$service" == "all" ]]
 then
     boot transmicroservices transaction-microservice 8082
-elif [[ "$service" == "list" ||  "$service" == "all" ]]
+    boot="YES"
+fi
+if [[ "$service" == "list" ||  "$service" == "all" ]]
 then
     boot listingmicroservice listing-microservice 8084
-else
-    echo "Unknown service, try all, login, book, trans or list"
+    boot="YES"
 fi
 
-echo "DONE!"
+if [[ "$boot" == "NO" ]]
+then
+    echo "Unknown service, try all, login, book, trans or list"
+else
+    echo "DONE!"
+fi
 
 
