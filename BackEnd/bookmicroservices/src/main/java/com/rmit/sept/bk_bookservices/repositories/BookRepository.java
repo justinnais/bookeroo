@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends CrudRepository<Book, String> {
-
+public interface BookRepository extends CrudRepository<Book, String>
+{
     Book findByIsbn(String isbn);
+
     Book findByIsbn13(String isbn13);
 
     List<Book> findAll();
 
     List<Book> findByTitleLike(String title);
-    List<Book> findByTitleLongLike(String titleLong);
 
+    List<Book> findByTitleLongLike(String titleLong);
 }

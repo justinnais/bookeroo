@@ -66,18 +66,7 @@ public class ListingController
         JSONArray listings = new JSONArray();
         List<Object[]> listingBybookIsbn = listingRepository.getListingBybookIsbn(bookIsbn);
 
-        for (Object[] details : listingBybookIsbn)
-        {
-            JSONObject listing = new JSONObject();
-            listing.put("cond", details[0]);
-            listing.put("condDesc", details[1]);
-            listing.put("used", details[2]);
-            listing.put("price", details[3]);
-
-            listings.put(listing);
-        }
-
-        return ResponseEntity.ok(listings.toString());
+        return responseToArray(listingBybookIsbn);
     }
 
     // LIST ALL 
@@ -87,6 +76,12 @@ public class ListingController
         JSONArray listings = new JSONArray();
         List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
 
+        return responseToArray(listingBybookIsbn);
+    }
+
+    private ResponseEntity<?> responseToArray(List<Object[]> listingBybookIsbn)
+    {
+        JSONArray listings = new JSONArray();
         for (Object[] details : listingBybookIsbn)
         {
             JSONObject listing = new JSONObject();
@@ -100,12 +95,6 @@ public class ListingController
 
         return ResponseEntity.ok(listings.toString());
     }
-    
-    // TODO GET LISTING
-//     @GetMapping("/{id}")
-//     public ResponseEntity<?> getListing(@PathVariable Long id) {
-//         log.info("Get request for " + id);
-        
-//         return new ResponseEntity<>(listing, HttpStatus.OK);
-//     }
+
+    // TODO: Get specific listing
 }
