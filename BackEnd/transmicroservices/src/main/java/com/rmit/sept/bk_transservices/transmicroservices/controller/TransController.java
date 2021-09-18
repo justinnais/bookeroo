@@ -35,6 +35,9 @@ public class TransController
         transaction.setBuyerId(transApiBody.buyer_id);
         transactionRepository.save(transaction);
 
+        if (transApiBody.listings == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         for (Map<String, Double> map : transApiBody.listings)
         {
             TransactionItem transItem = new TransactionItem();
