@@ -83,7 +83,6 @@ public class LoginController
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-
     @Autowired
     private JwtTokenProvider tokenProvider;
 

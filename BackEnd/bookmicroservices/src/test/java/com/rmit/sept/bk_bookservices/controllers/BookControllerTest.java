@@ -131,15 +131,9 @@ class BookControllerTest
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
-        return getResponse(requestBuilder, "");
-    }
-
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content)
-    {
         try
         {
-            ResultActions resultActions = mvc.perform(requestBuilder.content(content));
+            ResultActions resultActions = mvc.perform(requestBuilder);
             resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
