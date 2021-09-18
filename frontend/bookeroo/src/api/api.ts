@@ -1,4 +1,5 @@
 import axios from "axios";
+import storage from "../util/storage";
 
 export const api = axios.create({
     baseURL: "https://bookeroo-api.danieljmills.com/api",
@@ -10,14 +11,46 @@ export const apiLogin = axios.create({
     baseURL: "http://localhost:8080/api/user",
 });
 
+apiLogin.interceptors.request.use((config) => {
+    const token = storage.getToken();
+    if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export const apiBook = axios.create({
     baseURL: "http://localhost:8081/api/book",
+});
+
+apiBook.interceptors.request.use((config) => {
+    const token = storage.getToken();
+    if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
 });
 
 export const apiTrans = axios.create({
     baseURL: "http://localhost:8082/api/trans",
 });
 
+apiTrans.interceptors.request.use((config) => {
+    const token = storage.getToken();
+    if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+});
+
 export const apiListing = axios.create({
     baseURL: "http://localhost:8084/api/listing",
+});
+
+apiListing.interceptors.request.use((config) => {
+    const token = storage.getToken();
+    if (token) {
+        config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
 });

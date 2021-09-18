@@ -37,8 +37,17 @@ public class UserService {
     }
 
     // GET
-    public User getUser(String displayName) {
+    public User getUser(Long id) {
+        return userRepository.getById(id);
+    }
+    // GET
+    public User getUserByDisplayName(String displayName) {
         return userRepository.findByDisplayName(displayName);
+    }
+
+    // GET
+    public User getUserByEmail(String email) {
+        return userRepository.findByUsername(email);
     }
 
     public User saveUser (User newUser){
