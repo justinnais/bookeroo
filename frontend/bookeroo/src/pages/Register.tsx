@@ -15,6 +15,14 @@ import FormGenerator, {
 import Container from "../components/Layout/Container";
 import { registerUser } from "../api/stores/user";
 import { CreateAccountRequest } from "../api/models/Account";
+import { useAlertStore } from "../stores/useAlertStore";
+import { useHistory } from "react-router";
+
+declare module "yup" {
+    interface ArraySchema<T> {
+        unique(mapper: (a: T) => T, message?: any): ArraySchema<T>;
+    }
+}
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,14 +37,44 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+// TODO add unique property errors
+// https://github.com/jquense/yup/issues/345
+/* yup.addMethod(
+    yup.array,
+    "unique",
+    function (
+        mapper = (a: any) => a,
+        message: string = "${path} may not have duplicates"
+    ) {
+        return this.test("unique", message, (list) => {
+            return list
+                ? list.length === new Set(list.map(mapper)).size
+                : false;
+        });
+    }
+); */
+
 export default function Register() {
+    const foo = [{ displayName: "foo" }, { displayName: "test" }];
     const [isSubmitting, setSubmitting] = useState(false);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const classes = useStyles();
+    const history = useHistory();
+    const setAlert = useAlertStore((state) => state.setAlert);
+    // TODO need to improve this
+    const toast = (message: string) => {
+        setAlert(message);
+    };
     const fields: GeneratedField[] = [
         {
             label: "Display Name",
             type: "text",
-            schema: yup.string().required("Display Name is required"),
+            schema: yup
+                .string()
+                // .array()
+                // .of(yup.string())
+                .required("Display Name is required"),
+            // .unique((foo) => foo, "duplicate name"),
         },
         {
             label: "First Name",
@@ -82,18 +120,33 @@ export default function Register() {
             // if exists, global alert error
         } else {
             const { email, confirmPassword, ...other } = values; // omits confirmPassword and email from values
-            console.table(values);
-
             const request: CreateAccountRequest = {
                 ...other,
                 username: values.email,
                 accountType: AccountType.STANDARD,
             };
-            const response = registerUser(request);
-            console.table(response);
+            registerUser(request).then(
+                (res) => handleResponse(res, request),
+                (err) => handleError(err)
+            );
         }
         setSubmitting(false);
     };
+
+    const handleResponse = (res: any, request: CreateAccountRequest) => {
+        if (res.status === 201) {
+            toast(`Successfully created account for ${request.displayName}`);
+            history.push("/login");
+        }
+        // setErrors({});
+    };
+
+    const handleError = (err: any) => {
+        const errors: { [key: string]: string } = err.response.data;
+        Object.values(errors).map((error) => toast(error));
+        // setErrors(err.response.data);
+    };
+
     const form = FormGenerator("registerForm", fields, onSubmit);
 
     const buttons = [

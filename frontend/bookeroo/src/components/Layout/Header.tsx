@@ -15,6 +15,7 @@ import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
+import { useAlertStore } from "../../stores/useAlertStore";
 import Searchbar from "./Searchbar";
 
 /**
@@ -94,7 +95,6 @@ export default function Header() {
             Bookeroo
         </Typography>
     );
-
     /**
      * This is what is rendered by the component, we can see that it has the AppBar and Toolbar,
      * which contain the Logo, NavButtons and MenuButton components we created above

@@ -21,6 +21,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
 import Books from "./pages/Books";
+import Alert from "./components/Alert";
 import Book from "./pages/Book";
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -78,6 +79,7 @@ function App() {
 
                     </Switch>
                 </div>
+                <Alert />
                 <Footer />
             </Router>
         </div>

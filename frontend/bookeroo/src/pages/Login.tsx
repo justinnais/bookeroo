@@ -7,8 +7,10 @@ import FormGenerator, {
 } from "../components/Form/FormGenerator";
 import SubmitButton from "../components/Button/SubmitButton";
 import Container from "../components/Layout/Container";
-import { loginUser } from "../api/stores/user";
+import { getUser, loginUser } from "../api/stores/user";
 import { LoginAccountRequest } from "../api/models/Account";
+import { useAlertStore } from "../stores/useAlertStore";
+import { useHistory } from "react-router";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -29,7 +31,12 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Login() {
     const [isSubmitting, setSubmitting] = useState(false);
     const classes = useStyles();
+    const history = useHistory();
     const formId = "loginForm";
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
     const fields: GeneratedField[] = [
         {
             label: "Email",
@@ -50,9 +57,25 @@ export default function Login() {
             username: values.email,
             password: values.password,
         };
-        console.log(auth);
-        const response = loginUser(auth);
-        console.log(response);
+
+        loginUser(auth).then(
+            (res) => handleResponse(res, auth),
+            (err) => handleError(err)
+        );
+    };
+
+    const handleResponse = (res: any, auth: LoginAccountRequest) => {
+        console.log(res);
+
+        if (res.status) {
+            toast(`Successfully logged in ${auth.username}`);
+            history.push("/"); // TODO push to user profile
+        }
+    };
+
+    const handleError = (err: any) => {
+        const errors: { [key: string]: string } = err.response.data;
+        Object.values(errors).map((error) => toast(error));
     };
     const form = FormGenerator(formId, fields, onSubmit);
     const buttons = [
