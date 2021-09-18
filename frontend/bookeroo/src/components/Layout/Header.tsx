@@ -20,6 +20,7 @@ import { useAlertStore } from "../../stores/useAlertStore";
 import Searchbar from "./Searchbar";
 import { useFormik } from "formik";
 import SubmitButton from "../Button/SubmitButton";
+import Searchbar2 from "./Searchbar2";
 
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component

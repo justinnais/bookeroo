@@ -27,9 +27,6 @@ function filterResults(searchString: string | null, item: IBook) {
     if (searchString) {
         const search = searchString.toLowerCase();
         return Object.values(item).join(" ").toLowerCase().includes(search);
-        // console.log(search, item.title);
-
-        // return item.title.includes(search);
     } else {
         return true;
     }
@@ -57,7 +54,7 @@ export default function Search() {
                 <TableBody>
                     {books
                         .filter((book) =>
-                            filterResults(searchQuery.get(""), book)
+                            filterResults(searchQuery.get("q"), book)
                         )
                         .map((book) => (
                             <TableRow
