@@ -17,29 +17,21 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PREFIX;
-
-import java.util.Optional;
 
 /**
  * This file contains all api calls related to user login and registration
  */
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"}) // allows for CORS when testing locally
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
+// allows for CORS when testing locally
 public class LoginController
 {
-
     private static final Logger log = Logger.getLogger(LoginController.class);
 
     @Autowired
@@ -53,18 +45,20 @@ public class LoginController
 
     // LIST
     @GetMapping("")
-    public ResponseEntity<?> listUsers() {
-        return new ResponseEntity<>(userService.listUsers(),HttpStatus.OK);
+    public ResponseEntity<?> listUsers()
+    {
+        return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
     }
 
     // GET 
     @GetMapping("/{displayName}")
-    public ResponseEntity<?> getUser(@PathVariable String displayName) {
+    public ResponseEntity<?> getUser(@PathVariable String displayName)
+    {
         log.info("Get request for " + displayName);
         User user = userService.getUser(displayName);
-        if (user == null) {
-            return new ResponseEntity<>("No user exists with this display name", HttpStatus.NOT_FOUND);
-        }
+        if (user == null)
+            return new ResponseEntity<>("No user exists with this display name",
+                    HttpStatus.NOT_FOUND);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
@@ -77,7 +71,8 @@ public class LoginController
         // Validate passwords match
         userValidator.validate(user, result);
         ResponseEntity<?> errorMap = mapValidationErrorService.MapValidationService(result);
-        if (errorMap != null) return errorMap;
+        if (errorMap != null)
+            return errorMap;
 
         log.info("New user is valid");
 
@@ -94,7 +89,6 @@ public class LoginController
 
     @Autowired
     private AuthenticationManager authenticationManager;
-
 
     // LOGIN
     @PostMapping("/login")
@@ -116,7 +110,4 @@ public class LoginController
         log.info("Logged in user: " + loginRequest.getUsername());
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
-
-    
-
 }

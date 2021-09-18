@@ -100,12 +100,6 @@ public class ListingController
 
         return ResponseEntity.ok(listings.toString());
     }
-    
-    // TODO GET LISTING
-//     @GetMapping("/{id}")
-//     public ResponseEntity<?> getListing(@PathVariable Long id) {
-//         log.info("Get request for " + id);
-        
-//         return new ResponseEntity<>(listing, HttpStatus.OK);
-//     }
+
+    // TODO: Get specific listing
 }

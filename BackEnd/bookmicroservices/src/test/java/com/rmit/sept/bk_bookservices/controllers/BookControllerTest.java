@@ -122,7 +122,8 @@ class BookControllerTest
     public void SearchByInvalidTitle()
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/nsILBUR8943BG38BP8VB").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/book/search/title/nsILBUR8943BG38BP8VB")
+                .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
         Assertions.assertEquals(404, response.getStatus());

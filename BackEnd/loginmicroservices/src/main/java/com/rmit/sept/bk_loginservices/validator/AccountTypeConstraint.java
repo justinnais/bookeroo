@@ -1,6 +1,5 @@
 package com.rmit.sept.bk_loginservices.validator;
 
-
 import com.rmit.sept.bk_loginservices.utils.AccountType;
 
 import javax.validation.Constraint;
@@ -18,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = AccountTypeConstraintValidator.class)
 public @interface AccountTypeConstraint
 {
-
     AccountType[] anyOf();
 
     boolean nullable() default false;
