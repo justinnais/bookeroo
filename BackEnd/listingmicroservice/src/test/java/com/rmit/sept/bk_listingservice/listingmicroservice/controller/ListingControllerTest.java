@@ -93,7 +93,7 @@ class ListingControllerTest
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "");
+        MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
@@ -109,10 +109,74 @@ class ListingControllerTest
         Assertions.assertTrue(result.next());
         long count = result.getLong("count");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "");
+        MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
         JSONArray responseArray = new JSONArray(response.getContentAsString());
         Assertions.assertEquals(count, responseArray.length());
+    }
+
+    @Test
+    public void GetExistingBookListings() throws JSONException, UnsupportedEncodingException
+    {
+        // I hate how verbose this is, there must be a better way to do it
+        // TODO: Make test more streamlined
+
+        JSONObject listingJSON = new JSONObject();
+        listingJSON.put("userId", 35550);
+        listingJSON.put("bookIsbn", "2555");
+        listingJSON.put("used", false);
+        listingJSON.put("cond", Condition.NEW);
+        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("price", 123);
+
+        JSONObject listing1JSON = new JSONObject();
+        listing1JSON.put("userId", 35553);
+        listing1JSON.put("bookIsbn", "2555");
+        listing1JSON.put("used", true);
+        listing1JSON.put("cond", Condition.SLIGHTLY_USED);
+        listing1JSON.put("condDesc", "Crease in spine");
+        listing1JSON.put("price", 123);
+
+        for (JSONObject json : new JSONObject[]{listingJSON, listing1JSON})
+        {
+            MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                    .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
+            MockHttpServletResponse response = getResponse(requestBuilder, json.toString());
+            Assertions.assertNotNull(response);
+            Assertions.assertEquals(200, response.getStatus());
+        }
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/listing/list/2555").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        JSONArray responseArray = new JSONArray(response.getContentAsString());
+
+        JSONObject first = responseArray.getJSONObject(0);
+        Assertions.assertEquals(123, first.get("price"));
+        Assertions.assertEquals(false, first.get("used"));
+        Assertions.assertEquals("NEW", first.get("cond"));
+        Assertions.assertEquals("N/A", first.get("condDesc"));
+
+        JSONObject second = responseArray.getJSONObject(1);
+        Assertions.assertEquals(123, second.get("price"));
+        Assertions.assertEquals(true, second.get("used"));
+        Assertions.assertEquals("SLIGHTLY_USED", second.get("cond"));
+        Assertions.assertEquals("Crease in spine", second.get("condDesc"));
+
+        Assertions.assertTrue(deleteSellListing("2555"));
+    }
+
+    @Test
+    public void GetNonExistingBookListings() throws JSONException, UnsupportedEncodingException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/listing/list/8555").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+
+        JSONArray responseArray = new JSONArray(response.getContentAsString());
+        Assertions.assertEquals(0, responseArray.length());
     }
 
     private boolean deleteSellListing(String bookIsbn)
@@ -122,21 +186,24 @@ class ListingControllerTest
             PreparedStatement statement = db.prepareStatement(
                     "SELECT id FROM listing WHERE book_isbn" + " = '" + bookIsbn + "'");
             ResultSet result = statement.executeQuery();
-            if (result.next())
+            while (result.next())
             {
                 long id = result.getLong("id");
                 db.prepareStatement("DELETE FROM listing WHERE id = '" + id + "'").execute();
                 db.prepareStatement("DELETE FROM sell_listing WHERE listing_id = '" + id + "'")
                         .execute();
-
-                return true;
-            } else
-                return false;
+            }
+            return true;
         } catch (SQLException e)
         {
             e.printStackTrace();
         }
         return false;
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
+    {
+        return getResponse(requestBuilder, "");
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
