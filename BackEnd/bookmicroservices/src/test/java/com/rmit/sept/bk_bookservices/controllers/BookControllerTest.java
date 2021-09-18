@@ -87,6 +87,16 @@ class BookControllerTest
         Assertions.assertEquals("Leviathan Wakes", responseObject.get("title"));
     }
 
+    @Test
+    public void GetBookWithInvalidIsbn()
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/book/1234").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(400, response.getStatus());
+    }
+
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
         return getResponse(requestBuilder, "");
