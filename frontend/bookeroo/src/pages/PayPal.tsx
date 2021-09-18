@@ -1,11 +1,11 @@
 import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
-import { Listing, CreateTransactionRequest } from "../api/models/Listing";
+import { IListing, CreateTransactionRequest } from "../api/models/Listing";
 import { createTrans } from "../api/stores/trans";
 
 export default function PayPal(
     price: string,
-    listings: Array<Listing>,
+    listings: Array<IListing>,
     buyer_id: string
 ) {
     return (

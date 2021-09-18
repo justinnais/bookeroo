@@ -1,9 +1,13 @@
-export interface Listing {
-    listing_id: string;
+export interface IListing {
+    id: number;
+    userId: number;
+    bookIsbn: string;
+    condition: string; // TODO add enum to this
+    conditionDesc: string;
     price: string;
 }
 
 export interface CreateTransactionRequest {
-    listings: Array<Listing>;
+    listings: Array<IListing>;
     buyer_id: string;
 }

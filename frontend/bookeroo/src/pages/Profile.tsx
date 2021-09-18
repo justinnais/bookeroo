@@ -1,33 +1,19 @@
-
 import {
     Container,
     createStyles,
-    Grid,
-    GridSpacing,
     makeStyles,
-    Paper,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
     Theme,
     Typography,
 } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/styles";
 import React from "react";
-import { Link } from "react-router-dom";
-import ReactDOM from "react-dom";
-import { theme } from "../styles/theme";
+import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button";
 import { IBook } from "../api/models/Book";
-
-interface Props {
-    name: string;
-    rating: string;
-    books: IBook[];
-}
+import { getUser, listUsers } from "../api/stores/user";
+import { useQuery } from "react-query";
+import { IAccount } from "../api/models/Account";
+import { Skeleton } from "@material-ui/lab";
+import ProfileBooks from "../components/ProfileBooks";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -51,61 +37,43 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default function Profile(props: Props) {
+function convertDate(date: number) {
+    return new Date(date).toDateString();
+}
+
+export default function Profile() {
     const classes = useStyles();
+    const { displayName } = useParams<{ displayName: string }>();
+    const { isLoading, data } = useQuery("getUser", () => getUser(displayName));
+    console.log(data);
+
+    const profile: IAccount = data ? data.data : undefined;
 
     const UserDetails = () => (
         <div className={classes.userDetails}>
             <div>
                 <Typography variant="h4" component="h4">
-                    {props.name}
+                    {isLoading ? (
+                        <Skeleton variant="text" width={200} />
+                    ) : (
+                        profile.displayName
+                    )}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    {props.rating} Rating
+                    {isLoading ? (
+                        <Skeleton variant="text" width={150} />
+                    ) : (
+                        <div>
+                            Member since {convertDate(profile.dateCreated)}
+                        </div>
+                    )}
+                </Typography>
+                <Typography variant="body2" component="p">
+                    Rating TODO
                 </Typography>
             </div>
         </div>
     );
-
-    const BookTable = () => {
-        return (
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell align="right">Edition</TableCell>
-                            <TableCell align="right">Pages</TableCell>
-                            <TableCell align="right"></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {props.books.map((book, key) => (
-                            <TableRow key={key}>
-                                <TableCell component="th" scope="row">
-                                    {book.title}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {book.edition}
-                                </TableCell>
-                                <TableCell align="right">
-                                    ${book.pages}
-                                </TableCell>
-                                <TableCell align="right">
-                                    <Button
-                                        variant="contained"
-                                        color="secondary"
-                                    >
-                                        Add to cart
-                                    </Button>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        );
-    };
 
     return (
         <Container className={classes.root}>
@@ -118,7 +86,11 @@ export default function Profile(props: Props) {
             <Typography variant="h5" component="h5">
                 Books For Sale
             </Typography>
-            <BookTable />
+            {isLoading ? (
+                <Skeleton variant="rect" height={400} />
+            ) : (
+                <ProfileBooks userId={profile.id} />
+            )}
         </Container>
     );
 }
