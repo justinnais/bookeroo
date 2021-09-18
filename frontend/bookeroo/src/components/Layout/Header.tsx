@@ -13,6 +13,7 @@ import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
 import Searchbar from "./Searchbar";
 import { getCurrentUser } from "../../api/stores/user";
+import { useAuthStore } from "../../stores/useAuthStore";
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
  * If you need to create global styles, they go in App.scss
@@ -50,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Header() {
     const classes = useStyles();
     const [showSearch, setShowSearch] = useState(false);
+    const isAuthenticated: boolean = useAuthStore(
+        (state) => state.isAuthenticated
+    );
 
     const toggleSearch = () => setShowSearch(!showSearch);
 
@@ -66,13 +70,22 @@ export default function Header() {
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
             </div>
-            <div className={classes.navButtons}>
-                {/* <span>{currentUser}</span> */}
-                <Button to="/login">Sign In</Button>
-                <Button variant="contained" color="secondary" to="/register">
-                    Sign Up
-                </Button>
-            </div>
+            {isAuthenticated ? (
+                <div className={classes.navButtons}>
+                    <Button>Sign out</Button>
+                </div>
+            ) : (
+                <div className={classes.navButtons}>
+                    <Button to="/login">Sign In</Button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        to="/register"
+                    >
+                        Sign Up
+                    </Button>
+                </div>
+            )}
         </>
     );
 
