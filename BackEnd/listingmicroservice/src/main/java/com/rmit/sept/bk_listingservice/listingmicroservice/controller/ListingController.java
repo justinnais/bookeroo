@@ -35,6 +35,9 @@ public class ListingController
         else if (!type.equals("sell"))
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
+        if (body.userId == null || body.bookIsbn == null)
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
         Listing listing = new Listing();
         listing.setUserId(body.userId);
         listing.setbookIsbn(body.bookIsbn);

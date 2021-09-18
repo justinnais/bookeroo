@@ -20,8 +20,8 @@ import java.util.Set;
 
 
 @Service
-public class BookService {
-
+public class BookService
+{
     private static final Logger log = Logger.getLogger(BookService.class);
 
     @Value("${isbndb.key}")
@@ -34,34 +34,39 @@ public class BookService {
     private BookRepository bookRepository;
 
     // LIST
-    public Set<Book> listBooks() {
-        Set<Book> titles = new HashSet<>();
-        titles.addAll(bookRepository.findAll());
-        return titles;
+    public Set<Book> listBooks()
+    {
+        return new HashSet<>(bookRepository.findAll());
     }
 
     // GET
-    public Book getBook(String isbn) {
+    public Book getBook(String isbn)
+    {
         Book book;
-        if (isbn.length() == 10) {
+        if (isbn.length() == 10)
             book = bookRepository.findByIsbn(isbn);
-        } else {
+        else
             book = bookRepository.findByIsbn13(isbn);
-        }
 
-        if (book == null) {
+        if (book == null)
+        {
             log.warn("Couldn't find book with isbn: " + isbn + ", checking isbndb");
-            try {
-                HttpResponse<JsonNode> response = Unirest.get(isbndbUrl+"/book/"+isbn).header("Authorization",isbndbKey).asJson();
-                if (response.getStatus() != 200) {
+            try
+            {
+                HttpResponse<JsonNode> response = Unirest
+                        .get(isbndbUrl + "/book/" + isbn).header("Authorization", isbndbKey).asJson();
+                if (response.getStatus() != 200)
+                {
                     log.error("Book not found, returning null");
                     return null;
-                } else {
+                } else
+                {
                     book = Book.fromJson(response.getBody().getObject().getJSONObject("book"));
-                    log.info("Found book: "+ book.getTitle() +", saving!");
+                    log.info("Found book: " + book.getTitle() + ", saving!");
                     bookRepository.save(book);
                 }
-            } catch (UnirestException | JsonProcessingException e) {
+            } catch (UnirestException | JsonProcessingException e)
+            {
                 e.printStackTrace();
             }
         }
@@ -69,41 +74,43 @@ public class BookService {
     }
 
     @Transactional
-    public Set<Book> searchByTitle(String title) {
+    public Set<Book> searchByTitle(String title)
+    {
         Set<Book> titles = new HashSet<>();
-        titles.addAll(bookRepository.findByTitleLike("%"+title+"%"));
-        titles.addAll(bookRepository.findByTitleLongLike("%"+title+"%"));
+        titles.addAll(bookRepository.findByTitleLike("%" + title + "%"));
+        titles.addAll(bookRepository.findByTitleLongLike("%" + title + "%"));
 
         log.info("No books in database, checking isbndb");
 
-        try {
-            HttpResponse<JsonNode> response = Unirest.get(isbndbUrl+"/books/"+title+"?page=1&pageSize=100").header("Authorization",isbndbKey).asJson();
+        try
+        {
+            HttpResponse<JsonNode> response = Unirest.get(isbndbUrl + "/books/" + title + "?page" +
+                    "=1&pageSize=100").header("Authorization", isbndbKey).asJson();
 
-            if (response.getStatus() != 200) {
+            if (response.getStatus() != 200)
                 log.error("Got no books from isbndb!");
-            } else {
+            else
+            {
                 JSONArray bookJsons = response.getBody().getObject().getJSONArray("books");
 
-                for (int i = 0; i < bookJsons.length(); i++) {
+                for (int i = 0; i < bookJsons.length(); i++)
+                {
                     JSONObject bookJson = bookJsons.getJSONObject(i);
                     Book book = Book.fromJson(bookJson);
 
-                    bookRepository.save(book);
+                    if (bookRepository.findByIsbn(book.getIsbn()) == null) {
+                        bookRepository.save(book);
+                    }
+
+
                     titles.add(book);
-
-
                 }
             }
 
-        } catch (UnirestException | JsonProcessingException e) {
+        } catch (UnirestException | JsonProcessingException e)
+        {
             e.printStackTrace();
         }
-
-
         return titles;
-
-
     }
-
-
 }
