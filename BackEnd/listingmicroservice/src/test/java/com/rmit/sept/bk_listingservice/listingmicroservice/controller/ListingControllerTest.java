@@ -1,0 +1,97 @@
+package com.rmit.sept.bk_listingservice.listingmicroservice.controller;
+
+import com.rmit.sept.bk_listingservice.listingmicroservice.model.Condition;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+
+import java.sql.*;
+import java.util.Properties;
+
+@SpringBootTest
+@AutoConfigureMockMvc
+class ListingControllerTest
+{
+    @Autowired
+    private MockMvc mvc;
+
+    private static Connection db;
+
+    @BeforeAll
+    static void dbConnect() throws SQLException
+    {
+        // Create database connection for cleaning test users
+        Properties connectionProps = new Properties();
+        connectionProps.put("user", "admin");
+        connectionProps.put("password", "(rN9p:NdKHD:");
+        db = DriverManager.getConnection("jdbc:mysql://bookeroo-db.cy3gnqvujqx0.ap-southeast-2" +
+                ".rds.amazonaws.com:3306/bookeroo", connectionProps);
+    }
+
+    @Test
+    public void CreateValidSellListing() throws JSONException, SQLException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject listingJSON = new JSONObject();
+        listingJSON.put("userId", 35550);
+        listingJSON.put("bookIsbn", "1555");
+        listingJSON.put("used", false);
+        listingJSON.put("cond", Condition.NEW);
+        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("price", 123);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString(),
+                true);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+
+        Assertions.assertTrue(deleteSellListing("1555"));
+    }
+
+    private boolean deleteSellListing(String bookIsbn) throws SQLException
+    {
+        PreparedStatement statement = db.prepareStatement(
+                "SELECT id FROM listing WHERE book_isbn" + " = '" + bookIsbn + "'");
+        ResultSet result = statement.executeQuery();
+        if (result.next())
+        {
+            long id = result.getLong("id");
+            db.prepareStatement("DELETE FROM listing WHERE id = '" + id + "'").execute();
+            db.prepareStatement("DELETE FROM sell_listing WHERE listing_id = '" + id + "'")
+                    .execute();
+
+            return true;
+        } else
+            return false;
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
+                                                String content, boolean print)
+    {
+        try
+        {
+            ResultActions resultActions = mvc.perform(requestBuilder.content(content));
+            if (print)
+                resultActions.andDo(MockMvcResultHandlers.print());
+            return resultActions.andReturn().getResponse();
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
