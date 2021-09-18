@@ -98,7 +98,11 @@ public class BookService
                     JSONObject bookJson = bookJsons.getJSONObject(i);
                     Book book = Book.fromJson(bookJson);
 
-                    bookRepository.save(book);
+                    if (bookRepository.findByIsbn(book.getIsbn()) == null) {
+                        bookRepository.save(book);
+                    }
+
+
                     titles.add(book);
                 }
             }
