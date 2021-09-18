@@ -97,6 +97,16 @@ class BookControllerTest
         Assertions.assertEquals(400, response.getStatus());
     }
 
+    @Test
+    public void SearchByValidTitle()
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/book/search/title/Leviathan Wakes").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+    }
+
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
         return getResponse(requestBuilder, "");
