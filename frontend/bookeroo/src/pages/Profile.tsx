@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function convertDate(date: number) {
+export function convertDate(date: number) {
     return new Date(date).toDateString();
 }
 
