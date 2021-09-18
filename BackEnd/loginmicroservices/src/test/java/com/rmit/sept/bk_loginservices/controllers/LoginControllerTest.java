@@ -54,6 +54,12 @@ class LoginControllerTest
         deleteUser("%-test");
     }
 
+    @AfterAll
+    static void dbClose() throws SQLException
+    {
+        db.close();
+    }
+
     @Test
     public void RegisterWithAllFieldsEmpty() throws JSONException
     {
@@ -178,7 +184,6 @@ class LoginControllerTest
         }
 
         MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), false);
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA "+response.getErrorMessage());
         return response != null && response.getStatus() == 201;
     }
 
