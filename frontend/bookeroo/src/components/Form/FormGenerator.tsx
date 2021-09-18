@@ -24,8 +24,8 @@ export interface GeneratedField {
 export default function FormGenerator(
     formId: string,
     fields: GeneratedField[],
-    onSubmit: (values: any) => void,
-    errors?: { [key: string]: string }
+    onSubmit: (values: any) => void
+    // errors?: { [key: string]: string }
 ) {
     const initialValues: { [key: string]: string } = {};
     fields.forEach((field) => {
@@ -49,7 +49,7 @@ export default function FormGenerator(
                                 label={field.label}
                                 type={field.type}
                                 formik={formik}
-                                errors={errors}
+                                // errors={errors}
                             />
                         </Grid>
                     );

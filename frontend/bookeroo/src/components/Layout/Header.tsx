@@ -61,11 +61,6 @@ const useStyles = makeStyles((theme: Theme) =>
  */
 export default function Header() {
     const classes = useStyles();
-    const setAlert = useAlertStore((state) => state.setAlert);
-    // TODO need to improve this
-    const toast = (message: string, variant?: string) => {
-        setAlert(message);
-    };
     const [showSearch, setShowSearch] = useState(false);
 
     const toggleSearch = () => setShowSearch(!showSearch);
@@ -80,10 +75,6 @@ export default function Header() {
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
-                <Button onClick={() => toast("this is an alert")}>
-                    {/* <Button onClick={() => toast("this is an alert")}> */}
-                    Snackbar
-                </Button>
             </div>
             <div className={classes.navButtons}>
                 <Button to="/login">Sign In</Button>

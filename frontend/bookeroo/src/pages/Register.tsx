@@ -15,6 +15,8 @@ import FormGenerator, {
 import Container from "../components/Layout/Container";
 import { registerUser } from "../api/stores/user";
 import { CreateAccountRequest } from "../api/models/Account";
+import { useAlertStore } from "../stores/useAlertStore";
+import { useHistory } from "react-router";
 
 declare module "yup" {
     interface ArraySchema<T> {
@@ -57,6 +59,12 @@ export default function Register() {
     const [isSubmitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
     const classes = useStyles();
+    const history = useHistory();
+    const setAlert = useAlertStore((state) => state.setAlert);
+    // TODO need to improve this
+    const toast = (message: string) => {
+        setAlert(message);
+    };
     const fields: GeneratedField[] = [
         {
             label: "Display Name",
@@ -118,24 +126,28 @@ export default function Register() {
                 accountType: AccountType.STANDARD,
             };
             registerUser(request).then(
-                (res) => handleResponse(res),
-                (err) => {
-                    console.log("response errors", err.response.data);
-
-                    setErrors(err.response.data);
-                }
+                (res) => handleResponse(res, request),
+                (err) => handleError(err)
             );
         }
         setSubmitting(false);
     };
 
-    const handleResponse = (res: any) => {
-        setErrors({});
-        console.log("success", res);
+    const handleResponse = (res: any, request: CreateAccountRequest) => {
+        if (res.status === 201) {
+            toast(`Successfully created account for ${request.displayName}`);
+            history.push("/login");
+        }
+        // setErrors({});
     };
 
-    const form = FormGenerator("registerForm", fields, onSubmit, errors);
-    console.log(errors);
+    const handleError = (err: any) => {
+        const errors: { [key: string]: string } = err.response.data;
+        Object.values(errors).map((error) => toast(error));
+        // setErrors(err.response.data);
+    };
+
+    const form = FormGenerator("registerForm", fields, onSubmit);
 
     const buttons = [
         <Button
