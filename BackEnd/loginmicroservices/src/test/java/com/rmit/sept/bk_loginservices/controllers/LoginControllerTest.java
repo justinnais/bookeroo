@@ -54,6 +54,12 @@ class LoginControllerTest
         deleteUser("%-test");
     }
 
+    @AfterAll
+    static void dbClose() throws SQLException
+    {
+        db.close();
+    }
+
     @Test
     public void RegisterWithAllFieldsEmpty() throws JSONException
     {

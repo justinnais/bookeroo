@@ -4,6 +4,7 @@ import com.rmit.sept.bk_listingservice.listingmicroservice.model.Condition;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -40,6 +41,12 @@ class ListingControllerTest
         connectionProps.put("password", "(rN9p:NdKHD:");
         db = DriverManager.getConnection("jdbc:mysql://bookeroo-db.cy3gnqvujqx0.ap-southeast-2" +
                 ".rds.amazonaws.com:3306/bookeroo", connectionProps);
+    }
+
+    @AfterAll
+    static void dbClose() throws SQLException
+    {
+        db.close();
     }
 
     @Test

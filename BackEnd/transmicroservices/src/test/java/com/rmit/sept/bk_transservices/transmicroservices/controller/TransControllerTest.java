@@ -54,6 +54,12 @@ class TransControllerTest
         deleteTransItem("%555%");
     }
 
+    @AfterAll
+    static void dbClose() throws SQLException
+    {
+        db.close();
+    }
+
     @Test
     public void CreateValidTransaction() throws JSONException
     {
