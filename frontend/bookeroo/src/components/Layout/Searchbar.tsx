@@ -8,11 +8,8 @@ import {
 } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
 import SubmitButton from "../Button/SubmitButton";
-import { useFormik } from "formik";
 import { Redirect, useHistory } from "react-router-dom";
-import TextInput from "../Form/TextInput";
-import { TextField } from "@material-ui/core";
-import Button from "../Button/Button";
+import { useSearchParams } from "../../pages/Search";
 
 // https://material-ui.com/components/app-bar/#app-bar-with-search-field
 
@@ -62,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Searchbar() {
     const classes = useStyles();
     const history = useHistory();
-    const [query, setQuery] = useState<string>();
+    const [query, setQuery] = useState(useSearchParams().get("q"));
 
     const handleSubmit = (
         event:

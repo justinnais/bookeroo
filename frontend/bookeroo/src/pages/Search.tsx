@@ -12,6 +12,8 @@ import { listBooks } from "../api/stores/book";
 import { IBook } from "../api/models/Book";
 import { useHistory, useLocation } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
+import Container from "../components/Layout/Container";
+import { theme } from "../styles/theme";
 
 const useStyles = makeStyles({
     table: {
@@ -19,7 +21,7 @@ const useStyles = makeStyles({
     },
 });
 
-function useSearchParams() {
+export function useSearchParams() {
     return new URLSearchParams(useLocation().search);
 }
 
@@ -39,47 +41,57 @@ export default function Search() {
     const { isLoading, data } = useQuery("listBooks", listBooks);
     let books = data ? (data.data as IBook[]) : [];
 
+    // TODO fix styles later
     return (
-        <TableContainer component={Paper}>
-            <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Title</TableCell>
-                        <TableCell align="right">Author</TableCell>
-                        <TableCell align="right">Publisher</TableCell>
-                        <TableCell align="right">ISBN</TableCell>
-                        <TableCell align="right">Page Count</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {books
-                        .filter((book) =>
-                            filterResults(searchQuery.get("q"), book)
-                        )
-                        .map((book) => (
-                            <TableRow
-                                key={book.isbn}
-                                component={RouterLink}
-                                to={`/book/${book.isbn || book.isbn13}`}
-                                hover
-                            >
-                                <TableCell component="th" scope="row">
-                                    {book.title}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {book.authors}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {book.publisher}
-                                </TableCell>
-                                <TableCell align="right">{book.isbn}</TableCell>
-                                <TableCell align="right">
-                                    {book.pages}
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <Container
+            style={{
+                backgroundColor: theme.palette.primary.main,
+                minHeight: "100vh",
+            }}
+        >
+            <TableContainer component={Paper}>
+                <Table className={classes.table} aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Title</TableCell>
+                            <TableCell align="right">Author</TableCell>
+                            <TableCell align="right">Publisher</TableCell>
+                            <TableCell align="right">ISBN</TableCell>
+                            <TableCell align="right">Page Count</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {books
+                            .filter((book) =>
+                                filterResults(searchQuery.get("q"), book)
+                            )
+                            .map((book) => (
+                                <TableRow
+                                    key={book.isbn}
+                                    component={RouterLink}
+                                    to={`/book/${book.isbn || book.isbn13}`}
+                                    hover
+                                >
+                                    <TableCell component="th" scope="row">
+                                        {book.title}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {book.authors}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {book.publisher}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {book.isbn}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {book.pages}
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </Container>
     );
 }
