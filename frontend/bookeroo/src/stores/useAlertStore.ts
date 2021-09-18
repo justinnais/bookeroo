@@ -1,20 +1,25 @@
-import { boolean, string } from "yup/lib/locale";
+// import { AlertColor } from "@mui/material/Alert";
 import create from "zustand";
 
 export interface Foo {
     message: string;
-    setMessage: (message: string) => void;
+    // variant: AlertColor;
     open: boolean;
     setOpen: (v: boolean) => void;
-    setAlert: (message: string, variant?: string) => void;
+    setAlert: (message: string) => void;
+    // setAlert: (message: string, variant?: AlertColor) => void;
 }
 
+// TODO fix variant
+
 export const useAlertStore = create<Foo>((set) => ({
-    message: "aaaaaaa",
-    setMessage: (message: string) => set({ message }),
+    message: "alert",
+    // variant: "info",
     open: false,
     setOpen: (open: boolean) => set({ open }),
-    setAlert: (message: string, variant?: string) => {
+    // setAlert: (message: string, variant?: AlertColor) => {
+    setAlert: (message: string) => {
         set({ message, open: true });
+        // set({ message, variant: variant || "info", open: true });
     },
 }));

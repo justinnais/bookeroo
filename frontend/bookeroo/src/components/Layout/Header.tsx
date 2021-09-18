@@ -15,7 +15,6 @@ import Button from "../Button/Button";
 import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
-import Alert from "../Alert";
 import { useAlertStore } from "../../stores/useAlertStore";
 import Searchbar from "./Searchbar";
 
@@ -65,7 +64,7 @@ export default function Header() {
     const setAlert = useAlertStore((state) => state.setAlert);
     // TODO need to improve this
     const toast = (message: string, variant?: string) => {
-        setAlert(message, variant);
+        setAlert(message);
     };
     const [showSearch, setShowSearch] = useState(false);
 
@@ -82,6 +81,7 @@ export default function Header() {
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
                 <Button onClick={() => toast("this is an alert")}>
+                    {/* <Button onClick={() => toast("this is an alert")}> */}
                     Snackbar
                 </Button>
             </div>
