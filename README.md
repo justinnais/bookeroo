@@ -27,13 +27,25 @@ To run the application locally :
 	
 ## Release Notes
 ### Release 0.2.0 - 18 September 2021
-* View display of books
-* View individual books
-* Search bar
-* Admin portal
+* Setup CircleCI for deployment and testing
+* Listing microservice created
+* Transaction microservice created
+* Added testing for login, transaction and listing microservices
+* Acceptance testing
+* Book microservice created
+* Created display of books `/books`
+* View individual books `/book/{isbn}`
+* Automatic deployment to AWS using docker
+* Search bar and search result page `/search/?={query}`
+* Admin portal `/admin`
+* User Profile page `/profile/{displayName}`
+* Transaction API in testing
 * Account approval
-* Shopping cart and checkout
-* Transaction API ready
+* Shopping cart and checkout 
+* Skeleton loading placeholders `view using throttling - books page`
+* Local deploy script
+* React Query to cache API requests
+* Global alert toast
 
 ### Release 0.1.0 - 4 September 2021
 * Landing Page
