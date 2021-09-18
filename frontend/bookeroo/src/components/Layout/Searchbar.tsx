@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import {
     createStyles,
@@ -7,11 +7,23 @@ import {
     makeStyles,
 } from "@material-ui/core/styles";
 import SearchIcon from "@material-ui/icons/Search";
+import SubmitButton from "../Button/SubmitButton";
+import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
+import TextInput from "../Form/TextInput";
+import { TextField } from "@material-ui/core";
 
 // https://material-ui.com/components/app-bar/#app-bar-with-search-field
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        root: {
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "center",
+            background: theme.palette.primary.main,
+            gap: theme.spacing(2),
+        },
         search: {
             position: "relative",
             marginLeft: 0,
@@ -51,19 +63,44 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Searchbar() {
     const classes = useStyles();
+    const history = useHistory();
+    const [query, setQuery] = useState("");
+
+    const handleSubmit = () => {
+        history.push(`/search/?=${query}`);
+    };
+
+    const form = <form onSubmit={handleSubmit} id={"searchForm"}></form>;
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(event.target.value);
+    };
+
+    const SearchField = () => (
+        <TextField value={query} onChange={handleChange} />
+
+        // <div className={classes.search}>
+        //     <div className={classes.searchIcon}>
+        //         <SearchIcon />
+        //     </div>
+        //     <InputBase
+        //         placeholder="Search…"
+        //         classes={{
+        //             root: classes.inputRoot,
+        //             input: classes.inputInput,
+        //         }}
+        //         inputProps={{ "aria-label": "search" }}
+        //         value={query}
+        //         onChange={handleChange}
+        //     />
+        // </div>
+    );
     return (
-        <div className={classes.search}>
-            <div className={classes.searchIcon}>
-                <SearchIcon />
-            </div>
-            <InputBase
-                placeholder="Search…"
-                classes={{
-                    root: classes.inputRoot,
-                    input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-            />
+        <div className={classes.root}>
+            <SearchField />
+            <SubmitButton isSubmitting={false} formId="searchForm">
+                Search
+            </SubmitButton>
         </div>
     );
 }

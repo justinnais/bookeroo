@@ -38,11 +38,9 @@ function filterResults(searchString: string | null, item: IBook) {
 export default function Search() {
     const classes = useStyles();
     const searchQuery = useSearchParams();
-    const history = useHistory();
 
     const { isLoading, data } = useQuery("listBooks", listBooks);
     let books = data ? (data.data as IBook[]) : [];
-    console.log("book count", books.length);
 
     return (
         <TableContainer component={Paper}>
@@ -59,7 +57,7 @@ export default function Search() {
                 <TableBody>
                     {books
                         .filter((book) =>
-                            filterResults(searchQuery.get("book"), book)
+                            filterResults(searchQuery.get(""), book)
                         )
                         .map((book) => (
                             <TableRow
