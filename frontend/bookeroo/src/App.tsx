@@ -35,16 +35,12 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
     const classes = useStyles();
-    // const {} = useQuery('user', () =>)
     return (
-        // <Provider store={store}>
         <div className="page-container">
             <Router>
                 <Header />
                 <div className={classes.content}>
-                    {/* prettier-ignore */}
                     <Switch>
-
                         <Route exact path={Routes.Home} component={Landing} />
                         <Route
                             exact
@@ -56,28 +52,41 @@ function App() {
                             path={Routes.Register}
                             component={Register}
                         />
-                         <Route exact path={Routes.Profile} component={Profile}/>
+                        <Route
+                            exact
+                            path={Routes.Profile}
+                            component={Profile}
+                        />
                         <RestrictedRoute
                             exact
                             path={Routes.Login}
                             component={Login}
                         />
-                        <Route exact path={Routes.Contact} component={Contact} />
+                        <Route
+                            exact
+                            path={Routes.Contact}
+                            component={Contact}
+                        />
                         <Route exact path={Routes.Book} component={Book} />
                         <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
                         {/* Private Routes */}
-                        <PrivateRoute path={Routes.Profile} component={Profile} />
+                        <PrivateRoute
+                            path={Routes.Profile}
+                            component={Profile}
+                        />
                         {/* Admin Routes */}
-                        <AdminRoute exact path={Routes.Admin} component={Admin} />
-
+                        <AdminRoute
+                            exact
+                            path={Routes.Admin}
+                            component={Admin}
+                        />
                     </Switch>
                 </div>
                 <Alert />
                 <Footer />
             </Router>
         </div>
-        // </Provider>
     );
 }
 export default App;

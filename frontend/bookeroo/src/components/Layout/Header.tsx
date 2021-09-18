@@ -7,17 +7,11 @@ import {
     Collapse,
 } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import {
-    Link as RouterLink,
-    LinkProps as RouterLinkProps,
-} from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom";
 import Button from "../Button/Button";
-import ButtonGroup from "../Button/ButtonGroup";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
-import { useAlertStore } from "../../stores/useAlertStore";
 import Searchbar from "./Searchbar";
-
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
  * If you need to create global styles, they go in App.scss
@@ -45,13 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
             textTransform: "uppercase",
             color: theme.palette.secondary.main,
             textDecoration: "inherit",
-        },
-        searchbar: {
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "center",
-            background: theme.palette.primary.main,
-            gap: theme.spacing(2),
         },
     })
 );
@@ -105,19 +92,13 @@ export default function Header() {
                 <Container>
                     <Toolbar className={classes.toolbar} disableGutters>
                         <Logo />
-                        {/* <MiddleNavButtons /> */}
                         <NavButtons />
                         <MenuButton />
                     </Toolbar>
                 </Container>
             </AppBar>
             <Collapse in={showSearch}>
-                <div className={classes.searchbar}>
-                    <Searchbar />
-                    <Button variant="contained" color="secondary">
-                        Search
-                    </Button>
-                </div>
+                <Searchbar />
             </Collapse>
         </div>
     );

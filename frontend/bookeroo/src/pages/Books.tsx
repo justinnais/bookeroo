@@ -65,12 +65,12 @@ export default function Books() {
                             similique error pariatur earum consequatur
                             doloremque at cumque?
                         </Typography>
-                        <div className={classes.searchbar}>
+                        {/* <div className={classes.searchbar}>
                             <Searchbar />
                             <Button variant="contained" color="secondary">
                                 Filter
                             </Button>
-                        </div>
+                        </div> */}
                     </TextCard>
                 </div>
             </Container>
