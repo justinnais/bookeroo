@@ -4,7 +4,7 @@ export enum Routes {
     Register = "/register",
     Books = "/books",
     Book = "/book/:isbn",
-    Search = "/result/:query",
+    Search = "/search",
     Contact = "/contact",
     Profile = "/user/:displayName?",
     Admin = "/admin",
