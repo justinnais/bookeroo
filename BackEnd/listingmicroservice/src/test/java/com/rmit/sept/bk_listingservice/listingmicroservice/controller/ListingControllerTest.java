@@ -41,7 +41,7 @@ class ListingControllerTest
     }
 
     @Test
-    public void CreateValidSellListing() throws JSONException, SQLException
+    public void CreateValidSellListing() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
@@ -54,39 +54,72 @@ class ListingControllerTest
         listingJSON.put("condDesc", "N/A");
         listingJSON.put("price", 123);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString(),
-                true);
+        MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
 
         Assertions.assertTrue(deleteSellListing("1555"));
     }
 
-    private boolean deleteSellListing(String bookIsbn) throws SQLException
+    @Test
+    public void CreateSellListingMissingId() throws JSONException
     {
-        PreparedStatement statement = db.prepareStatement(
-                "SELECT id FROM listing WHERE book_isbn" + " = '" + bookIsbn + "'");
-        ResultSet result = statement.executeQuery();
-        if (result.next())
-        {
-            long id = result.getLong("id");
-            db.prepareStatement("DELETE FROM listing WHERE id = '" + id + "'").execute();
-            db.prepareStatement("DELETE FROM sell_listing WHERE listing_id = '" + id + "'")
-                    .execute();
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
 
-            return true;
-        } else
-            return false;
+        JSONObject listingJSON = new JSONObject();
+        listingJSON.put("used", false);
+        listingJSON.put("cond", Condition.NEW);
+        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("price", 123);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    public void CreateEmptySellListing()
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/listing/create/sell").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(400, response.getStatus());
+    }
+
+    private boolean deleteSellListing(String bookIsbn)
+    {
+        try
+        {
+            PreparedStatement statement = db.prepareStatement(
+                    "SELECT id FROM listing WHERE book_isbn" + " = '" + bookIsbn + "'");
+            ResultSet result = statement.executeQuery();
+            if (result.next())
+            {
+                long id = result.getLong("id");
+                db.prepareStatement("DELETE FROM listing WHERE id = '" + id + "'").execute();
+                db.prepareStatement("DELETE FROM sell_listing WHERE listing_id = '" + id + "'")
+                        .execute();
+
+                return true;
+            } else
+                return false;
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content, boolean print)
+                                                String content)
     {
         try
         {
             ResultActions resultActions = mvc.perform(requestBuilder.content(content));
-            if (print)
-                resultActions.andDo(MockMvcResultHandlers.print());
+            resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
         {
