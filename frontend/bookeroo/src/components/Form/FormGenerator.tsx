@@ -18,12 +18,14 @@ export interface GeneratedField {
  * @param fields array of fields to be generated
  * @param onSubmit callback for when form is submitted
  * @param formId id of the form to attatch the submit button to
+ * @param errors key value pair of errors to be set in the fields from API response
  * @returns form JSX element
  */
 export default function FormGenerator(
     formId: string,
     fields: GeneratedField[],
-    onSubmit: (values: any) => void
+    onSubmit: (values: any) => void,
+    errors?: { [key: string]: string }
 ) {
     const initialValues: { [key: string]: string } = {};
     fields.forEach((field) => {
@@ -47,6 +49,7 @@ export default function FormGenerator(
                                 label={field.label}
                                 type={field.type}
                                 formik={formik}
+                                errors={errors}
                             />
                         </Grid>
                     );
