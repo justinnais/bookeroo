@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_listingservice.listingmicroservice.controller;
 
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.Condition;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 import java.util.Properties;
 
@@ -87,6 +89,23 @@ class ListingControllerTest
         MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    public void GetAllListings() throws SQLException, UnsupportedEncodingException, JSONException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/listing").contentType(MediaType.APPLICATION_JSON);
+
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM sell_listing")
+                .executeQuery();
+        Assertions.assertTrue(result.next());
+        long count = result.getLong("count");
+
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
+        Assertions.assertNotNull(response);
+        JSONArray responseArray = new JSONArray(response.getContentAsString());
+        Assertions.assertEquals(count, responseArray.length());
     }
 
     private boolean deleteSellListing(String bookIsbn)
