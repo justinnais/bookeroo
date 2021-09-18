@@ -32,7 +32,16 @@ export interface CreateAccountRequest {
     companyName?: string;
 }
 
+export interface CreateAccountResponse {
+    id: string;
+}
+
 export interface LoginAccountRequest {
     username: string;
     password: string;
+}
+
+export interface LoginAccountResponse {
+    user: IAccount;
+    token: string;
 }

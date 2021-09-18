@@ -11,6 +11,7 @@ import { getUser, loginUser } from "../api/stores/user";
 import { LoginAccountRequest } from "../api/models/Account";
 import { useAlertStore } from "../stores/useAlertStore";
 import { useHistory } from "react-router";
+import storage from "../util/storage";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -65,9 +66,8 @@ export default function Login() {
     };
 
     const handleResponse = (res: any, auth: LoginAccountRequest) => {
-        console.log(res);
-
-        if (res.status) {
+        if (res.status === 200) {
+            storage.setToken(res.data.token);
             toast(`Successfully logged in ${auth.username}`);
             history.push("/"); // TODO push to user profile
         }
