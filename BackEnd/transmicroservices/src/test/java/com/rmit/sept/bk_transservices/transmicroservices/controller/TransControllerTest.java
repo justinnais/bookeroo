@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -56,8 +57,8 @@ class TransControllerTest
     @Test
     public void CreateValidTransaction() throws JSONException
     {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/trans" +
-                "/transaction").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
 
         JSONArray listings = new JSONArray();
         listings.put(createListing(123, 15551));
@@ -71,15 +72,16 @@ class TransControllerTest
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
 
-        Assertions.assertTrue(deleteTransItem("%555%"));
-        Assertions.assertTrue(deleteTransaction("%555%"));
+        Assertions.assertTrue(deleteTransItem("15551"));
+        Assertions.assertTrue(deleteTransItem("15552"));
+        Assertions.assertTrue(deleteTransaction("25551"));
     }
 
     @Test
     public void CreateTransactionWithoutListing() throws JSONException
     {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/trans" +
-                "/transaction").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
         transJSON.put("buyer_id", 25551);
@@ -92,8 +94,8 @@ class TransControllerTest
     @Test
     public void CreateTransactionWithoutBuyer() throws JSONException
     {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/trans" +
-                "/transaction").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
 
         JSONArray listings = new JSONArray();
         listings.put(createListing(123, 15551));
@@ -105,6 +107,60 @@ class TransControllerTest
         MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    public void GetNonExistingListing() throws UnsupportedEncodingException, JSONException
+    {
+        String buyerId = "95559";
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        Assertions.assertNotNull(response);
+
+        JSONArray responseJSON = new JSONArray(response.getContentAsString());
+        Assertions.assertEquals(0, responseJSON.length());
+    }
+
+    @Test
+    public void GetExistingListing() throws JSONException, UnsupportedEncodingException
+    {
+        int buyerId = 85559;
+        int listingId = 35558;
+        createTransaction(buyerId, listingId);
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        Assertions.assertNotNull(response);
+
+        JSONArray responseJSON = new JSONArray(response.getContentAsString());
+        JSONObject object = (JSONObject) responseJSON.get(0);
+
+        Assertions.assertEquals(listingId, object.get("listing_id"));
+        Assertions.assertEquals(123, object.get("price"));
+
+        Assertions.assertTrue(deleteTransaction(String.valueOf(buyerId)));
+        Assertions.assertTrue(deleteTransItem(String.valueOf(listingId)));
+    }
+
+    private void createTransaction(long buyerId, long listingId) throws JSONException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
+
+        JSONArray listings = new JSONArray();
+        listings.put(createListing(123, listingId));
+
+        JSONObject transJSON = new JSONObject();
+        transJSON.put("buyer_id", buyerId);
+        transJSON.put("listings", listings);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
     }
 
     private JSONObject createListing(long price, long listing_id) throws JSONException
