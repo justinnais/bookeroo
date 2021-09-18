@@ -58,12 +58,12 @@ public class LoginController
     }
 
     // GET 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id) {
-        log.info("Get request for " + id);
-        Optional<User> user = userService.getUser(id);
+    @GetMapping("/{displayName}")
+    public ResponseEntity<?> getUser(@PathVariable String displayName) {
+        log.info("Get request for " + displayName);
+        User user = userService.getUser(displayName);
         if (user == null) {
-            return new ResponseEntity<>("No user exists with this id", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("No user exists with this display name", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
