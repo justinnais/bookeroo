@@ -33,6 +33,7 @@ export interface TableColumn<T, K extends keyof T> {
 interface TableProps<T, K extends keyof T> {
     data: Array<T>;
     columns: Array<TableColumn<T, K>>;
+    onRowClick?: (data?: any) => void;
 }
 
 type TableHeaderProps<T, K extends keyof T> = {
@@ -109,17 +110,21 @@ const TableHeader = <T, K extends keyof T>({
 const TableRows = <T, K extends keyof T>({
     data,
     columns,
+    onRowClick,
 }: TableProps<T, K>) => {
+    // on row click, pass the row back to parent
+    const handleClick = (row: T) => {
+        if (onRowClick) {
+            onRowClick(row);
+        }
+    };
     // map each row of data, then in each row map the cells
     const rows = data.map((row, rowIndex) => {
         return (
             <TableRow
                 hover
-                onClick={(event) => console.log("event", event)}
-                // aria-checked={isItemSelected}
-                // tabIndex={-1}
+                onClick={() => handleClick(row)}
                 key={`row-${rowIndex}`}
-                // selected={isItemSelected}
             >
                 {columns.map((column, colIndex) => (
                     <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
@@ -136,13 +141,19 @@ const TableRows = <T, K extends keyof T>({
 const EnhancedTable = <T, K extends keyof T>({
     data,
     columns,
+    onRowClick,
 }: TableProps<T, K>) => {
     const classes = useStyles();
+
+    const handleClick = (row: T) => {
+        if (onRowClick) {
+            onRowClick(row);
+        }
+    };
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
-                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
                 <TableContainer>
                     <Table
                         className={classes.table}
@@ -151,7 +162,11 @@ const EnhancedTable = <T, K extends keyof T>({
                         aria-label="enhanced table"
                     >
                         <TableHeader columns={columns} />
-                        <TableRows columns={columns} data={data} />
+                        <TableRows
+                            columns={columns}
+                            data={data}
+                            onRowClick={(row: T) => handleClick(row)}
+                        />
                     </Table>
                 </TableContainer>
             </Paper>

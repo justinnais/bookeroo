@@ -46,10 +46,14 @@ function filterResults(searchString: string | null, item: IBook) {
 
 export default function Search() {
     const classes = useStyles();
+    const history = useHistory();
     const searchQuery = useSearchParams();
 
     const { isLoading, data } = useQuery("listBooks", listBooks);
-    let books = data ? (data.data as IBook[]) : [];
+    const books = data ? (data.data as IBook[]) : [];
+    const filteredBooks = books.filter((book) =>
+        filterResults(searchQuery.get("q"), book)
+    );
 
     const columns: TableColumn<IBook, keyof IBook>[] = [
         { key: "title" },
@@ -59,57 +63,28 @@ export default function Search() {
         { key: "pages", align: "right" },
     ];
 
+    const handleClick = (book: IBook) => {
+        console.log("click inside search", book);
+        history.push(`/book/${book.isbn || book.isbn13}`);
+    };
+
     // TODO fix styles later
-    return <EnhancedTable data={books} columns={columns} />;
     return (
-        <Container className={classes.root}>
-            <TableContainer component={Paper}>
-                <Table className={classes.table}>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell align="right">Author</TableCell>
-                            <TableCell align="right">Publisher</TableCell>
-                            <TableCell align="right">ISBN</TableCell>
-                            <TableCell align="right">Page Count</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {books
-                            .filter((book) =>
-                                filterResults(searchQuery.get("q"), book)
-                            )
-                            .map((book) => {
-                                const authors = createAuthorArray(book.authors);
-                                return (
-                                    <TableRow
-                                        key={book.isbn}
-                                        component={RouterLink}
-                                        to={`/book/${book.isbn || book.isbn13}`}
-                                        hover
-                                        className={classes.tableRow}
-                                    >
-                                        <TableCell component="th" scope="row">
-                                            {book.title}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {authors.join(", ")}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {book.publisher}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {book.isbn}
-                                        </TableCell>
-                                        <TableCell align="right">
-                                            {book.pages}
-                                        </TableCell>
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+        <EnhancedTable
+            data={filteredBooks}
+            columns={columns}
+            onRowClick={handleClick}
+        />
     );
+    /* return (
+        <Container className={classes.root}>
+            <TableRow
+                key={book.isbn}
+                component={RouterLink}
+                to={`/book/${book.isbn || book.isbn13}`}
+                hover
+                className={classes.tableRow}>
+            </TableRow>
+        </Container>
+    ); */
 }
