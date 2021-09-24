@@ -14,6 +14,7 @@ import { useHistory, useLocation } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
 import Container from "../components/Layout/Container";
 import { theme } from "../styles/theme";
+import { createAuthorArray } from "../util/createAuthorArray";
 
 const useStyles = makeStyles({
     root: {
@@ -67,31 +68,34 @@ export default function Search() {
                             .filter((book) =>
                                 filterResults(searchQuery.get("q"), book)
                             )
-                            .map((book) => (
-                                <TableRow
-                                    key={book.isbn}
-                                    component={RouterLink}
-                                    to={`/book/${book.isbn || book.isbn13}`}
-                                    hover
-                                    className={classes.tableRow}
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {book.title}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.authors}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.publisher}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.isbn}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.pages}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
+                            .map((book) => {
+                                const authors = createAuthorArray(book.authors);
+                                return (
+                                    <TableRow
+                                        key={book.isbn}
+                                        component={RouterLink}
+                                        to={`/book/${book.isbn || book.isbn13}`}
+                                        hover
+                                        className={classes.tableRow}
+                                    >
+                                        <TableCell component="th" scope="row">
+                                            {book.title}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {authors.join(", ")}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {book.publisher}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {book.isbn}
+                                        </TableCell>
+                                        <TableCell align="right">
+                                            {book.pages}
+                                        </TableCell>
+                                    </TableRow>
+                                );
+                            })}
                     </TableBody>
                 </Table>
             </TableContainer>
