@@ -15,6 +15,8 @@ import { Link as RouterLink } from "react-router-dom";
 import Container from "../components/Layout/Container";
 import { theme } from "../styles/theme";
 import { createAuthorArray } from "../util/createAuthorArray";
+import EnhancedTable from "../components/EnhancedTable";
+import { TableColumn } from "../components/EnhancedTable";
 
 const useStyles = makeStyles({
     root: {
@@ -49,7 +51,16 @@ export default function Search() {
     const { isLoading, data } = useQuery("listBooks", listBooks);
     let books = data ? (data.data as IBook[]) : [];
 
+    const columns: TableColumn<IBook, keyof IBook>[] = [
+        { key: "title" },
+        { key: "authors" },
+        { key: "publisher" },
+        { key: "isbn", header: "ISBN" },
+        { key: "pages", align: "right" },
+    ];
+
     // TODO fix styles later
+    return <EnhancedTable data={books} columns={columns} />;
     return (
         <Container className={classes.root}>
             <TableContainer component={Paper}>

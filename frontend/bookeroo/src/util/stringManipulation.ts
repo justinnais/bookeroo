@@ -5,3 +5,15 @@ export function camelCase(value: string) {
         return index === 0 ? match.toLowerCase() : match.toUpperCase();
     });
 }
+
+/**
+ * Converts a string to Title Case
+ * https://stackoverflow.com/questions/196972/convert-string-to-title-case-with-javascript
+ * @param value string to convert
+ * @returns value converted to Title Case
+ */
+export function titleCase(value: string) {
+    return value.replace(/\w\S*/g, function (txt) {
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
+}

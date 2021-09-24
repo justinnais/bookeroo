@@ -29,6 +29,7 @@ import Container from "../Layout/Container";
 import { listBookListings, listListings } from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
+import EnhancedTable, { TableColumn } from "../EnhancedTable";
 
 interface Props {
     book: IBook;
@@ -114,35 +115,6 @@ export default function BookTemplate(props: Props) {
         </Button>
     );
 
-    // TODO this needs to be turned into its own component, maybe better to use regular table instead of data grid
-    // https://material-ui.com/components/tables/#table
-    const columns: GridColDef[] = [
-        { field: "id", headerName: "ID" },
-        {
-            field: "sellerName",
-            headerName: "Seller",
-            minWidth: 200,
-        },
-        {
-            field: "condition",
-            headerName: "Condition",
-            minWidth: 200,
-        },
-        {
-            field: "price",
-            headerName: "Price",
-            type: "number",
-            minWidth: 150,
-        },
-        {
-            field: "button",
-            headerName: "",
-            minWidth: 200,
-            align: "right",
-            renderCell: addToCartButton,
-        },
-    ];
-
     const rows = [
         { id: 1, sellerName: "Jon", price: 35, condition: "Good" },
         { id: 2, sellerName: "Cersei", price: 42, condition: "Good" },
@@ -155,7 +127,20 @@ export default function BookTemplate(props: Props) {
         { id: 9, sellerName: "Harvey", price: 65, condition: "Good" },
     ];
 
-    const table = (
+    type Foo = {
+        id: number;
+        sellerName: string;
+        price: number;
+        condition: string;
+    };
+
+    const columns: TableColumn<Foo, keyof Foo>[] = [
+        { key: "id", header: "ID" },
+        { key: "sellerName", header: "Seller Name" },
+        { key: "price", header: "Price" },
+    ];
+
+    /*  const table = (
         <div style={{ height: 400, width: "100%" }}>
             <DataGrid
                 rows={rows}
@@ -164,7 +149,7 @@ export default function BookTemplate(props: Props) {
                 disableSelectionOnClick
             />
         </div>
-    );
+    ); */
     return (
         <div>
             <Container noMargin>
@@ -178,7 +163,7 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
-                {table}
+                <EnhancedTable data={rows} columns={columns} />
             </Container>
         </div>
     );
