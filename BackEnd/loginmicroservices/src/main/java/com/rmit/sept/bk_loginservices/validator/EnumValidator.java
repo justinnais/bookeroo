@@ -23,5 +23,4 @@ public abstract class EnumValidator<T extends Annotation, U> implements Constrai
             return nullable;
         return Arrays.asList(subset).contains(value);
     }
-
 }

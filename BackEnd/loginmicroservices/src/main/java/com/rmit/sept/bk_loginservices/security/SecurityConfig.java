@@ -22,8 +22,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
         jsr250Enabled = true,
         prePostEnabled = true
 )
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
+public class SecurityConfig extends WebSecurityConfigurerAdapter
+{
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
 
@@ -34,21 +34,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(customUserDetailsService).passwordEncoder(bCryptPasswordEncoder);
+    protected void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception
+    {
+        authenticationManagerBuilder.userDetailsService(customUserDetailsService)
+                .passwordEncoder(bCryptPasswordEncoder);
     }
 
     @Override
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
-    protected AuthenticationManager authenticationManager() throws Exception {
+    protected AuthenticationManager authenticationManager() throws Exception
+    {
         return super.authenticationManager();
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter() {return  new JwtAuthenticationFilter();}
+    public JwtAuthenticationFilter jwtAuthenticationFilter()
+    {
+        return new JwtAuthenticationFilter();
+    }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception
+    {
         http.cors().and().csrf().disable()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement()
