@@ -66,7 +66,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface TableHeaderProps<T, K extends keyof T> {
     columns: Array<TableColumn<T, K>>;
     order: Order;
-    orderBy: K;
+    orderBy: K | undefined;
     onRequestSort: (
         event: React.MouseEvent<unknown>,
         property: keyof T
@@ -75,6 +75,7 @@ interface TableHeaderProps<T, K extends keyof T> {
 
 type Order = "asc" | "desc";
 
+// ! this breaks stuff
 /* function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
@@ -83,6 +84,10 @@ type Order = "asc" | "desc";
         return a[1] - b[1];
     });
     return stabilizedThis.map((el) => el[0]);
+} */
+
+function sort<T>(data: Array<T>, comparator: (a: T, b: T) => number) {
+    console.log("sorting", data);
 }
 
 function getComparator<Key extends keyof any>(
@@ -105,7 +110,12 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
         return 1;
     }
     return 0;
-} */
+}
+
+enum PossibleIds {
+    id = "id",
+    isbn = "isbn",
+}
 
 /**
  *
@@ -122,9 +132,7 @@ export default function EnhancedTable<T, K extends keyof T>(
     const [order, setOrder] = React.useState<Order>("asc");
 
     /* which column to sort table by */
-    const [orderBy, setOrderBy] = React.useState<keyof T>(
-        ("id" || "isbn") as keyof T
-    );
+    const [orderBy, setOrderBy] = React.useState<keyof T>();
 
     /* pages for pagination of table */
     const [page, setPage] = React.useState(0);
@@ -146,7 +154,7 @@ export default function EnhancedTable<T, K extends keyof T>(
     ) => {
         const isAsc = orderBy === property && order === "asc";
         setOrder(isAsc ? "desc" : "asc");
-        setOrderBy(property);
+        // setOrderBy(property);
     };
 
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -237,6 +245,8 @@ export default function EnhancedTable<T, K extends keyof T>(
         //     data,
         //     getComparator(order, orderBy)
         // ).slice(page * rowsPerPage, rowsPerPage + rowsPerPage);
+
+        // sort<T>(data, getComparator(order, orderBy));
         // map each row of data, then in each row map the cells
         const rows = data.map((row, rowIndex) => {
             return (
