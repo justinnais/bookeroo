@@ -21,7 +21,6 @@ import {
     GridColDef,
     GridValueGetterParams,
 } from "@material-ui/data-grid";
-import SellerTable from "../components/SellerTable";
 import { api } from "../api/api";
 import { IBook } from "../api/models/Book";
 import { useParams } from "react-router";

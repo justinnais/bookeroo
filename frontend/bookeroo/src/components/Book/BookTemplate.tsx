@@ -29,7 +29,7 @@ import Container from "../Layout/Container";
 import { listBookListings, listListings } from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
-import EnhancedTable, { TableColumn } from "../EnhancedTable";
+import GenericTable, { TableColumn } from "../Table/GenericTable";
 
 interface Props {
     book: IBook;
@@ -163,7 +163,7 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
-                <EnhancedTable data={rows} columns={columns} />
+                <GenericTable data={rows} columns={columns} />
             </Container>
         </div>
     );

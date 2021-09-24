@@ -13,7 +13,7 @@ import {
     TablePagination,
 } from "@material-ui/core";
 import React from "react";
-import { titleCase } from "../util/stringManipulation";
+import { titleCase } from "../../util/stringManipulation";
 
 // https://react.christmas/2020/22
 
@@ -122,7 +122,7 @@ enum PossibleIds {
  * @param props data, columns and row click action to be passed to generic table
  * @returns
  */
-export default function EnhancedTable<T, K extends keyof T>(
+export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
     const { data, columns, onRowClick } = props;

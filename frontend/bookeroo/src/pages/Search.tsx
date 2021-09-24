@@ -15,8 +15,8 @@ import { Link as RouterLink } from "react-router-dom";
 import Container from "../components/Layout/Container";
 import { theme } from "../styles/theme";
 import { createAuthorArray } from "../util/createAuthorArray";
-import EnhancedTable from "../components/EnhancedTable";
-import { TableColumn } from "../components/EnhancedTable";
+import GenericTable from "../components/Table/GenericTable";
+import { TableColumn } from "../components/Table/GenericTable";
 
 const useStyles = makeStyles({
     root: {
@@ -70,7 +70,7 @@ export default function Search() {
     return (
         <div className={classes.root}>
             <Container>
-                <EnhancedTable
+                <GenericTable
                     data={filteredBooks}
                     columns={columns}
                     onRowClick={handleClick}
