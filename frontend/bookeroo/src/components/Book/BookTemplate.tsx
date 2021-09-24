@@ -28,6 +28,7 @@ import Image from "../Layout/Image";
 import Container from "../Layout/Container";
 import { listBookListings, listListings } from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
+import DetailsList from "./DetailsList";
 
 interface Props {
     book: IBook;
@@ -46,6 +47,9 @@ const useStyles = makeStyles((theme: Theme) =>
         details: {
             background: theme.palette.common.white,
         },
+        quote: {
+            maxWidth: "50vw",
+        },
     })
 );
 
@@ -58,10 +62,9 @@ export default function BookTemplate(props: Props) {
     const authors = createAuthorArray(props.book.authors);
 
     const firstCard = [
-        <Image src={props.book.image} alt="placeholder" />,
         <TextCard
             title={props.book.title}
-            titleSize="h3"
+            titleSize="h4"
             subtitle={authors.join(", ")}
             buttons={[
                 <Button color="secondary" variant="contained">
@@ -76,44 +79,19 @@ export default function BookTemplate(props: Props) {
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
         </TextCard>,
+        <Image src={props.book.image} alt="placeholder" />,
     ];
 
-    const details = (
-        <List className={classes.details}>
-            <ListItem>
-                <ListItemText
-                    primary={props.book.edition}
-                    secondary="Edition"
-                />
-            </ListItem>
-            <ListItem>
-                <ListItemText
-                    primary={props.book.datePublished}
-                    secondary="Published"
-                />
-            </ListItem>
-            <ListItem>
-                <ListItemText
-                    primary={props.book.publisher}
-                    secondary="Publisher"
-                />
-            </ListItem>
-            <ListItem>
-                <ListItemText
-                    primary={props.book.isbn || props.book.isbn13}
-                    secondary="ISBN"
-                />
-            </ListItem>
-            <ListItem>
-                <ListItemText
-                    primary={props.book.pages}
-                    secondary="Page Count"
-                />
-            </ListItem>
-        </List>
-    );
+    const firstList = [
+        { label: "Edition", value: props.book.edition },
+        { label: "Published", value: props.book.datePublished },
+        { label: "Publisher", value: props.book.publisher },
+        { label: "ISBN", value: props.book.isbn || props.book.isbn13 },
+        { label: "Page Count", value: props.book.pages },
+    ];
+
     const quote = (
-        <div>
+        <div className={classes.quote}>
             <FormatQuoteIcon className={classes.icon} />
             <Typography variant="h5">
                 Est tation latine aliquip id, mea ad tale illud definitiones.
@@ -123,7 +101,12 @@ export default function BookTemplate(props: Props) {
             <Typography variant="subtitle1">John Smith</Typography>
         </div>
     );
-    const secondCard = [quote, details];
+
+    const secondCard = [
+        quote,
+        <DetailsList items={firstList} />,
+        <DetailsList items={firstList} />,
+    ];
 
     const addToCartButton = (params: GridCellParams) => (
         <Button variant="contained" color="secondary">
@@ -185,13 +168,13 @@ export default function BookTemplate(props: Props) {
     return (
         <div>
             <Container noMargin>
-                <GridLayout items={firstCard} spacing={2} />
+                <GridLayout items={firstCard} spacing={2} size={[7, 5]} />
             </Container>
             <Container
                 style={{ backgroundColor: theme.palette.primary.main }}
                 noMargin
             >
-                <GridLayout items={secondCard} size={[7, 5]} spacing={2} />
+                <GridLayout items={secondCard} spacing={2} />
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
