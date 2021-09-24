@@ -16,8 +16,15 @@ import Container from "../components/Layout/Container";
 import { theme } from "../styles/theme";
 
 const useStyles = makeStyles({
+    root: {
+        backgroundColor: theme.palette.primary.main,
+        minHeight: "100vh",
+    },
     table: {
         minWidth: 650,
+    },
+    tableRow: {
+        textDecoration: "none",
     },
 });
 
@@ -43,14 +50,9 @@ export default function Search() {
 
     // TODO fix styles later
     return (
-        <Container
-            style={{
-                backgroundColor: theme.palette.primary.main,
-                minHeight: "100vh",
-            }}
-        >
+        <Container className={classes.root}>
             <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
+                <Table className={classes.table}>
                     <TableHead>
                         <TableRow>
                             <TableCell>Title</TableCell>
@@ -71,6 +73,7 @@ export default function Search() {
                                     component={RouterLink}
                                     to={`/book/${book.isbn || book.isbn13}`}
                                     hover
+                                    className={classes.tableRow}
                                 >
                                     <TableCell component="th" scope="row">
                                         {book.title}
