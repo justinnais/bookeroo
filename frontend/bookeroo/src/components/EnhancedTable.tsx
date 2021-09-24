@@ -4,7 +4,6 @@ import {
     TableBody,
     TableRow,
     TableCell,
-    Checkbox,
     createStyles,
     makeStyles,
     Theme,
@@ -83,6 +82,7 @@ const TableHeader = <T, K extends keyof T>({
                 {headers.map((column) => (
                     <TableCell
                         key={column.key}
+                        align={column.align}
                         // sortDirection={orderBy === column.id ? order : false}
                     >
                         <TableSortLabel
@@ -106,6 +106,33 @@ const TableHeader = <T, K extends keyof T>({
     );
 };
 
+const TableRows = <T, K extends keyof T>({
+    data,
+    columns,
+}: TableProps<T, K>) => {
+    // map each row of data, then in each row map the cells
+    const rows = data.map((row, rowIndex) => {
+        return (
+            <TableRow
+                hover
+                onClick={(event) => console.log("event", event)}
+                // aria-checked={isItemSelected}
+                // tabIndex={-1}
+                key={`row-${rowIndex}`}
+                // selected={isItemSelected}
+            >
+                {columns.map((column, colIndex) => (
+                    <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
+                        {row[column.key]}
+                    </TableCell>
+                ))}
+            </TableRow>
+        );
+    });
+
+    return <TableBody>{rows}</TableBody>;
+};
+
 const EnhancedTable = <T, K extends keyof T>({
     data,
     columns,
@@ -124,58 +151,9 @@ const EnhancedTable = <T, K extends keyof T>({
                         aria-label="enhanced table"
                     >
                         <TableHeader columns={columns} />
-                        <TableBody>
-                            {/* <TableRow
-                                hover
-                                onClick={(event) => console.log("event", event)}
-                                role="checkbox"
-                                aria-checked={isItemSelected}
-                                tabIndex={-1}
-                                key={row.id.toString()}
-                                selected={isItemSelected}
-                            >
-                                <TableCell padding="checkbox">
-                                    <Checkbox
-                                        checked={isItemSelected}
-                                        inputProps={{
-                                            "aria-labelledby": labelId,
-                                        }}
-                                    />
-                                </TableCell>
-                                <TableCell
-                                    component="th"
-                                    id={labelId}
-                                    scope="row"
-                                    padding="none"
-                                >
-                                    {row.id}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.userId}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.bookIsbn}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.condition}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {row.conditionDesc}
-                                </TableCell>
-                                <TableCell align="right">{row.price}</TableCell>
-                            </TableRow> */}
-                        </TableBody>
+                        <TableRows columns={columns} data={data} />
                     </Table>
                 </TableContainer>
-                {/* <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={rows.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                /> */}
             </Paper>
         </div>
     );
