@@ -20,11 +20,3 @@ export function registerUser(user: CreateAccountRequest) {
 export function loginUser(auth: LoginAccountRequest) {
     return apiLogin.post(`/login`, auth);
 }
-
-export function logoutUser() {
-    storage.clearToken();
-}
-
-export function getCurrentUser() {
-    storage.getToken();
-}

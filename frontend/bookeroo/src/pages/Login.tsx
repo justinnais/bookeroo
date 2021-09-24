@@ -40,7 +40,7 @@ export default function Login() {
     const toast = (message: string) => {
         setAlert(message);
     };
-    const setUser = useAuthStore((state) => state.setUser);
+    const login = useAuthStore((state) => state.login);
     // const toast = (message: string) => {
     //     setUser(message);
     // };
@@ -76,7 +76,7 @@ export default function Login() {
             storage.setToken(res.data.token);
             console.log("token decode", jwt.decode(res.data.token));
             const user = jwt.decode(res.data.token);
-            setUser(user as IAccount);
+            login(user as IAccount);
             toast(`Successfully logged in ${auth.username}`);
             history.push("/"); // TODO push to user profile
         }
