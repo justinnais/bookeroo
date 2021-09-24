@@ -138,7 +138,7 @@ export default function EnhancedTable<T, K extends keyof T>(
     const [page, setPage] = React.useState(0);
 
     /* rows per page setting */
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     /* callback to pass generic row back to parent */
     const handleClick = (row: T) => {
@@ -247,8 +247,14 @@ export default function EnhancedTable<T, K extends keyof T>(
         // ).slice(page * rowsPerPage, rowsPerPage + rowsPerPage);
 
         // sort<T>(data, getComparator(order, orderBy));
+
+        // divide data into pages
+        const slicedPages = data.slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage
+        );
         // map each row of data, then in each row map the cells
-        const rows = data.map((row, rowIndex) => {
+        const rows = slicedPages.map((row, rowIndex) => {
             return (
                 <TableRow
                     hover
@@ -263,6 +269,23 @@ export default function EnhancedTable<T, K extends keyof T>(
                 </TableRow>
             );
         });
+
+        //empty row to display to keep table same height
+        const emptyRows =
+            rowsPerPage -
+            Math.min(rowsPerPage, data.length - page * rowsPerPage);
+
+        if (emptyRows > 0) {
+            rows.push(
+                <TableRow
+                    style={{
+                        height: 53 * emptyRows,
+                    }}
+                >
+                    <TableCell colSpan={6} />
+                </TableRow>
+            );
+        }
 
         return <TableBody>{rows}</TableBody>;
     };
@@ -290,7 +313,8 @@ export default function EnhancedTable<T, K extends keyof T>(
                     </Table>
                 </TableContainer>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    // TODO this pagination is fine for now but will be better to use paginated requests from React Query and database
+                    rowsPerPageOptions={[10, 20, 40]}
                     component="div"
                     count={data.length}
                     rowsPerPage={rowsPerPage}
