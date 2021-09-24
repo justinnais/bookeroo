@@ -75,7 +75,7 @@ interface TableHeaderProps<T, K extends keyof T> {
 
 type Order = "asc" | "desc";
 
-function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
+/* function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
     const stabilizedThis = array.map((el, index) => [el, index] as [T, number]);
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
@@ -105,7 +105,7 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
         return 1;
     }
     return 0;
-}
+} */
 
 /**
  *
