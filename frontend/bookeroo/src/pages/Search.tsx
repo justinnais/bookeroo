@@ -21,7 +21,6 @@ import { TableColumn } from "../components/EnhancedTable";
 const useStyles = makeStyles({
     root: {
         backgroundColor: theme.palette.primary.main,
-        minHeight: "100vh",
     },
     table: {
         minWidth: 650,
@@ -60,7 +59,7 @@ export default function Search() {
         { key: "authors" },
         { key: "publisher" },
         { key: "isbn", header: "ISBN" },
-        { key: "pages", align: "right" },
+        { key: "pages" },
     ];
 
     const handleClick = (book: IBook) => {
@@ -68,23 +67,15 @@ export default function Search() {
         history.push(`/book/${book.isbn || book.isbn13}`);
     };
 
-    // TODO fix styles later
     return (
-        <EnhancedTable
-            data={filteredBooks}
-            columns={columns}
-            onRowClick={handleClick}
-        />
+        <div className={classes.root}>
+            <Container>
+                <EnhancedTable
+                    data={filteredBooks}
+                    columns={columns}
+                    onRowClick={handleClick}
+                />
+            </Container>
+        </div>
     );
-    /* return (
-        <Container className={classes.root}>
-            <TableRow
-                key={book.isbn}
-                component={RouterLink}
-                to={`/book/${book.isbn || book.isbn13}`}
-                hover
-                className={classes.tableRow}>
-            </TableRow>
-        </Container>
-    ); */
 }
