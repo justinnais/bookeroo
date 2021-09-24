@@ -27,6 +27,7 @@ import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
 import { listBookListings, listListings } from "../../api/stores/listing";
+import { createAuthorArray } from "../../util/createAuthorArray";
 
 interface Props {
     book: IBook;
@@ -53,17 +54,15 @@ export default function BookTemplate(props: Props) {
     const { isLoading, data } = useQuery("listBookListings", () =>
         listBookListings(props.book.isbn || props.book.isbn)
     );
-    // const { data } = useQuery("listListings", () => listListings());
 
-    console.log("listing", data);
+    const authors = createAuthorArray(props.book.authors);
 
     const firstCard = [
         <Image src={props.book.image} alt="placeholder" />,
         <TextCard
             title={props.book.title}
             titleSize="h3"
-            subtitle={"this is authors"}
-            // subtitle={props.book.authors.split("|").join(" - ")}
+            subtitle={authors.join(", ")}
             buttons={[
                 <Button color="secondary" variant="contained">
                     View Sellers
