@@ -2,9 +2,6 @@ import React, { useContext } from "react";
 import "./styles/App.scss";
 import Header from "./components/Layout/Header";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import AddPerson from "./components/Persons/AddPerson";
-// import { Provider } from "react-redux";
-// import store from "./store";
 
 import Landing from "./pages/Landing";
 import Register from "./pages/Register";
@@ -21,7 +18,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 import AdminRoute from "./routes/AdminRoute";
 import Admin from "./pages/Admin";
 import Books from "./pages/Books";
-import Alert from "./components/Alert";
+import Alert from "./components/Alert/Alert";
 import Book from "./pages/Book";
 
 const useStyles = makeStyles((theme: Theme) =>

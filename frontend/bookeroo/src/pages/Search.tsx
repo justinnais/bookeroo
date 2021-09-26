@@ -14,10 +14,19 @@ import { useHistory, useLocation } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
 import Container from "../components/Layout/Container";
 import { theme } from "../styles/theme";
+import { createAuthorArray } from "../util/createAuthorArray";
+import GenericTable from "../components/Table/GenericTable";
+import { TableColumn } from "../components/Table/GenericTable";
 
 const useStyles = makeStyles({
+    root: {
+        backgroundColor: theme.palette.primary.main,
+    },
     table: {
         minWidth: 650,
+    },
+    tableRow: {
+        textDecoration: "none",
     },
 });
 
@@ -36,62 +45,37 @@ function filterResults(searchString: string | null, item: IBook) {
 
 export default function Search() {
     const classes = useStyles();
+    const history = useHistory();
     const searchQuery = useSearchParams();
 
     const { isLoading, data } = useQuery("listBooks", listBooks);
-    let books = data ? (data.data as IBook[]) : [];
+    const books = data ? (data.data as IBook[]) : [];
+    const filteredBooks = books.filter((book) =>
+        filterResults(searchQuery.get("q"), book)
+    );
 
-    // TODO fix styles later
+    const columns: TableColumn<IBook, keyof IBook>[] = [
+        { key: "title" },
+        { key: "authors" },
+        { key: "publisher" },
+        { key: "isbn", header: "ISBN" },
+        { key: "pages" },
+    ];
+
+    const handleClick = (book: IBook) => {
+        console.log("click inside search", book);
+        history.push(`/book/${book.isbn || book.isbn13}`);
+    };
+
     return (
-        <Container
-            style={{
-                backgroundColor: theme.palette.primary.main,
-                minHeight: "100vh",
-            }}
-        >
-            <TableContainer component={Paper}>
-                <Table className={classes.table} aria-label="simple table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Title</TableCell>
-                            <TableCell align="right">Author</TableCell>
-                            <TableCell align="right">Publisher</TableCell>
-                            <TableCell align="right">ISBN</TableCell>
-                            <TableCell align="right">Page Count</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {books
-                            .filter((book) =>
-                                filterResults(searchQuery.get("q"), book)
-                            )
-                            .map((book) => (
-                                <TableRow
-                                    key={book.isbn}
-                                    component={RouterLink}
-                                    to={`/book/${book.isbn || book.isbn13}`}
-                                    hover
-                                >
-                                    <TableCell component="th" scope="row">
-                                        {book.title}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.authors}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.publisher}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.isbn}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {book.pages}
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        </Container>
+        <div className={classes.root}>
+            <Container>
+                <GenericTable
+                    data={filteredBooks}
+                    columns={columns}
+                    onRowClick={handleClick}
+                />
+            </Container>
+        </div>
     );
 }
