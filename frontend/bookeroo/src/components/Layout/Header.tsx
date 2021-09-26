@@ -7,11 +7,14 @@ import {
     Collapse,
 } from "@material-ui/core";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import Button from "../Button/Button";
 import MenuButton from "./MenuButton";
 import { Routes } from "../../routes/Routes";
 import Searchbar from "./Searchbar";
+import { useAuthStore } from "../../stores/useAuthStore";
+import { IAccount } from "../../api/models/Account";
+import { useAlertStore } from "../../stores/useAlertStore";
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
  * If you need to create global styles, they go in App.scss
@@ -49,8 +52,24 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Header() {
     const classes = useStyles();
     const [showSearch, setShowSearch] = useState(false);
-
     const toggleSearch = () => setShowSearch(!showSearch);
+    const history = useHistory();
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
+
+    const isAuthenticated: boolean = useAuthStore(
+        (state) => state.isAuthenticated
+    );
+    const user: IAccount | undefined = useAuthStore((state) => state.user);
+    const logout = useAuthStore((state) => state.logout);
+
+    const handleSignOut = () => {
+        logout();
+        toast(`Successfully logged out`);
+        history.push("/"); // TODO push to user profile
+    };
 
     /**
      * Navigation links that show on large screens
@@ -63,12 +82,22 @@ export default function Header() {
                 <Button to={Routes.Books}>Books</Button>
                 <Button>Sell Books</Button>
             </div>
-            <div className={classes.navButtons}>
-                <Button to="/login">Sign In</Button>
-                <Button variant="contained" color="secondary" to="/register">
-                    Sign Up
-                </Button>
-            </div>
+            {isAuthenticated ? (
+                <div className={classes.navButtons}>
+                    <Button onClick={handleSignOut}>Sign out</Button>
+                </div>
+            ) : (
+                <div className={classes.navButtons}>
+                    <Button to="/login">Sign In</Button>
+                    <Button
+                        variant="contained"
+                        color="secondary"
+                        to="/register"
+                    >
+                        Sign Up
+                    </Button>
+                </div>
+            )}
         </>
     );
 

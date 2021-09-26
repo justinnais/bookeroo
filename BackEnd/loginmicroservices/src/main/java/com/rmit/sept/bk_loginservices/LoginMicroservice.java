@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @SpringBootApplication()
 public class LoginMicroservice
 {
-
     @Bean
     BCryptPasswordEncoder bCryptPasswordEncoder()
     {
@@ -19,5 +18,4 @@ public class LoginMicroservice
     {
         SpringApplication.run(LoginMicroservice.class, args);
     }
-
 }

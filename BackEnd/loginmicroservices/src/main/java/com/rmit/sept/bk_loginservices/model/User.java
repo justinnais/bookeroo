@@ -17,7 +17,6 @@ import java.util.Date;
 @Entity
 public class User implements UserDetails
 {
-
     /**
      * The unique identifier for this user object
      */

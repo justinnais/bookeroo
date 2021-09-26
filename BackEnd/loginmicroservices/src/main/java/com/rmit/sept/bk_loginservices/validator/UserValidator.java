@@ -9,7 +9,6 @@ import org.springframework.validation.Validator;
 @Component
 public class UserValidator implements Validator
 {
-
     @Override
     public boolean supports(Class<?> aClass)
     {
@@ -22,14 +21,10 @@ public class UserValidator implements Validator
         User user = (User) object;
 
         if (user.getPassword() == null)
-            errors.rejectValue("password", "Missing",
-                    "Password is required");
-        else
-        {
-            if (user.getPassword().length() < 6)
-                errors.rejectValue("password", "Length",
-                        "Password must be at least 6 characters");
-        }
+            errors.rejectValue("password", "Missing", "Password is required");
+        else if (user.getPassword().length() < 6)
+            errors.rejectValue("password", "Length",
+                    "Password must be at least 6 characters");
 
         if (user.getAccountType() != null)
         {
@@ -50,6 +45,5 @@ public class UserValidator implements Validator
                             "A company name is required");
             }
         }
-
     }
 }

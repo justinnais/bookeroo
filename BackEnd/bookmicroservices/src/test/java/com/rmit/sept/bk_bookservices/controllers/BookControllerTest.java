@@ -122,7 +122,8 @@ class BookControllerTest
     public void SearchByInvalidTitle()
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/nsILBUR8943BG38BP8VB").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/book/search/title/nsILBUR8943BG38BP8VB")
+                .contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
         Assertions.assertEquals(404, response.getStatus());
@@ -130,15 +131,9 @@ class BookControllerTest
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
-        return getResponse(requestBuilder, "");
-    }
-
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content)
-    {
         try
         {
-            ResultActions resultActions = mvc.perform(requestBuilder.content(content));
+            ResultActions resultActions = mvc.perform(requestBuilder);
             resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)

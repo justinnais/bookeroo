@@ -34,7 +34,6 @@ import static com.rmit.sept.bk_loginservices.security.SecurityConstant.TOKEN_PRE
 // allows for CORS when testing locally
 public class LoginController
 {
-
     private static final Logger log = Logger.getLogger(LoginController.class);
 
     @Autowired
@@ -59,16 +58,24 @@ public class LoginController
         return new ResponseEntity<>(userService.listUsers(), HttpStatus.OK);
     }
 
-    // GET 
-    @GetMapping("/{displayName}")
-    public ResponseEntity<?> getUser(@PathVariable String displayName)
-    {
+    // GET BY ID
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id) {
+        log.info("Get request for " + id);
+        User user = userService.getUser(id);
+        if (user == null) {
+            return new ResponseEntity<>("No user exists with this id", HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    // GET PROFILE
+    @GetMapping("/profile/{displayName}")
+    public ResponseEntity<?> getUserByDisplayName(@PathVariable String displayName) {
         log.info("Get request for " + displayName);
-        User user = userService.getUser(displayName);
-        if (user == null)
-        {
-            return new ResponseEntity<>("No user exists with this display name",
-                    HttpStatus.NOT_FOUND);
+        User user = userService.getUserByDisplayName(displayName);
+        if (user == null) {
+            return new ResponseEntity<>("No user exists with this display name", HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
@@ -106,19 +113,19 @@ public class LoginController
         if (errorMap != null)
             return errorMap;
 
+        String username = loginRequest.getUsername();
+        String password = loginRequest.getPassword();
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
+                        username,
+                        password
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = TOKEN_PREFIX + tokenProvider.generateToken(authentication);
-        log.info("Logged in user: " + loginRequest.getUsername());
-
+        String jwt = tokenProvider.generateToken(authentication);
+        log.info("Logged in user: " + username);
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
-
-
 }

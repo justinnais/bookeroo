@@ -74,7 +74,7 @@ class TransControllerTest
         transJSON.put("buyer_id", 25551);
         transJSON.put("listings", listings);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
 
@@ -92,7 +92,7 @@ class TransControllerTest
         JSONObject transJSON = new JSONObject();
         transJSON.put("buyer_id", 25551);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
@@ -110,7 +110,7 @@ class TransControllerTest
         JSONObject transJSON = new JSONObject();
         transJSON.put("listings", listings);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
@@ -122,7 +122,7 @@ class TransControllerTest
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
 
         JSONArray responseJSON = new JSONArray(response.getContentAsString());
@@ -139,7 +139,7 @@ class TransControllerTest
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
 
         JSONArray responseJSON = new JSONArray(response.getContentAsString());
@@ -164,7 +164,7 @@ class TransControllerTest
         transJSON.put("buyer_id", buyerId);
         transJSON.put("listings", listings);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
     }
@@ -178,13 +178,12 @@ class TransControllerTest
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content, boolean print)
+                                                String content)
     {
         try
         {
             ResultActions resultActions = mvc.perform(requestBuilder.content(content));
-            if (print)
-                resultActions.andDo(MockMvcResultHandlers.print());
+            resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
         {

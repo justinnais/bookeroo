@@ -8,9 +8,12 @@ import FormGenerator, {
 import SubmitButton from "../components/Button/SubmitButton";
 import Container from "../components/Layout/Container";
 import { getUser, loginUser } from "../api/stores/user";
-import { LoginAccountRequest } from "../api/models/Account";
+import { IAccount, LoginAccountRequest } from "../api/models/Account";
 import { useAlertStore } from "../stores/useAlertStore";
 import { useHistory } from "react-router";
+import storage from "../util/storage";
+import jwt from "jsonwebtoken";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -37,6 +40,10 @@ export default function Login() {
     const toast = (message: string) => {
         setAlert(message);
     };
+    const login = useAuthStore((state) => state.login);
+    // const toast = (message: string) => {
+    //     setUser(message);
+    // };
     const fields: GeneratedField[] = [
         {
             label: "Email",
@@ -65,9 +72,11 @@ export default function Login() {
     };
 
     const handleResponse = (res: any, auth: LoginAccountRequest) => {
-        console.log(res);
-
-        if (res.status) {
+        if (res.status === 200) {
+            storage.setToken(res.data.token);
+            console.log("token decode", jwt.decode(res.data.token));
+            const user = jwt.decode(res.data.token);
+            login(user as IAccount);
             toast(`Successfully logged in ${auth.username}`);
             history.push("/"); // TODO push to user profile
         }
