@@ -98,6 +98,29 @@ class LoginControllerTest
     }
 
     @Test
+    public void RegisterWithBusinessUser() throws JSONException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject userJson = new JSONObject();
+        userJson.put("firstName", "firstName");
+        userJson.put("lastName", "lastName");
+        userJson.put("password", "password");
+        userJson.put("displayName", "displayName");
+        userJson.put("username", "username@registertest.com-test");
+        userJson.put("accountType", AccountType.BUSINESS);
+        userJson.put("abn", "51824753556");
+        userJson.put("companyName", "companyName");
+
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(201, response.getStatus());
+
+        Assertions.assertTrue(deleteUser("username@registertest.com-test"));
+    }
+
+    @Test
     public void LoginWithAllFieldsEmpty() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
@@ -191,7 +214,7 @@ class LoginControllerTest
     {
         try
         {
-            db.prepareStatement("DELETE FROM user WHERE username = '" + username + "'").execute();
+            db.prepareStatement("DELETE FROM user WHERE username LIKE '" + username + "'").execute();
         } catch (SQLException e)
         {
             e.printStackTrace();
