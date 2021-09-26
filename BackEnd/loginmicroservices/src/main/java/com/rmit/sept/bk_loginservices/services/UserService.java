@@ -19,30 +19,6 @@ public class UserService
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // LIST
-    public Iterable<User> listUsers()
-    {
-        return userRepository.findAll();
-    }
-
-    // GET
-    public User getUser(Long id)
-    {
-        return userRepository.getById(id);
-    }
-
-    // GET
-    public User getUserByDisplayName(String displayName)
-    {
-        return userRepository.findByDisplayName(displayName);
-    }
-
-    // GET
-    public User getUserByEmail(String email)
-    {
-        return userRepository.findByUsername(email);
-    }
-
     public User saveUser(User newUser)
     {
         //Encrypt the password
