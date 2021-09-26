@@ -13,6 +13,7 @@ import { IBook } from "../../api/models/Book";
 import Skeleton from "@material-ui/lab/Skeleton";
 import Logo from "../../assets/image.svg";
 import { theme } from "../../styles/theme";
+import { Paper } from "@material-ui/core";
 
 interface IBookCard {
     book: IBook;
@@ -24,7 +25,8 @@ const useStyles = makeStyles({
         width: "16rem",
         background: "transparent",
         textAlign: "center",
-        maxHeight: "24rem", // TODO not sure about this
+
+        // maxHeight: "24rem", // TODO not sure about this
     },
     media: {
         height: "16rem",
@@ -38,15 +40,17 @@ export default function BookCard(props: IBookCard) {
         props.loading ? (
             <Skeleton variant="rect" className={classes.media} />
         ) : (
-            <CardMedia
-                className={classes.media}
-                image={props.book.image}
-                title={props.book.title}
-            />
+            <Paper>
+                <CardMedia
+                    className={classes.media}
+                    image={props.book.image}
+                    title={props.book.title}
+                />
+            </Paper>
         );
 
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} elevation={0}>
             <CardActionArea
                 component={RouterLink}
                 to={
