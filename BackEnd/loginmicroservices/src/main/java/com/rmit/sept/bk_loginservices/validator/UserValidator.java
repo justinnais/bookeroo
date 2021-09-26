@@ -19,15 +19,16 @@ public class UserValidator implements Validator
     @Override
     public void validate(Object object, Errors errors)
     {
-
         User user = (User) object;
 
         if (user.getPassword() == null)
-            errors.rejectValue("password", "Missing", "Password is required");
+            errors.rejectValue("password", "Missing",
+                    "Password is required");
         else
         {
             if (user.getPassword().length() < 6)
-                errors.rejectValue("password", "Length", "Password must be at least 6 characters");
+                errors.rejectValue("password", "Length",
+                        "Password must be at least 6 characters");
         }
 
         if (user.getAccountType() != null)
@@ -35,14 +36,18 @@ public class UserValidator implements Validator
             if (user.getAccountType() == AccountType.BUSINESS)
             {
                 if (user.getAbn() == null)
-                    errors.rejectValue("abn", "Missing", "An ABN is required for company accounts");
+                    errors.rejectValue("abn", "Missing",
+                            "An ABN is required for company accounts");
                 else if (!AbnValidator.validate(user.getAbn()))
-                    errors.rejectValue("abn", "Invalid", "The provided ABN is invalid");
+                    errors.rejectValue("abn", "Invalid",
+                            "The provided ABN is invalid");
 
                 if (user.getCompanyName() == null)
-                    errors.rejectValue("companyName", "Missing", "A company name is required");
+                    errors.rejectValue("companyName", "Missing",
+                            "A company name is required");
                 else if (user.getCompanyName().isBlank())
-                    errors.rejectValue("companyName", "Missing", "A company name is required");
+                    errors.rejectValue("companyName", "Missing",
+                            "A company name is required");
             }
         }
 

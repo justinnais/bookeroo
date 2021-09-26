@@ -3,19 +3,13 @@ package com.rmit.sept.bk_loginservices.services;
 
 
 
-import com.rmit.sept.bk_loginservices.exceptions.InvalidAbnException;
-import com.rmit.sept.bk_loginservices.exceptions.MissingFieldException;
 import com.rmit.sept.bk_loginservices.exceptions.UsernameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.repositories.UserRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 import com.rmit.sept.bk_loginservices.exceptions.DisplayNameAlreadyExistsException;
 import com.rmit.sept.bk_loginservices.model.User;
 import com.rmit.sept.bk_loginservices.utils.AccountStatus;
 import com.rmit.sept.bk_loginservices.utils.AccountType;
-import com.rmit.sept.bk_loginservices.validator.AbnValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -63,7 +57,7 @@ public class UserService {
         } else if (newUser.getAccountType().equals(AccountType.ADMIN)) {
             throw new IllegalArgumentException("Admin registration not allowed at this time");
         } else {
-            newUser.setAccountStatus(AccountStatus.OK);
+            newUser.setAccountStatus(AccountStatus.ACTIVE);
         }
 
         return userRepository.save(newUser);
