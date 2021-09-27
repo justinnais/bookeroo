@@ -19,28 +19,8 @@ public class UserService
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    // LIST
-    public Iterable<User> listUsers()
+    public User saveUser(User newUser)
     {
-        return userRepository.findAll();
-    }
-
-    // GET
-    public User getUser(Long id) {
-        return userRepository.getById(id);
-    }
-    // GET
-    public User getUserByDisplayName(String displayName) {
-        return userRepository.findByDisplayName(displayName);
-    }
-
-    // GET
-    public User getUserByEmail(String email) {
-        return userRepository.findByUsername(email);
-    }
-
-    public User saveUser (User newUser){
-
         //Encrypt the password
         newUser.setPassword(bCryptPasswordEncoder.encode(newUser.getPassword()));
 
@@ -59,7 +39,7 @@ public class UserService
         else if (newUser.getAccountType().equals(AccountType.ADMIN))
             throw new IllegalArgumentException("Admin registration not allowed at this time");
         else
-            newUser.setAccountStatus(AccountStatus.OK);
+            newUser.setAccountStatus(AccountStatus.ACTIVE);
 
         return userRepository.save(newUser);
     }
