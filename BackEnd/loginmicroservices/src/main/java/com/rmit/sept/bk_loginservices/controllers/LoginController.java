@@ -149,4 +149,35 @@ public class LoginController
         log.info("Logged in user: " + username);
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user)
+    {
+        User oldUser = userRepository.getById(id);
+        if (oldUser == null)
+            return new ResponseEntity<>("No user exists with this id", HttpStatus.NOT_FOUND);
+
+        if (user.getDisplayName() != null)
+            oldUser.setDisplayName(user.getDisplayName());
+        if (user.getUsername() != null)
+            oldUser.setUsername(user.getUsername());
+        if (user.getFirstName() != null)
+            oldUser.setFirstName(user.getFirstName());
+        if (user.getLastName() != null)
+            oldUser.setLastName(user.getLastName());
+        if (user.getPassword() != null)
+            oldUser.setPassword(user.getPassword());
+        if (user.getAccountType() != null)
+            oldUser.setAccountType(user.getAccountType());
+        if (user.getAccountStatus() != null)
+            oldUser.setAccountStatus(user.getAccountStatus());
+        if (user.getAbn() != null)
+            oldUser.setAbn(user.getAbn());
+        if (user.getCompanyName() != null)
+            oldUser.setCompanyName(user.getCompanyName());
+
+        userRepository.save(oldUser);
+
+        return ResponseEntity.ok(oldUser);
+    }
 }
