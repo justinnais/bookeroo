@@ -225,8 +225,8 @@ class LoginControllerTest
             userJson.put("lastName", "lastName");
             userJson.put("password", "password");
             userJson.put("displayName", "displayName");
-            userJson.put("username", type);
-            userJson.put("accountType", AccountType.STANDARD);
+            userJson.put("username", "username@logintest.com-test");
+            userJson.put("accountType", type);
         } catch (JSONException e)
         {
             e.printStackTrace();
