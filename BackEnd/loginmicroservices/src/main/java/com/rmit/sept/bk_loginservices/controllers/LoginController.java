@@ -144,9 +144,15 @@ public class LoginController
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(username, password));
 
+        User user = userRepository.findByUsername(username);
+        AccountStatus status = user.getAccountStatus();
+        if (status != AccountStatus.ACTIVE)
+            return new ResponseEntity<>("Account status: " + status, HttpStatus.LOCKED);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = tokenProvider.generateToken(authentication);
         log.info("Logged in user: " + username);
+
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
