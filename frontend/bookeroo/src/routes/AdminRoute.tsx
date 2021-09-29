@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { useAuthStore } from "../stores/useAuthStore";
 import { Routes } from "./Routes";
 
 /**
@@ -10,8 +11,7 @@ import { Routes } from "./Routes";
 export default function AdminRoute(props: RouteProps) {
     // https://navid2zp.medium.com/private-routes-with-react-router-while-using-the-render-method-77534c11fa25
     const { component: Component, ...rest } = props;
-    // todo implement auth
-    const isAdmin = true;
+    const isAdmin = useAuthStore((state) => state.isAdmin);
 
     return (
         <Route

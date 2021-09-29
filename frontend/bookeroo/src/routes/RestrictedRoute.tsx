@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { useAuthStore } from "../stores/useAuthStore";
 import { Routes } from "./Routes";
 
 /**
@@ -9,8 +10,7 @@ import { Routes } from "./Routes";
  */
 export default function RestrictedRoute(props: RouteProps) {
     const { component: Component, ...rest } = props;
-    // todo implement auth
-    const isAuthenticated = false;
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     return (
         <Route

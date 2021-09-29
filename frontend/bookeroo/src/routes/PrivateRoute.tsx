@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Redirect, RouteProps } from "react-router-dom";
+import { useAuthStore } from "../stores/useAuthStore";
 import { Routes } from "./Routes";
 
 /**
@@ -11,7 +12,7 @@ export default function PrivateRoute(props: RouteProps) {
     // https://navid2zp.medium.com/private-routes-with-react-router-while-using-the-render-method-77534c11fa25
     const { component: Component, ...rest } = props;
     // todo implement auth
-    const isAuthenticated = true;
+    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
     return (
         <Route

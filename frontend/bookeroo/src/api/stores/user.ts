@@ -13,6 +13,10 @@ export function getUser(id: string) {
     return apiLogin.get(`/${id}`);
 }
 
+export function getProfile(displayName: string) {
+    return apiLogin.get(`/profile/${displayName}`);
+}
+
 export function registerUser(user: CreateAccountRequest) {
     return apiLogin.post(`/register`, user);
 }
