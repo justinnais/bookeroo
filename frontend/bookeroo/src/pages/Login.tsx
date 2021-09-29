@@ -83,8 +83,15 @@ export default function Login() {
     };
 
     const handleError = (err: any) => {
-        const errors: { [key: string]: string } = err.response.data;
-        Object.values(errors).map((error) => toast(error));
+        const error: { [key: string]: string } = err.response.data;
+        // can be an object or string?
+        console.log("error", error);
+
+        if (typeof error === "string") {
+            toast(error);
+        } else {
+            Object.values(error).map((error) => toast(error));
+        }
     };
     const form = FormGenerator(formId, fields, onSubmit);
     const buttons = [
