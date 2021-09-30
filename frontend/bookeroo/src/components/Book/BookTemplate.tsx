@@ -26,10 +26,16 @@ import GridLayout from "../Layout/GridLayout";
 import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
-import { listBookListings, listListings } from "../../api/stores/listing";
+import {
+    createListing,
+    listBookListings,
+    listListings,
+} from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
 import GenericTable, { TableColumn } from "../Table/GenericTable";
+import FormGenerator from "../Form/FormGenerator";
+import CreateListingForm from "./CreateListingForm";
 
 interface Props {
     book: IBook;
@@ -56,6 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
+    const [isSubmitting, setSubmitting] = useState(false);
     const { isLoading, data } = useQuery("listBookListings", () =>
         listBookListings(props.book.isbn || props.book.isbn)
     );
@@ -72,7 +79,7 @@ export default function BookTemplate(props: Props) {
                     View Sellers
                 </Button>,
                 <Button color="secondary" variant="outlined">
-                    Add to wishlist
+                    Sell your copy
                 </Button>,
             ]}
         >
@@ -140,16 +147,6 @@ export default function BookTemplate(props: Props) {
         { key: "price", header: "Price" },
     ];
 
-    /*  const table = (
-        <div style={{ height: 400, width: "100%" }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                disableSelectionOnClick
-            />
-        </div>
-    ); */
     return (
         <div>
             <Container noMargin>
@@ -164,6 +161,7 @@ export default function BookTemplate(props: Props) {
             <Container>
                 <Typography variant="h4">Sellers</Typography>
                 <GenericTable data={rows} columns={columns} />
+                <CreateListingForm book={props.book} />
             </Container>
         </div>
     );
