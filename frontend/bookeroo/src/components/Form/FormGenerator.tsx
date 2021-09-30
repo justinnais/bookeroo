@@ -67,24 +67,5 @@ export default function FormGenerator(
             </Grid>
         </form>
     );
-    // const form = (
-    //     <form onSubmit={formik.handleSubmit} id={formId}>
-    //         <Grid container spacing={2}>
-    //             {fields.map((field, key) => {
-    //                 return (
-    //                     <Grid item xs={12} key={key}>
-    //                         <TextInput
-    //                             label={field.label}
-    //                             type={field.type}
-    //                             formik={formik}
-    //                             // errors={errors}
-    //                         />
-    //                     </Grid>
-    //                 );
-    //             })}
-    //         </Grid>
-    //     </form>
-    // );
-
     return form;
 }

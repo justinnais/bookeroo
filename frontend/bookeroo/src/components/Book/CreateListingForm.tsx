@@ -12,6 +12,7 @@ import { CreateListingRequest } from "../../api/models/Listing";
 import { IBook } from "../../api/models/Book";
 import SubmitButton from "../Button/SubmitButton";
 import { useAuthStore } from "../../stores/useAuthStore";
+import { BookCondition } from "../../util/enums";
 
 interface Props {
     book: IBook;
@@ -35,7 +36,7 @@ export default function CreateListingForm(props: Props) {
         {
             label: "Condition",
             type: "select",
-            options: ["New", "Used", "Well Worn"],
+            options: Object.values(BookCondition),
             schema: yup.string().required("Condition is required"),
         },
         {
@@ -53,7 +54,7 @@ export default function CreateListingForm(props: Props) {
                 bookIsbn: book.isbn || book.isbn13,
                 condition: values.condtion,
                 conditionDesc: values.conditionDescription,
-                isUsed: true,
+                isUsed: values.condition !== BookCondition.NEW,
                 userId: user.id,
             };
 
@@ -87,5 +88,5 @@ export default function CreateListingForm(props: Props) {
 
     const form = FormGenerator(formId, fields, onSubmit);
 
-    return <FormCard title="Sign Up" form={form} buttons={buttons} />;
+    return <FormCard title="Create Listing" form={form} buttons={buttons} />;
 }
