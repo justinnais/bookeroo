@@ -36,6 +36,9 @@ import DetailsList from "./DetailsList";
 import GenericTable, { TableColumn } from "../Table/GenericTable";
 import FormGenerator from "../Form/FormGenerator";
 import CreateListingForm from "./CreateListingForm";
+import { IListing } from "../../api/models/Listing";
+import { getUser } from "../../api/stores/user";
+import { IAccount } from "../../api/models/Account";
 
 interface Props {
     book: IBook;
@@ -60,12 +63,27 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+function getDisplayName(id: string): string {
+    let displayName = id;
+    getUser(id).then((res) => {
+        if (res.status === 200) {
+            const user = res.data as IAccount;
+            displayName = user.displayName;
+        } else {
+            displayName = "uh oh";
+        }
+    });
+    return displayName;
+}
+
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
     const [isSubmitting, setSubmitting] = useState(false);
     const { isLoading, data } = useQuery("listBookListings", () =>
         listBookListings(props.book.isbn || props.book.isbn)
     );
+
+    const listings = data ? data.data : [];
 
     const authors = createAuthorArray(props.book.authors);
 
@@ -122,29 +140,16 @@ export default function BookTemplate(props: Props) {
         </Button>
     );
 
-    const rows = [
-        { id: 1, sellerName: "Jon", price: 35, condition: "Good" },
-        { id: 2, sellerName: "Cersei", price: 42, condition: "Good" },
-        { id: 3, sellerName: "Jaime", price: 45, condition: "Good" },
-        { id: 4, sellerName: "Arya", price: 16, condition: "Good" },
-        { id: 5, sellerName: "Daenerys", price: null, condition: "Good" },
-        { id: 6, sellerName: null, price: 150, condition: "Good" },
-        { id: 7, sellerName: "Ferrara", price: 44, condition: "Good" },
-        { id: 8, sellerName: "Rossini", price: 36, condition: "Good" },
-        { id: 9, sellerName: "Harvey", price: 65, condition: "Good" },
-    ];
-
-    type Foo = {
-        id: number;
-        sellerName: string;
-        price: number;
-        condition: string;
-    };
-
-    const columns: TableColumn<Foo, keyof Foo>[] = [
+    // TODO check that table fills out correctly when data gets fixed
+    const columns: TableColumn<IListing, keyof IListing>[] = [
         { key: "id", header: "ID" },
-        { key: "sellerName", header: "Seller Name" },
-        { key: "price", header: "Price" },
+        { key: "condition" },
+        { key: "conditionDesc", header: "Condition Description" },
+        {
+            key: "userId",
+            header: "User",
+            dataTransform: (id: string) => getDisplayName(id),
+        },
     ];
 
     return (
@@ -160,7 +165,7 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
-                <GenericTable data={rows} columns={columns} />
+                <GenericTable data={listings} columns={columns} />
                 <CreateListingForm book={props.book} />
             </Container>
         </div>
