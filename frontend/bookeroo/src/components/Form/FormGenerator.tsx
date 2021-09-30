@@ -4,12 +4,14 @@ import React, { useState } from "react";
 
 import * as yup from "yup";
 import { camelCase } from "../../util/stringManipulation";
+import DropdownSelect from "./DropdownSelect";
 import TextInput from "./TextInput";
 import { createYupSchema } from "./yupSchema";
 export interface GeneratedField {
     label: string;
     schema: yup.AnySchema;
-    type?: "text" | "email" | "password";
+    type: "text" | "email" | "password" | "select";
+    options?: string[];
     initialValue?: string;
 }
 
@@ -45,18 +47,44 @@ export default function FormGenerator(
                 {fields.map((field, key) => {
                     return (
                         <Grid item xs={12} key={key}>
-                            <TextInput
-                                label={field.label}
-                                type={field.type}
-                                formik={formik}
-                                // errors={errors}
-                            />
+                            {field.type === "select" ? (
+                                <DropdownSelect
+                                    label={field.label}
+                                    options={field.options || []}
+                                    formik={formik}
+                                />
+                            ) : (
+                                <TextInput
+                                    label={field.label}
+                                    type={field.type}
+                                    formik={formik}
+                                    // errors={errors}
+                                />
+                            )}
                         </Grid>
                     );
                 })}
             </Grid>
         </form>
     );
+    // const form = (
+    //     <form onSubmit={formik.handleSubmit} id={formId}>
+    //         <Grid container spacing={2}>
+    //             {fields.map((field, key) => {
+    //                 return (
+    //                     <Grid item xs={12} key={key}>
+    //                         <TextInput
+    //                             label={field.label}
+    //                             type={field.type}
+    //                             formik={formik}
+    //                             // errors={errors}
+    //                         />
+    //                     </Grid>
+    //                 );
+    //             })}
+    //         </Grid>
+    //     </form>
+    // );
 
     return form;
 }

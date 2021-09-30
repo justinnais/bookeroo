@@ -34,7 +34,8 @@ export default function CreateListingForm(props: Props) {
     const fields: GeneratedField[] = [
         {
             label: "Condition",
-            type: "text",
+            type: "select",
+            options: ["New", "Used", "Well Worn"],
             schema: yup.string().required("Condition is required"),
         },
         {
