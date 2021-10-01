@@ -16,7 +16,7 @@ import { Skeleton } from "@material-ui/lab";
 import { PayPalButton } from "react-paypal-button-v2";
 import { IListing, CreateTransactionRequest } from "../api/models/Listing";
 import { createTrans } from "../api/stores/trans";
-
+import GridLayout from "../components/Layout/GridLayout";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,40 +40,76 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-export default function Checkout( price: string,
-                                     listings: Array<IListing>,
-                                     buyer_id: string
-) {
+interface Props {
+    price: string;
+    listings: Array<IListing>;
+    buyerId: string;
+}
+
+export default function Checkout() {
     const classes = useStyles();
     const { displayName } = useParams<{ displayName: string }>();
     const { isLoading, data } = useQuery("getUser", () => getUser(displayName));
     const profile: IAccount = data ? data.data : undefined;
 
+    const price: number = 40;
+    // const listings: Array<IListing> =
+    // const buyerId: string =
+
     const CartDetails = () => (
         <div className={classes.topbar}>
             <Typography variant="h4" component="h4">
-                        Cart
+                Cart
             </Typography>
         </div>
     );
 
-    return(
+    const Foo = () => (
+        <div>
+            <Typography variant="h4" component="h4">
+                Price: $45
+            </Typography>
+        </div>
+    );
 
-         <div>
-             <Container className={classes.root}>
-                             <CartDetails />
-             </Container>
+    const CartItems = (props: { items: number[] }) => (
+        <div>
+            {props.items.map((item) => (
+                <div style={{ marginBottom: 10 }}>
+                    <Skeleton variant="rect" height={40} />
+                </div>
+            ))}
+        </div>
+    );
+
+    return (
+        <div>
+            <Container className={classes.root}>
+                <CartDetails />
+                <GridLayout
+                    items={[
+                        <CartItems items={[1, 2, 3, 4, 5]} />,
+                        <div>
+                            <Foo />
+                            <PayPalButton
+                                amount={price}
+                                onSuccess={() => {
+                                    /* const request: CreateTransactionRequest = {
+                                listings: listings,
+                                buyer_id: buyerId,
+                            };
+                            createTrans(request); */
+                                    console.log("success");
+                                }}
+                            />
+                        </div>,
+                    ]}
+                    size={[7, 5]}
+                    spacing={2}
+                    reverseLayout={true}
+                />
+            </Container>
             <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
-            <PayPalButton
-                amount={price}
-                onSuccess={() => {
-                    const request: CreateTransactionRequest = {
-                        listings: listings,
-                        buyer_id: buyer_id,
-                    };
-                    createTrans(request);
-                }}
-            />
-         </div>
+        </div>
     );
 }
