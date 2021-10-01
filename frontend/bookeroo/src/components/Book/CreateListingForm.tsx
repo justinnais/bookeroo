@@ -2,7 +2,6 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { request } from "http";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { CreateAccountRequest } from "../../api/models/Account";
 import { createListing } from "../../api/stores/listing";
 import { useAlertStore } from "../../stores/useAlertStore";
 import FormCard from "../Form/FormCard";
