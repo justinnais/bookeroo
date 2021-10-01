@@ -60,20 +60,20 @@ export default function Checkout( price: string,
     return(
 
          <div>
-         <Container className={classes.root}>
-                         <CartDetails />
-                 </Container>
-                    <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
-                    <PayPalButton
-                        amount={price}
-                        onSuccess={() => {
-                            const request: CreateTransactionRequest = {
-                                listings: listings,
-                                buyer_id: buyer_id,
-                            };
-                            createTrans(request);
-                        }}
-                    />
+             <Container className={classes.root}>
+                             <CartDetails />
+             </Container>
+            <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
+            <PayPalButton
+                amount={price}
+                onSuccess={() => {
+                    const request: CreateTransactionRequest = {
+                        listings: listings,
+                        buyer_id: buyer_id,
+                    };
+                    createTrans(request);
+                }}
+            />
          </div>
     );
 }
