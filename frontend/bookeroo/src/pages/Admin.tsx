@@ -87,7 +87,7 @@ export default function Admin() {
         { key: "accountType", header: "Account Type" },
         { key: "accountStatus", header: "Status" },
     ];
-
+    // TODO update so I can put custom columns in without needing key, want to add button
     const UserTable = () => (
         <GenericTable data={users} columns={columns} onRowClick={handleClick} />
     );

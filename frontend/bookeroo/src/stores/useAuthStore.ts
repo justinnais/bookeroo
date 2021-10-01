@@ -18,7 +18,7 @@ export const useAuthStore = create<IAuthStore>((set) => ({
         ? (jwt.decode(storage.getToken()) as IAccount)
         : undefined,
     isAuthenticated: !!storage.getToken(),
-    isAdmin: false,
+    isAdmin: true,
     login: (user: IAccount) => {
         const isAuthenticated = !!user; // if user is provided, set true
 
