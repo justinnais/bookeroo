@@ -1,8 +1,6 @@
 package com.rmit.sept.bk_reviewservices.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Review {
@@ -11,6 +9,7 @@ public class Review {
     public static int MAX_LENGTH = 240;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
 
     private Long userId;
