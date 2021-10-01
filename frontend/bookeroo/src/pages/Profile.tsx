@@ -9,7 +9,7 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button";
 import { IBook } from "../api/models/Book";
-import { getUser, listUsers } from "../api/stores/user";
+import { getProfile, getUser, listUsers } from "../api/stores/user";
 import { useQuery } from "react-query";
 import { IAccount } from "../api/models/Account";
 import { Skeleton } from "@material-ui/lab";
@@ -43,10 +43,13 @@ export function convertDate(date: number) {
 export default function Profile() {
     const classes = useStyles();
     const { displayName } = useParams<{ displayName: string }>();
-    const { isLoading, data } = useQuery("getUser", () => getUser(displayName));
+    const { isLoading, data } = useQuery("getProfile", () =>
+        getProfile(displayName)
+    );
     console.log(data);
 
     const profile: IAccount = data ? data.data : undefined;
+    // TODO add error handling to this page when no user found
 
     const UserDetails = () => (
         <div className={classes.userDetails}>
