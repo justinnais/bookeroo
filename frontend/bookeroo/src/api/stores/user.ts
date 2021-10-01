@@ -2,7 +2,11 @@
 
 import storage from "../../util/storage";
 import { apiLogin } from "../api";
-import { CreateAccountRequest, LoginAccountRequest } from "../models/Account";
+import {
+    CreateBusinessAccountRequest,
+    CreatePersonalAccountRequest,
+    LoginAccountRequest,
+} from "../models/Account";
 // https://www.bezkoder.com/react-hooks-jwt-auth/
 
 export function listUsers() {
@@ -13,7 +17,13 @@ export function getUser(id: string) {
     return apiLogin.get(`/${id}`);
 }
 
-export function registerUser(user: CreateAccountRequest) {
+export function getProfile(displayName: string) {
+    return apiLogin.get(`/profile/${displayName}`);
+}
+
+export function registerUser(
+    user: CreatePersonalAccountRequest | CreateBusinessAccountRequest
+) {
     return apiLogin.post(`/register`, user);
 }
 

@@ -26,7 +26,8 @@ export interface GeneratedField {
 export default function FormGenerator(
     formId: string,
     fields: GeneratedField[],
-    onSubmit: (values: any) => void
+    onSubmit: (values: any) => void,
+    sideBySide?: boolean
     // errors?: { [key: string]: string }
 ) {
     const initialValues: { [key: string]: string } = {};
