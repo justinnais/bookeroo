@@ -33,7 +33,8 @@ interface Props extends Omit<OutlinedTextFieldProps, "variant"> {
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         text: {
-            // background: theme.palette.common.white,
+            // background: theme.palette.primary.main,
+            // minHeight: "4rem", // allows for error field without pushing other fields
         },
     })
 );
@@ -65,6 +66,7 @@ export default function TextInput(props: Props) {
             fullWidth
             error={error}
             helperText={helperText}
+            // size="small"
             {...props.formik.getFieldProps(id)}
         />
     );
