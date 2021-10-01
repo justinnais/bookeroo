@@ -21,11 +21,13 @@ import { titleCase } from "../../util/stringManipulation";
  * Shape of table column
  * Takes the key from the type of data it is displaying
  * header is optional text override, if not provided it will Title Case the key
+ * dataTransform passes a function to convert into more appropriate content - eg. sellerId passed through transform that fetches the sellers name, displays 'John Smith' instead of 85747032
  */
 export interface TableColumn<T, K extends keyof T> {
     key: K;
     header?: string;
     align?: "left" | "right";
+    dataTransform?: (data: any) => string | number;
 }
 
 /**
@@ -263,7 +265,9 @@ export default function GenericTable<T, K extends keyof T>(
                 >
                     {columns.map((column, colIndex) => (
                         <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
-                            {row[column.key]}
+                            {column.dataTransform
+                                ? column.dataTransform(row[column.key])
+                                : row[column.key]}
                         </TableCell>
                     ))}
                 </TableRow>
