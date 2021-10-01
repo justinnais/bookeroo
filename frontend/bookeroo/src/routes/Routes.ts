@@ -8,5 +8,5 @@ export enum Routes {
     Contact = "/contact",
     Profile = "/user/:displayName?",
     Admin = "/admin",
-    Checkout = "/Checkout"
+    Checkout = "/checkout",
 }
