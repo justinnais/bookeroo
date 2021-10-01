@@ -14,7 +14,10 @@ import FormGenerator, {
 } from "../components/Form/FormGenerator";
 import Container from "../components/Layout/Container";
 import { registerUser } from "../api/stores/user";
-import { CreateAccountRequest } from "../api/models/Account";
+import {
+    CreatePersonalAccountRequest,
+    CreateBusinessAccountRequest,
+} from "../api/models/Account";
 import { useAlertStore } from "../stores/useAlertStore";
 import { useHistory } from "react-router";
 
@@ -58,6 +61,7 @@ export default function Register() {
     const foo = [{ displayName: "foo" }, { displayName: "test" }];
     const [isSubmitting, setSubmitting] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [approvalRequired, setApprovalRequired] = useState(false);
     const classes = useStyles();
     const history = useHistory();
     const setAlert = useAlertStore((state) => state.setAlert);
@@ -65,17 +69,8 @@ export default function Register() {
     const toast = (message: string) => {
         setAlert(message);
     };
-    const fields: GeneratedField[] = [
-        {
-            label: "Display Name",
-            type: "text",
-            schema: yup
-                .string()
-                // .array()
-                // .of(yup.string())
-                .required("Display Name is required"),
-            // .unique((foo) => foo, "duplicate name"),
-        },
+    // fields shared between both types of accounts
+    const baseFields: GeneratedField[] = [
         {
             label: "First Name",
             type: "text",
@@ -85,6 +80,16 @@ export default function Register() {
             label: "Last Name",
             type: "text",
             schema: yup.string().required("Last Name is required"),
+        },
+        {
+            label: "Display Name",
+            type: "text",
+            schema: yup
+                .string()
+                // .array()
+                // .of(yup.string())
+                .required("Display Name is required"),
+            // .unique((foo) => foo, "duplicate name"),
         },
         {
             label: "Email",
@@ -112,30 +117,90 @@ export default function Register() {
         },
     ];
 
+    // fields for personal accounts
+    const personalAccount: GeneratedField[] = [
+        // {
+        //     label: "First Name",
+        //     type: "text",
+        //     schema: yup.string().required("First Name is required"),
+        // },
+        // {
+        //     label: "Last Name",
+        //     type: "text",
+        //     schema: yup.string().required("Last Name is required"),
+        // },
+    ];
+
+    //fields for business accounts
+    const businessAccount: GeneratedField[] = [
+        {
+            label: "Company Name",
+            type: "text",
+            schema: yup.string().required("Company Name is required"),
+        },
+        {
+            label: "ABN", // TODO issues with camel case on this, create a text transform prop
+            type: "text",
+            schema: yup.string().required("ABN is required"),
+        },
+    ];
+
     const onSubmit = (values: any) => {
+        // TODO update this
         setSubmitting(true);
-        let duplicate = false;
-        // TODO check database for existing accounts with email
-        if (duplicate) {
-            // if exists, global alert error
-        } else {
-            const { email, confirmPassword, ...other } = values; // omits confirmPassword and email from values
-            const request: CreateAccountRequest = {
-                ...other,
-                username: values.email,
-                accountType: AccountType.STANDARD,
-            };
-            registerUser(request).then(
-                (res) => handleResponse(res, request),
-                (err) => handleError(err)
-            );
-        }
+
+        const partialRequest = {
+            displayName: values.displayName,
+            password: values.password,
+            username: values.email,
+            firstName: values.firstName,
+            lastName: values.lastName,
+        };
+        const request = approvalRequired
+            ? {
+                  ...partialRequest,
+                  abn: values.aBN.replace(/\s+/g, ""),
+                  accountType: AccountType.BUSINESS,
+                  companyName: values.companyName,
+              }
+            : {
+                  ...partialRequest,
+                  accountType: AccountType.STANDARD,
+              };
+
+        // * this is without contact name for business
+        /*  const partialRequest = {
+            displayName: values.displayName,
+            password: values.password,
+            username: values.email,
+        };
+        const request = approvalRequired
+            ? {
+                  ...partialRequest,
+                  abn: values.aBN.replace(/\s+/g, ""),
+                  accountType: AccountType.BUSINESS,
+                  companyName: values.companyName,
+              }
+            : {
+                  ...partialRequest,
+                  accountType: AccountType.STANDARD,
+                  firstName: values.firstName,
+                  lastName: values.lastName,
+              }; */
+
+        registerUser(request).then(
+            (res) => handleResponse(res, request),
+            (err) => handleError(err)
+        );
         setSubmitting(false);
     };
 
-    const handleResponse = (res: any, request: CreateAccountRequest) => {
+    const handleResponse = (res: any, request: any) => {
+        const message = approvalRequired
+            ? `Please wait for admin approval of your business account ${request.companyName}`
+            : `Successfully created account for ${request.displayName}`;
         if (res.status === 201) {
-            toast(`Successfully created account for ${request.displayName}`);
+            toast(message);
             history.push("/login");
         }
         // setErrors({});
@@ -147,9 +212,20 @@ export default function Register() {
         // setErrors(err.response.data);
     };
 
+    // if approval is required, use a business account
+    const fields = (
+        approvalRequired ? businessAccount : personalAccount
+    ).concat(baseFields);
+
     const form = FormGenerator("registerForm", fields, onSubmit);
 
+    // TODO on button swap clear all fields
     const buttons = [
+        <Button onClick={() => setApprovalRequired(!approvalRequired)}>
+            {approvalRequired
+                ? "Creating a personal account?"
+                : "Creating a business account?"}
+        </Button>,
         <Button
             variant="contained"
             color="secondary"

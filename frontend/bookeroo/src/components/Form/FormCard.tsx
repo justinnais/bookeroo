@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         root: {
             width: "30rem",
-            background: theme.palette.primary.main,
+            background: theme.palette.common.white,
         },
         content: {
             display: "flex",
