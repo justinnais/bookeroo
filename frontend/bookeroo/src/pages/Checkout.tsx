@@ -59,7 +59,7 @@ export default function Checkout() {
     const CartDetails = () => (
         <div className={classes.topbar}>
             <Typography variant="h4" component="h4">
-                Cart
+                Checkout
             </Typography>
         </div>
     );
