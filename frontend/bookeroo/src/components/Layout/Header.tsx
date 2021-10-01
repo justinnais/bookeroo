@@ -80,7 +80,7 @@ export default function Header() {
             <div className={classes.navButtons}>
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
-                <Button>Sell Books</Button>
+                <Button to={Routes.Checkout}>Cart</Button>
             </div>
             {isAuthenticated ? (
                 <div className={classes.navButtons}>

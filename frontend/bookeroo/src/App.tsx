@@ -8,6 +8,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
+import Checkout from "./pages/Checkout";
+import PayPal from "./pages/PayPal";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";
@@ -67,6 +69,7 @@ function App() {
                         <Route exact path={Routes.Book} component={Book} />
                         <Route exact path={Routes.Books} component={Books} />
                         <Route path={Routes.Search} component={Search} />
+                        <Route path={Routes.Checkout} component={Checkout} />
                         {/* Private Routes */}
                         <PrivateRoute
                             path={Routes.Profile}
