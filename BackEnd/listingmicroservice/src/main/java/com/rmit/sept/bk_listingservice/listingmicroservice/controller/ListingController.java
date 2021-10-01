@@ -76,7 +76,7 @@ public class ListingController
         JSONArray listings = new JSONArray();
         List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
 
-        return responseToArray(listingBybookIsbn);
+        return new ResponseEntity<>(listingBybookIsbn.toString(), HttpStatus.OK);
     }
 
     private ResponseEntity<?> responseToArray(List<Object[]> listingBybookIsbn)
