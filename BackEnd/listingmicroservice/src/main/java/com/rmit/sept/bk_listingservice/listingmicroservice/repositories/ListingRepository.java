@@ -11,9 +11,10 @@ public interface ListingRepository extends CrudRepository<Listing, Long>
 {
     @Query("SELECT l " +
             "FROM Listing l " +
-            "JOIN SellListing sl ON l.id = sl.listingId " +
             "WHERE l.bookIsbn = :bookIsbn")
-    List<Object[]> getListingBybookIsbn(@Param("bookIsbn") Long bookIsbn);
+    List<Listing> getListingBybookIsbn(@Param("bookIsbn") Long bookIsbn);
+
+    Listing getListingByBookIsbn(Long bookIsbn);
 
     @Query("SELECT l.cond, l.condDesc, l.used, sl.price " +
             "FROM Listing l " +

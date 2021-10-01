@@ -64,9 +64,9 @@ public class ListingController
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
         JSONArray listings = new JSONArray();
-        List<Object[]> listingBybookIsbn = listingRepository.getListingBybookIsbn(bookIsbn);
+        Listing listingBybookIsbn = listingRepository.getListingByBookIsbn(bookIsbn);
 
-        return new ResponseEntity<>(listingBybookIsbn.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
     }
 
     // LIST ALL 
