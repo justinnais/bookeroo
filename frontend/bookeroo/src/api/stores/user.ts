@@ -1,5 +1,6 @@
 // book microservice store
 
+import { AccountStatus } from "../../util/enums";
 import storage from "../../util/storage";
 import { apiLogin } from "../api";
 import {
@@ -29,4 +30,8 @@ export function registerUser(
 
 export function loginUser(auth: LoginAccountRequest) {
     return apiLogin.post(`/login`, auth);
+}
+
+export function editUser(id: number, accountStatus: AccountStatus) {
+    return apiLogin.patch(`/${id}`, { accountStatus: 0 }); // TODO this is cheese and needs to be fixed ASAP
 }

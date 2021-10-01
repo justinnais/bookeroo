@@ -22,8 +22,9 @@ import Container from "../components/Layout/Container";
 import TextCard from "../components/Layout/TextCard";
 import { theme } from "../styles/theme";
 import { IAccount } from "../api/models/Account";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useHistory } from "react-router-dom";
 import { convertDate } from "./Profile";
+import GenericTable, { TableColumn } from "../components/Table/GenericTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Admin() {
     const classes = useStyles();
+    const history = useHistory();
     const { isLoading, data } = useQuery("listUsers", listUsers);
     const users = data ? (data.data as IAccount[]) : [];
     const listItems = [
@@ -71,75 +73,23 @@ export default function Admin() {
         },
     ];
 
-    const SkeletonRow = () => (
-        <TableRow>
-            <Skeleton variant="rect" />
-        </TableRow>
-    );
+    const handleClick = (user: IAccount) => {
+        history.push(`/user/${user.displayName}`);
+    };
 
+    const columns: TableColumn<IAccount, keyof IAccount>[] = [
+        { key: "id", header: "ID" },
+        { key: "displayName", header: "Display Name" },
+        { key: "firstName", header: "First Name" },
+        { key: "lastName", header: "Last Name" },
+        { key: "username", header: "Email" },
+        { key: "dateCreated", header: "Date Created" },
+        { key: "accountType", header: "Account Type" },
+        { key: "accountStatus", header: "Status" },
+    ];
+    // TODO update so I can put custom columns in without needing key, want to add button
     const UserTable = () => (
-        <TableContainer>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell>ID</TableCell>
-                        <TableCell>Display Name</TableCell>
-                        <TableCell align="right">First Name</TableCell>
-                        <TableCell align="right">Last Name</TableCell>
-                        <TableCell align="right">Email</TableCell>
-                        <TableCell align="right">Date Created</TableCell>
-                        <TableCell align="right">Last Updated</TableCell>
-                        <TableCell align="right">Account Type</TableCell>
-                        <TableCell align="right">Account Status</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {isLoading ? (
-                        <SkeletonRow />
-                    ) : (
-                        users.map((user) => (
-                            <TableRow
-                                key={user.id}
-                                component={RouterLink}
-                                to={`/user/${user.displayName}`}
-                                hover
-                                className={classes.tableRow}
-                            >
-                                <TableCell component="th" scope="row">
-                                    {user.id}
-                                </TableCell>
-                                <TableCell component="th" scope="row">
-                                    {user.displayName}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.firstName}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.lastName}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.username}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {convertDate(user.dateCreated)}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.lastUpdated
-                                        ? convertDate(user.lastUpdated)
-                                        : "-"}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.accountType}
-                                </TableCell>
-                                <TableCell align="right">
-                                    {user.accountStatus}
-                                </TableCell>
-                            </TableRow>
-                        ))
-                    )}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <GenericTable data={users} columns={columns} onRowClick={handleClick} />
     );
 
     return (

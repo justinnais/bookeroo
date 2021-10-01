@@ -9,10 +9,12 @@ import React from "react";
 import { Link, useParams } from "react-router-dom";
 import Button from "../components/Button/Button";
 import { IBook } from "../api/models/Book";
-import { getProfile, getUser, listUsers } from "../api/stores/user";
+import { editUser, getProfile, getUser, listUsers } from "../api/stores/user";
 import { useQuery } from "react-query";
 import { IAccount } from "../api/models/Account";
 import { Skeleton } from "@material-ui/lab";
+import { AccountStatus } from "../util/enums";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -40,8 +42,18 @@ export function convertDate(date: number) {
     return new Date(date).toDateString();
 }
 
+function approveAccount(id: number) {
+    console.log("approve");
+    editUser(id, AccountStatus.OK);
+}
+function denyAccount(id: number) {
+    editUser(id, AccountStatus.REJECTED);
+}
+
 export default function Profile() {
     const classes = useStyles();
+    const isAdmin = useAuthStore((state) => state.isAdmin);
+    const user = useAuthStore((state) => state.user);
     const { displayName } = useParams<{ displayName: string }>();
     const { isLoading, data } = useQuery("getProfile", () =>
         getProfile(displayName)
@@ -50,7 +62,13 @@ export default function Profile() {
 
     const profile: IAccount = data ? data.data : undefined;
     // TODO add error handling to this page when no user found
+    const isPending = profile
+        ? profile.accountStatus === AccountStatus.PENDING
+        : false;
 
+    const isOwnAccount = user && profile ? profile.id === user.id : false;
+
+    console.log("isPending", isPending, isAdmin);
     const UserDetails = () => (
         <div className={classes.userDetails}>
             <div>
@@ -81,9 +99,38 @@ export default function Profile() {
         <Container className={classes.root}>
             <div className={classes.topbar}>
                 <UserDetails />
-                <Button color="secondary" variant="outlined">
-                    Recent Orders
-                </Button>
+                <div>
+                    {isOwnAccount && (
+                        <Button color="secondary" variant="outlined">
+                            Recent Orders
+                        </Button>
+                    )}
+
+                    {isPending && isAdmin ? (
+                        <div>
+                            <Button
+                                color="secondary"
+                                variant="contained"
+                                onClick={() =>
+                                    approveAccount(
+                                        profile ? profile.id : 999999
+                                    )
+                                }
+                            >
+                                Approve
+                            </Button>
+                            <Button
+                                color="secondary"
+                                variant="outlined"
+                                onClick={() =>
+                                    denyAccount(profile ? profile.id : 999999)
+                                }
+                            >
+                                Deny
+                            </Button>
+                        </div>
+                    ) : null}
+                </div>
             </div>
             <Typography variant="h5" component="h5">
                 Books For Sale
