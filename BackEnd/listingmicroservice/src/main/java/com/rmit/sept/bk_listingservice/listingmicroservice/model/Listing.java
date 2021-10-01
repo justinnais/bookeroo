@@ -16,9 +16,11 @@ public class Listing
     private boolean used;
 
     @Enumerated(EnumType.STRING)
-    private Condition cond;
+    @Column(name = "cond")
+    private Condition condition;
 
-    private String condDesc;
+    @Column(name = "cond_desc")
+    private String conditionDesc;
 
     public Long getId()
     {
@@ -60,23 +62,23 @@ public class Listing
         this.used = used;
     }
 
-    public Condition getCond()
+    public Condition getCondition()
     {
-        return cond;
+        return condition;
     }
 
-    public void setCond(Condition cond)
+    public void setCondition(Condition condition)
     {
-        this.cond = cond;
+        this.condition = condition;
     }
 
-    public String getCondDesc()
+    public String getConditionDesc()
     {
-        return condDesc;
+        return conditionDesc;
     }
 
-    public void setCondDesc(String condDesc)
+    public void setConditionDesc(String conditionDesc)
     {
-        this.condDesc = condDesc;
+        this.conditionDesc = conditionDesc;
     }
 }
