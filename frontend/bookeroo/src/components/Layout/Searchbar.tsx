@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import InputBase from "@material-ui/core/InputBase";
 import {
     createStyles,
@@ -74,6 +74,10 @@ export default function Searchbar() {
         setQuery(event.target.value);
     };
 
+    // setting input ref as autofocus on inputbase doesn't work
+    const inputRef = useRef<HTMLInputElement>();
+    useEffect(() => inputRef.current && inputRef.current.focus());
+
     return (
         <form
             className={classes.root}
@@ -93,6 +97,7 @@ export default function Searchbar() {
                     inputProps={{ "aria-label": "search" }}
                     value={query || ""}
                     onChange={handleChange}
+                    inputRef={inputRef}
                 />
             </div>
             <SubmitButton formId="searchForm" isSubmitting={false}>
