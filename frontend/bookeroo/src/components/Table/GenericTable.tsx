@@ -189,7 +189,7 @@ export default function GenericTable<T, K extends keyof T>(
 
         const headers = columns.map((column, index) => {
             return {
-                key: `header-${column.key}`,
+                key: `header-${column.key}-${index}`,
                 label: column.header || titleCase(column.key.toString()),
                 align: column.align ? column.align : "left",
             };

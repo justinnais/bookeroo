@@ -30,7 +30,7 @@ export default function Menu(props: Props) {
     };
 
     // TODO bug with opening menu and clicking out of it, will still propogate through events
-
+    // ! findDOMNode is deprecated in StrictMode - warning message that is related to MUI v4, if we have time we can potentially move to v5 where this has been resolved, currently doesn't have a major impact
     return (
         <div>
             <Button

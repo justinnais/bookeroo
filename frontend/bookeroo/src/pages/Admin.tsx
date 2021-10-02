@@ -27,6 +27,7 @@ import { convertDate } from "./Profile";
 import GenericTable, { TableColumn } from "../components/Table/GenericTable";
 import Button from "../components/Button/Button";
 import Menu, { IMenuItem } from "../components/Layout/Menu";
+import { AccountStatus } from "../util/enums";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -79,11 +80,40 @@ export default function Admin() {
         history.push(`/user/${user.displayName}`);
     };
 
-    const manageItems: IMenuItem[] = [
-        { label: "Approve", onClick: () => console.log("logging") },
-        { label: "Reject", onClick: () => console.log("Reject") },
-        { label: "Delete", onClick: () => console.log("Delete") },
-    ];
+    // TODO add actual functions for these options
+    const getMenuItems = (user: IAccount): IMenuItem[] => {
+        let menuItems: IMenuItem[] = [];
+
+        switch (user.accountStatus) {
+            case AccountStatus.PENDING:
+                menuItems = [
+                    { label: "Approve", onClick: () => console.log("Approve") },
+                    { label: "Reject", onClick: () => console.log("Reject") },
+                ];
+                break;
+            case AccountStatus.BANNED:
+                menuItems = [
+                    { label: "Unban", onClick: () => console.log("Unban") },
+                ];
+                break;
+            case AccountStatus.REJECTED:
+                menuItems = [
+                    { label: "Approve", onClick: () => console.log("Approve") },
+                ];
+                break;
+
+            default:
+                menuItems = [
+                    { label: "Ban", onClick: () => console.log("Ban") },
+                ];
+                break;
+        }
+        menuItems.push({
+            label: "Close",
+            onClick: () => console.log("closing"),
+        });
+        return menuItems;
+    };
 
     const columns: TableColumn<IAccount, keyof IAccount>[] = [
         { key: "id", header: "ID" },
@@ -91,7 +121,11 @@ export default function Admin() {
         { key: "firstName", header: "First Name" },
         { key: "lastName", header: "Last Name" },
         { key: "username", header: "Email" },
-        { key: "dateCreated", header: "Date Created" },
+        {
+            key: "dateCreated",
+            header: "Date Created",
+            dataTransform: (date: string) => new Date(date).toDateString(),
+        },
         { key: "accountType", header: "Account Type" },
         { key: "accountStatus", header: "Status" },
         {
@@ -101,22 +135,8 @@ export default function Admin() {
                 <Menu
                     buttonLabel="Edit"
                     id={`${data.id}-menu`}
-                    items={manageItems}
+                    items={getMenuItems(data)}
                 />
-            ),
-        },
-        {
-            key: "custom",
-            header: "Button",
-            customComponent: (data: IAccount) => (
-                <Button
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        console.log("foo");
-                    }}
-                >
-                    Test
-                </Button>
             ),
         },
     ];
