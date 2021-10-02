@@ -14,6 +14,7 @@ import {
 } from "@material-ui/core";
 import React from "react";
 import { titleCase } from "../../util/stringManipulation";
+import Button from "../Button/Button";
 
 // https://react.christmas/2020/22
 
@@ -24,10 +25,11 @@ import { titleCase } from "../../util/stringManipulation";
  * dataTransform passes a function to convert into more appropriate content - eg. sellerId passed through transform that fetches the sellers name, displays 'John Smith' instead of 85747032
  */
 export interface TableColumn<T, K extends keyof T> {
-    key: K;
+    key: K | "custom"; // allows for custom columns
     header?: string;
     align?: "left" | "right";
     dataTransform?: (data: any) => string | number;
+    customComponent?: (data: any) => React.ReactNode; // must be provided when using a custom field
 }
 
 /**
@@ -250,6 +252,19 @@ export default function GenericTable<T, K extends keyof T>(
 
         // sort<T>(data, getComparator(order, orderBy));
 
+        const getTableCell = (column: TableColumn<T, K>, row: T) => {
+            // if a custom component is provided, pass data back and render
+            if (column.key === "custom") {
+                return column.customComponent
+                    ? column.customComponent(row)
+                    : null;
+            } else if (column.dataTransform) {
+                return column.dataTransform(row[column.key]);
+            } else {
+                return row[column.key];
+            }
+        };
+
         // divide data into pages
         const slicedPages = data.slice(
             page * rowsPerPage,
@@ -265,9 +280,7 @@ export default function GenericTable<T, K extends keyof T>(
                 >
                     {columns.map((column, colIndex) => (
                         <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
-                            {column.dataTransform
-                                ? column.dataTransform(row[column.key])
-                                : row[column.key]}
+                            {getTableCell(column, row)}
                         </TableCell>
                     ))}
                 </TableRow>
@@ -282,6 +295,7 @@ export default function GenericTable<T, K extends keyof T>(
         if (emptyRows > 0) {
             rows.push(
                 <TableRow
+                    key={"fillerRow"}
                     style={{
                         height: 53 * emptyRows,
                     }}

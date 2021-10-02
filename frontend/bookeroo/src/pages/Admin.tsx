@@ -25,6 +25,8 @@ import { IAccount } from "../api/models/Account";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { convertDate } from "./Profile";
 import GenericTable, { TableColumn } from "../components/Table/GenericTable";
+import Button from "../components/Button/Button";
+import Menu, { IMenuItem } from "../components/Layout/Menu";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -46,7 +48,7 @@ export default function Admin() {
     const history = useHistory();
     const { isLoading, data } = useQuery("listUsers", listUsers);
     const users = data ? (data.data as IAccount[]) : [];
-    const listItems = [
+    /* const listItems = [
         {
             label: "Pending accounts",
             link: console.log("update this"),
@@ -71,11 +73,17 @@ export default function Admin() {
             label: "View logs",
             link: console.log("update this"),
         },
-    ];
+    ]; */
 
     const handleClick = (user: IAccount) => {
         history.push(`/user/${user.displayName}`);
     };
+
+    const manageItems: IMenuItem[] = [
+        { label: "Approve", onClick: () => console.log("approve") },
+        { label: "Reject", onClick: () => console.log("Reject") },
+        { label: "Delete", onClick: () => console.log("Delete") },
+    ];
 
     const columns: TableColumn<IAccount, keyof IAccount>[] = [
         { key: "id", header: "ID" },
@@ -86,6 +94,17 @@ export default function Admin() {
         { key: "dateCreated", header: "Date Created" },
         { key: "accountType", header: "Account Type" },
         { key: "accountStatus", header: "Status" },
+        {
+            key: "custom",
+            header: "Manage",
+            customComponent: (data: IAccount) => (
+                <Menu
+                    buttonLabel="Edit"
+                    id={`${data.id}-menu`}
+                    items={manageItems}
+                />
+            ),
+        },
     ];
     // TODO update so I can put custom columns in without needing key, want to add button
     const UserTable = () => (
@@ -109,7 +128,7 @@ export default function Admin() {
                     <div>
                         <UserTable />
                     </div>
-                    <List className={classes.list}>
+                    {/* <List className={classes.list}>
                         {listItems.map((item, index, arr) => {
                             return (
                                 <div>
@@ -120,7 +139,7 @@ export default function Admin() {
                                 </div>
                             );
                         })}
-                    </List>
+                    </List> */}
                 </Paper>
             </Container>
         </div>
