@@ -80,7 +80,7 @@ export default function Admin() {
     };
 
     const manageItems: IMenuItem[] = [
-        { label: "Approve", onClick: () => console.log("approve") },
+        { label: "Approve", onClick: () => console.log("logging") },
         { label: "Reject", onClick: () => console.log("Reject") },
         { label: "Delete", onClick: () => console.log("Delete") },
     ];
@@ -105,8 +105,21 @@ export default function Admin() {
                 />
             ),
         },
+        {
+            key: "custom",
+            header: "Button",
+            customComponent: (data: IAccount) => (
+                <Button
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        console.log("foo");
+                    }}
+                >
+                    Test
+                </Button>
+            ),
+        },
     ];
-    // TODO update so I can put custom columns in without needing key, want to add button
     const UserTable = () => (
         <GenericTable data={users} columns={columns} onRowClick={handleClick} />
     );

@@ -1,4 +1,8 @@
-import { MenuItem, Menu as MenuMui } from "@material-ui/core";
+import {
+    MenuItem,
+    Menu as MenuMui,
+    ClickAwayListener,
+} from "@material-ui/core";
 import React from "react";
 import Button from "../Button/Button";
 
@@ -25,6 +29,8 @@ export default function Menu(props: Props) {
         setAnchorEl(null);
     };
 
+    // TODO bug with opening menu and clicking out of it, will still propogate through events
+
     return (
         <div>
             <Button
@@ -42,23 +48,17 @@ export default function Menu(props: Props) {
                 onClose={handleClose}
             >
                 {props.items.map((item, key) => {
-                    const itemClick = (
-                        event: React.MouseEvent<HTMLButtonElement>
+                    const handleItemClick = (
+                        event: React.MouseEvent<HTMLLIElement, MouseEvent>
                     ) => {
-                        event.stopPropagation(); // TODO this is having issues
+                        event.stopPropagation();
                         item.onClick();
-                        console.log("is this happending");
                         handleClose();
                     };
                     return (
-                        <span
-                            key={key}
-                            onClick={(event) => event.stopPropagation()}
-                        >
-                            <MenuItem onClick={() => itemClick}>
-                                {item.label}
-                            </MenuItem>
-                        </span>
+                        <MenuItem key={key} onClick={handleItemClick}>
+                            {item.label}
+                        </MenuItem>
                     );
                 })}
             </MenuMui>

@@ -275,6 +275,7 @@ export default function GenericTable<T, K extends keyof T>(
             return (
                 <TableRow
                     hover
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleClick(row)}
                     key={`row-${rowIndex}`}
                 >
