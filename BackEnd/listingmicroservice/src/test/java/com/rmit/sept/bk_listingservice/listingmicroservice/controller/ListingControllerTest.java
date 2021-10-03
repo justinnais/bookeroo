@@ -161,7 +161,7 @@ class ListingControllerTest
         JSONObject second = responseArray.getJSONObject(1);
         Assertions.assertEquals(123, second.get("price"));
         Assertions.assertEquals(true, second.get("used"));
-        Assertions.assertEquals("SLIGHTLY_USED", second.get("condition"));
+        Assertions.assertEquals("FAIR", second.get("condition"));
         Assertions.assertEquals("Crease in spine", second.get("conditionDesc"));
 
         Assertions.assertTrue(deleteSellListing("2555"));
