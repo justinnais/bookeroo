@@ -28,6 +28,7 @@ import GenericTable, { TableColumn } from "../components/Table/GenericTable";
 import Button from "../components/Button/Button";
 import Menu, { IMenuItem } from "../components/Layout/Menu";
 import { AccountStatus } from "../util/enums";
+import { useAdminStore } from "../stores/useAdminStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -47,6 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Admin() {
     const classes = useStyles();
     const history = useHistory();
+    const adjustStatus = useAdminStore((state) => state.adjustStatus);
     const { isLoading, data } = useQuery("listUsers", listUsers);
     const users = data ? (data.data as IAccount[]) : [];
     /* const listItems = [
@@ -87,24 +89,41 @@ export default function Admin() {
         switch (user.accountStatus) {
             case AccountStatus.PENDING:
                 menuItems = [
-                    { label: "Approve", onClick: () => console.log("Approve") },
-                    { label: "Reject", onClick: () => console.log("Reject") },
+                    {
+                        label: "Approve",
+                        onClick: () => adjustStatus(user.id, AccountStatus.ACTIVE),
+                    },
+                    {
+                        label: "Reject",
+                        onClick: () =>
+                            adjustStatus(user.id, AccountStatus.REJECTED),
+                    },
                 ];
                 break;
             case AccountStatus.BANNED:
                 menuItems = [
-                    { label: "Unban", onClick: () => console.log("Unban") },
+                    {
+                        label: "Unban",
+                        onClick: () => adjustStatus(user.id, AccountStatus.ACTIVE),
+                    },
                 ];
                 break;
             case AccountStatus.REJECTED:
                 menuItems = [
-                    { label: "Approve", onClick: () => console.log("Approve") },
+                    {
+                        label: "Approve",
+                        onClick: () => adjustStatus(user.id, AccountStatus.ACTIVE),
+                    },
                 ];
                 break;
 
             default:
                 menuItems = [
-                    { label: "Ban", onClick: () => console.log("Ban") },
+                    {
+                        label: "Ban",
+                        onClick: () =>
+                            adjustStatus(user.id, AccountStatus.BANNED),
+                    },
                 ];
                 break;
         }
