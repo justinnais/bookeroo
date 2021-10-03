@@ -6,5 +6,4 @@ public enum Condition
     GOOD,
     FAIR,
     POOR,
-    
 }

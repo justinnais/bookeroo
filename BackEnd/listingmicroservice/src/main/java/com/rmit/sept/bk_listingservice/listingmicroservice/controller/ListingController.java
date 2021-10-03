@@ -42,8 +42,8 @@ public class ListingController
         listing.setUserId(body.userId);
         listing.setbookIsbn(body.bookIsbn);
         listing.setUsed(body.used);
-        listing.setCond(body.cond);
-        listing.setCondDesc(body.condDesc);
+        listing.setCondition(body.condition);
+        listing.setConditionDesc(body.conditionDesc);
 
         listingRepository.save(listing);
 
@@ -85,8 +85,8 @@ public class ListingController
         for (Object[] details : listingBybookIsbn)
         {
             JSONObject listing = new JSONObject();
-            listing.put("cond", details[0]);
-            listing.put("condDesc", details[1]);
+            listing.put("condition", details[0]);
+            listing.put("conditionDesc", details[1]);
             listing.put("used", details[2]);
             listing.put("price", details[3]);
 

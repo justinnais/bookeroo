@@ -59,8 +59,8 @@ class ListingControllerTest
         listingJSON.put("userId", 35550);
         listingJSON.put("bookIsbn", "1555");
         listingJSON.put("used", false);
-        listingJSON.put("cond", Condition.NEW);
-        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("condition", Condition.NEW);
+        listingJSON.put("conditionDesc", "N/A");
         listingJSON.put("price", 123);
 
         MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
@@ -78,8 +78,8 @@ class ListingControllerTest
 
         JSONObject listingJSON = new JSONObject();
         listingJSON.put("used", false);
-        listingJSON.put("cond", Condition.NEW);
-        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("condition", Condition.NEW);
+        listingJSON.put("conditionDesc", "N/A");
         listingJSON.put("price", 123);
 
         MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
@@ -125,16 +125,16 @@ class ListingControllerTest
         listingJSON.put("userId", 35550);
         listingJSON.put("bookIsbn", "2555");
         listingJSON.put("used", false);
-        listingJSON.put("cond", Condition.NEW);
-        listingJSON.put("condDesc", "N/A");
+        listingJSON.put("condition", Condition.NEW);
+        listingJSON.put("conditionDesc", "N/A");
         listingJSON.put("price", 123);
 
         JSONObject listing1JSON = new JSONObject();
         listing1JSON.put("userId", 35553);
         listing1JSON.put("bookIsbn", "2555");
         listing1JSON.put("used", true);
-        listing1JSON.put("cond", Condition.SLIGHTLY_USED);
-        listing1JSON.put("condDesc", "Crease in spine");
+        listing1JSON.put("condition", Condition.FAIR);
+        listing1JSON.put("conditionDesc", "Crease in spine");
         listing1JSON.put("price", 123);
 
         for (JSONObject json : new JSONObject[]{listingJSON, listing1JSON})
@@ -155,14 +155,14 @@ class ListingControllerTest
         JSONObject first = responseArray.getJSONObject(0);
         Assertions.assertEquals(123, first.get("price"));
         Assertions.assertEquals(false, first.get("used"));
-        Assertions.assertEquals("NEW", first.get("cond"));
-        Assertions.assertEquals("N/A", first.get("condDesc"));
+        Assertions.assertEquals("NEW", first.get("condition"));
+        Assertions.assertEquals("N/A", first.get("conditionDesc"));
 
         JSONObject second = responseArray.getJSONObject(1);
         Assertions.assertEquals(123, second.get("price"));
         Assertions.assertEquals(true, second.get("used"));
-        Assertions.assertEquals("SLIGHTLY_USED", second.get("cond"));
-        Assertions.assertEquals("Crease in spine", second.get("condDesc"));
+        Assertions.assertEquals("SLIGHTLY_USED", second.get("condition"));
+        Assertions.assertEquals("Crease in spine", second.get("conditionDesc"));
 
         Assertions.assertTrue(deleteSellListing("2555"));
     }
