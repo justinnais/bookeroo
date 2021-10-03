@@ -42,8 +42,8 @@ public class ListingController
         listing.setUserId(body.userId);
         listing.setbookIsbn(body.bookIsbn);
         listing.setUsed(body.used);
-        listing.setCond(body.cond);
-        listing.setCondDesc(body.condDesc);
+        listing.setCondition(body.condition);
+        listing.setConditionDesc(body.conditionDesc);
 
         listingRepository.save(listing);
 
@@ -63,10 +63,28 @@ public class ListingController
     @GetMapping("/list/{bookIsbn}")
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
-        JSONArray listings = new JSONArray();
-        List<Object[]> listingBybookIsbn = listingRepository.getListingBybookIsbn(bookIsbn);
+        // This is way more hacky than it should be, but weird errors keep happening with the test
+        // Talk to Josh if you want more info
+        // TODO: Investigate JSON null bug with tests
+        List<Listing> listingBookIsbn = listingRepository.getListingByBookIsbn(bookIsbn);
+        JSONArray array = new JSONArray();
+        for (Listing listing : listingBookIsbn)
+        {
+            JSONObject obj = new JSONObject();
+            obj.put("id", listing.getId());
+            obj.put("userId", listing.getUserId());
+            obj.put("bookIsbn", listing.getbookIsbn());
+            obj.put("used", listing.isUsed());
+            obj.put("condition", listing.getCondition());
+            obj.put("conditionDesc", listing.getConditionDesc());
 
-        return responseToArray(listingBybookIsbn);
+            SellListing sl = sellListingRepository.getSellListingByListingId(listing.getId());
+            obj.put("price", sl.getPrice());
+
+            array.put(obj);
+        }
+        return ResponseEntity.ok().header("Content-Type", "application/json")
+                .body(array.toString());
     }
 
     // LIST ALL 
@@ -76,7 +94,7 @@ public class ListingController
         JSONArray listings = new JSONArray();
         List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
 
-        return responseToArray(listingBybookIsbn);
+        return new ResponseEntity<>(listingBybookIsbn.toString(), HttpStatus.OK);
     }
 
     private ResponseEntity<?> responseToArray(List<Object[]> listingBybookIsbn)
@@ -85,8 +103,8 @@ public class ListingController
         for (Object[] details : listingBybookIsbn)
         {
             JSONObject listing = new JSONObject();
-            listing.put("cond", details[0]);
-            listing.put("condDesc", details[1]);
+            listing.put("condition", details[0]);
+            listing.put("conditionDesc", details[1]);
             listing.put("used", details[2]);
             listing.put("price", details[3]);
 
