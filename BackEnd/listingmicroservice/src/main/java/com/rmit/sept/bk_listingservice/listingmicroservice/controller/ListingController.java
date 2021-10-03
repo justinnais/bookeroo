@@ -63,10 +63,16 @@ public class ListingController
     @GetMapping("/list/{bookIsbn}")
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
-        JSONArray listings = new JSONArray();
-        Listing listingBybookIsbn = listingRepository.getListingByBookIsbn(bookIsbn);
-
-        return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
+        List<Listing> listingBookIsbn = listingRepository.getListingByBookIsbn(bookIsbn);
+        JSONArray array = new JSONArray(listingBookIsbn);
+        for (Object obj : array)
+        {
+            JSONObject listing = (JSONObject) obj;
+            SellListing sl = sellListingRepository.getSellListingByListingId(listing.getLong("id"));
+            listing.put("price", sl.getPrice());
+        }
+        return ResponseEntity.ok().header("Content-Type", "application/json")
+                .body(array.toString());
     }
 
     // LIST ALL 

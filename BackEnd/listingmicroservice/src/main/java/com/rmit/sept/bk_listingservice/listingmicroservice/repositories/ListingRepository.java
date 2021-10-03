@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ListingRepository extends CrudRepository<Listing, Long>
 {
-    Listing getListingByBookIsbn(Long bookIsbn);
+    List<Listing> getListingByBookIsbn(Long bookIsbn);
 
     @Query("SELECT l.condition, l.conditionDesc, l.used, sl.price " +
             "FROM Listing l " +
