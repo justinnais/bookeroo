@@ -9,13 +9,9 @@ import java.util.List;
 
 public interface ListingRepository extends CrudRepository<Listing, Long>
 {
-    @Query("SELECT l.cond, l.condDesc, l.used, sl.price " +
-            "FROM Listing l " +
-            "JOIN SellListing sl ON l.id = sl.listingId " +
-            "WHERE l.bookIsbn = :bookIsbn")
-    List<Object[]> getListingBybookIsbn(@Param("bookIsbn") Long bookIsbn);
+    List<Listing> getListingByBookIsbn(Long bookIsbn);
 
-    @Query("SELECT l.cond, l.condDesc, l.used, sl.price " +
+    @Query("SELECT l.condition, l.conditionDesc, l.used, sl.price " +
             "FROM Listing l " +
             "JOIN SellListing sl ON l.id = sl.listingId ")
     List<Object[]> getAllListings();

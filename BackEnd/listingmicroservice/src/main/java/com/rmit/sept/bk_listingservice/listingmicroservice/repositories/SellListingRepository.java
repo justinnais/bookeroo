@@ -5,4 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 
 public interface SellListingRepository extends CrudRepository<SellListing, Long>
 {
+    SellListing getSellListingByListingId(Long listingId);
 }

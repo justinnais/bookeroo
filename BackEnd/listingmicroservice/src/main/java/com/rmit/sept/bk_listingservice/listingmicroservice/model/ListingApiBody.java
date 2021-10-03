@@ -5,7 +5,7 @@ public class ListingApiBody
     public Long userId;
     public Long bookIsbn;
     public boolean used;
-    public Condition cond;
-    public String condDesc;
+    public Condition condition;
+    public String conditionDesc;
     public double price;
 }
