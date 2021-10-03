@@ -45,6 +45,11 @@ then
     boot listingmicroservice listing-microservice 8084
     boot="YES"
 fi
+if [[ "$service" == "review" || "$service" == "all" ]]
+then
+    boot reviewmicroservices review-microservice 8085
+    boot="YES"
+fi
 
 if [[ "$boot" == "NO" ]]
 then
