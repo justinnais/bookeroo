@@ -13,8 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trans")
@@ -69,5 +71,25 @@ public class TransController
         }
 
         return ResponseEntity.ok(transactions.toString());
+    }
+
+    @DeleteMapping("/{transId}")
+    public ResponseEntity<?> deleteTransaction(@PathVariable("transId") Long transId)
+    {
+        Optional<Transaction> transResult = transactionRepository.findById(transId);
+        if (transResult.isEmpty())
+            return new ResponseEntity<>("No transaction exists with that id", HttpStatus.NOT_FOUND);
+        Transaction transaction = transResult.get();
+
+        long currentTime = new Date().getTime();
+        long diff = currentTime - transaction.getDatetime().getTime();
+        if (diff > 7200000)
+            return new ResponseEntity<>("More than 2 hours have elapsed since this transaction " +
+                    "was made", HttpStatus.LOCKED);
+
+        transactionRepository.deleteById(transId);
+        transItemRepository.deleteAllByTransactionId(transId);
+
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
