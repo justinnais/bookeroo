@@ -32,6 +32,7 @@ import { useAdminStore } from "../stores/useAdminStore";
 import { useAlertStore } from "../stores/useAlertStore";
 import UserTable from "../components/Table/AdminTables/UserTable";
 import Tabs from "../components/Layout/Tabs";
+import BookTable from "../components/Table/AdminTables/BookTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -81,7 +82,7 @@ export default function Admin() {
 
     const tabs = [
         { label: "Users", component: <UserTable /> },
-        { label: "Books", component: <UserTable /> },
+        { label: "Books", component: <BookTable /> },
         { label: "Transactions", component: <UserTable /> },
     ];
 

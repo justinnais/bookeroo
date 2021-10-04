@@ -12,6 +12,7 @@ import {
     TableSortLabel,
     TablePagination,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import React from "react";
 import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
@@ -39,6 +40,7 @@ interface TableProps<T, K extends keyof T> {
     data: Array<T>;
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
+    isLoading?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -306,7 +308,27 @@ export default function GenericTable<T, K extends keyof T>(
             );
         }
 
-        return <TableBody>{rows}</TableBody>;
+        if (props.isLoading) {
+            const skeletonRows: number[] = [...Array(rowsPerPage)];
+            // return skeleton rows if loading
+            return (
+                <TableBody>
+                    {skeletonRows.map((row, rowIndex) => (
+                        <TableRow key={`skeleton-row-${rowIndex}`}>
+                            {columns.map((column, colIndex) => (
+                                <TableCell
+                                    key={`skeleton-row-${rowIndex}-cell-${colIndex}`}
+                                >
+                                    <Skeleton variant="text" />
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            );
+        } else {
+            return <TableBody>{rows}</TableBody>;
+        }
     };
 
     return (
@@ -324,10 +346,12 @@ export default function GenericTable<T, K extends keyof T>(
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                         />
+
                         <TableRows
                             columns={columns}
                             data={data}
                             onRowClick={(row: T) => handleClick(row)}
+                            isLoading={props.isLoading}
                         />
                     </Table>
                 </TableContainer>

@@ -115,6 +115,11 @@ export default function UserTable() {
         },
     ];
     return (
-        <GenericTable data={users} columns={columns} onRowClick={handleClick} />
+        <GenericTable
+            data={users}
+            columns={columns}
+            onRowClick={handleClick}
+            isLoading={isLoading}
+        />
     );
 }
