@@ -80,7 +80,10 @@ export default function Header() {
             <div className={classes.navButtons}>
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
-                <Button to={Routes.Checkout}>Cart</Button>
+                {/* <Button to={Routes.Checkout}>Cart</Button> */}
+                {isAuthenticated && (
+                    <Button to={`/user/${user!.displayName}`}>Profile</Button>
+                )}
             </div>
             {isAuthenticated ? (
                 <div className={classes.navButtons}>
