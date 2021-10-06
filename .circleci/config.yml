@@ -54,8 +54,8 @@ jobs:
           jar: reviewmicroservices-0.0.1.jar
 
       
-      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS
-      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS
+      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/docker-entrypoint.sh
+      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/Dockerfile
       - run: ssh ubuntu@$BOOK_AWS '(sudo docker build . -t bookeroo && sudo docker-compose up -d)'
 
 workflows:
