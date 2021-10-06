@@ -63,7 +63,6 @@ export default function Search() {
     ];
 
     const handleClick = (book: IBook) => {
-        console.log("click inside search", book);
         history.push(`/book/${book.isbn || book.isbn13}`);
     };
 
@@ -74,6 +73,7 @@ export default function Search() {
                     data={filteredBooks}
                     columns={columns}
                     onRowClick={handleClick}
+                    isLoading={isLoading}
                 />
             </Container>
         </div>

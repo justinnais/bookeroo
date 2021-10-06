@@ -16,8 +16,8 @@ import {
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import React from "react";
-import { useQuery } from "react-query";
-import { listUsers } from "../api/stores/user";
+import { useMutation, useQuery } from "react-query";
+import { editUser, listUsers } from "../api/stores/user";
 import Container from "../components/Layout/Container";
 import TextCard from "../components/Layout/TextCard";
 import { theme } from "../styles/theme";
@@ -25,6 +25,15 @@ import { IAccount } from "../api/models/Account";
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { convertDate } from "./Profile";
 import GenericTable, { TableColumn } from "../components/Table/GenericTable";
+import Button from "../components/Button/Button";
+import Menu, { IMenuItem } from "../components/Layout/Menu";
+import { AccountStatus } from "../util/enums";
+import { useAdminStore } from "../stores/useAdminStore";
+import { useAlertStore } from "../stores/useAlertStore";
+import UserTable from "../components/Table/AdminTables/UserTable";
+import Tabs from "../components/Layout/Tabs";
+import BookTable from "../components/Table/AdminTables/BookTable";
+import TransactionTable from "../components/Table/AdminTables/TransactionTable";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -44,9 +53,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Admin() {
     const classes = useStyles();
     const history = useHistory();
-    const { isLoading, data } = useQuery("listUsers", listUsers);
-    const users = data ? (data.data as IAccount[]) : [];
-    const listItems = [
+
+    /* const listItems = [
         {
             label: "Pending accounts",
             link: console.log("update this"),
@@ -71,26 +79,13 @@ export default function Admin() {
             label: "View logs",
             link: console.log("update this"),
         },
-    ];
+    ]; */
 
-    const handleClick = (user: IAccount) => {
-        history.push(`/user/${user.displayName}`);
-    };
-
-    const columns: TableColumn<IAccount, keyof IAccount>[] = [
-        { key: "id", header: "ID" },
-        { key: "displayName", header: "Display Name" },
-        { key: "firstName", header: "First Name" },
-        { key: "lastName", header: "Last Name" },
-        { key: "username", header: "Email" },
-        { key: "dateCreated", header: "Date Created" },
-        { key: "accountType", header: "Account Type" },
-        { key: "accountStatus", header: "Status" },
+    const tabs = [
+        { label: "Users", component: <UserTable /> },
+        { label: "Books", component: <BookTable /> },
+        { label: "Transactions", component: <TransactionTable /> },
     ];
-    // TODO update so I can put custom columns in without needing key, want to add button
-    const UserTable = () => (
-        <GenericTable data={users} columns={columns} onRowClick={handleClick} />
-    );
 
     return (
         <div>
@@ -105,11 +100,9 @@ export default function Admin() {
             </Container>
 
             <Container>
-                <Paper className={classes.content}>
-                    <div>
-                        <UserTable />
-                    </div>
-                    <List className={classes.list}>
+                {/* <Paper className={classes.content}> */}
+                <Tabs tabs={tabs} />
+                {/* <List className={classes.list}>
                         {listItems.map((item, index, arr) => {
                             return (
                                 <div>
@@ -120,8 +113,8 @@ export default function Admin() {
                                 </div>
                             );
                         })}
-                    </List>
-                </Paper>
+                    </List> */}
+                {/* </Paper> */}
             </Container>
         </div>
     );

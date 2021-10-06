@@ -5,7 +5,7 @@ export enum AccountType {
 }
 
 export enum AccountStatus {
-    OK = "OK",
+    ACTIVE = "ACTIVE",
     PENDING = "PENDING",
     REJECTED = "REJECTED",
     BANNED = "BANNED",

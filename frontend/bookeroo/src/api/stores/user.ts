@@ -6,6 +6,7 @@ import { apiLogin } from "../api";
 import {
     CreateBusinessAccountRequest,
     CreatePersonalAccountRequest,
+    IAccount,
     LoginAccountRequest,
 } from "../models/Account";
 // https://www.bezkoder.com/react-hooks-jwt-auth/
@@ -32,6 +33,6 @@ export function loginUser(auth: LoginAccountRequest) {
     return apiLogin.post(`/login`, auth);
 }
 
-export function editUser(id: number, accountStatus: AccountStatus) {
-    return apiLogin.patch(`/${id}`, { accountStatus: 0 }); // TODO this is cheese and needs to be fixed ASAP
+export function editUser(id: number, user: Partial<IAccount>) {
+    return apiLogin.patch(`/${id}`, user);
 }

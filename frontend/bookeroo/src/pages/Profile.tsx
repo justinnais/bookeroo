@@ -42,13 +42,6 @@ export function convertDate(date: number) {
     return new Date(date).toDateString();
 }
 
-function approveAccount(id: number) {
-    console.log("approve");
-    editUser(id, AccountStatus.OK);
-}
-function denyAccount(id: number) {
-    editUser(id, AccountStatus.REJECTED);
-}
 
 export default function Profile() {
     const classes = useStyles();
@@ -108,24 +101,10 @@ export default function Profile() {
 
                     {isPending && isAdmin ? (
                         <div>
-                            <Button
-                                color="secondary"
-                                variant="contained"
-                                onClick={() =>
-                                    approveAccount(
-                                        profile ? profile.id : 999999
-                                    )
-                                }
-                            >
+                            <Button color="secondary" variant="contained">
                                 Approve
                             </Button>
-                            <Button
-                                color="secondary"
-                                variant="outlined"
-                                onClick={() =>
-                                    denyAccount(profile ? profile.id : 999999)
-                                }
-                            >
+                            <Button color="secondary" variant="outlined">
                                 Deny
                             </Button>
                         </div>
