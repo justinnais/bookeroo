@@ -9,11 +9,8 @@ commands:
         type: string
     steps:
       - run:
-          name: clean-and-test-<<parameters.git-folder>>
-          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean && mvn test
-      - run:
-          name: build-<<parameters.git-folder>>
-          command: cd BackEnd/<<parameters.git-folder>>/ && mvn package
+          name: build-and-test-<<parameters.git-folder>>
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean package
       - run:
           name: copy-<<parameters.git-folder>>
           command:
@@ -51,6 +48,11 @@ jobs:
       - copy-microservice:   
           git-folder: listingmicroservice
           jar: listingmicroservice-0.0.1.jar
+
+      - copy-microservice:
+          git-folder: reviewmicroservices
+          jar: reviewmicroservices-0.0.1.jar
+
       
       - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS
       - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS
