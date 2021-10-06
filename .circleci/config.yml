@@ -56,6 +56,7 @@ jobs:
       
       - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/BackEnd/docker-entrypoint.sh
       - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/BackEnd/Dockerfile
+      - run: scp BackEnd/docker-compose.yml ubuntu@$BOOK_AWS:~/BackEnd/docker-compose.yml
       - run: ssh ubuntu@$BOOK_AWS '(cd BackEnd/ && sudo docker build . -t bookeroo && sudo docker-compose up -d)'
 
 workflows:
