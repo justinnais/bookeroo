@@ -56,3 +56,7 @@ jobs:
       - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS
       - run: ssh ubuntu@$BOOK_AWS '(sudo docker build . -t bookeroo && sudo docker-compose up -d)'
 
+workflows:
+  build-and-test: 
+    jobs:
+      - build-backend
