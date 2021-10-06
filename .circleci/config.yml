@@ -14,7 +14,7 @@ commands:
       - run:
           name: copy-<<parameters.git-folder>>
           command:
-            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/<<parameters.git-folder>>/target/<<parameters.jar>>
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>>
 
 jobs:
   build-backend:  
@@ -54,9 +54,9 @@ jobs:
           jar: reviewmicroservices-0.0.1.jar
 
       
-      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/docker-entrypoint.sh
-      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/Dockerfile
-      - run: ssh ubuntu@$BOOK_AWS '(sudo docker build . -t bookeroo && sudo docker-compose up -d)'
+      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/BackEnd/docker-entrypoint.sh
+      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/BackEnd/Dockerfile
+      - run: ssh ubuntu@$BOOK_AWS '(cd BackEnd/ && sudo docker build . -t bookeroo && sudo docker-compose up -d)'
 
 workflows:
   build-and-test: 
