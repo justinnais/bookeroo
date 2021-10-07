@@ -60,5 +60,6 @@ public class Transaction
     protected void onCreate()
     {
         datetime = new Date();
+        status = Status.PENDING;
     }
 }
