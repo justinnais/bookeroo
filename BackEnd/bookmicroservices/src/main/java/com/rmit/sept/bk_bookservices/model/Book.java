@@ -51,7 +51,7 @@ public class Book
     private String authors;
 
     private String tags;
-    
+
     private String tableOfContents = "{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}";
 
     public Book()
@@ -70,7 +70,8 @@ public class Book
 
         if (json.has("subjects")) {
             int count = 0;
-            for (Object tag : json.getJSONArray("subjects")) {
+            for (int i = 0; i < json.getJSONArray("subjects").length(); i++) {
+                Object tag = json.getJSONArray("subjects").get(i);
                 if (tag instanceof String) {
                     if (tags.length() != 0) {
                         tags = tags + "|";
