@@ -15,6 +15,8 @@ import javax.persistence.Id;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Book
 {
+    public static int MAX_TAGS = 5;
+
     @Id
     private String isbn;
 
@@ -48,6 +50,10 @@ public class Book
 
     private String authors;
 
+    private String tags;
+    
+    private String tableOfContents = "{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}";
+
     public Book()
     {
     }
@@ -55,11 +61,30 @@ public class Book
     public static Book fromJson(JSONObject json) throws JsonProcessingException
     {
         String authors = "Unknown";
+        String tags = "";
 
         if (json.has("authors"))
             authors = json.getJSONArray("authors").join("|").replaceAll("\\\"", "");
 
         json.remove("authors");
+
+        if (json.has("subjects")) {
+            int count = 0;
+            for (Object tag : json.getJSONArray("subjects")) {
+                if (tag instanceof String) {
+                    if (tags.length() != 0) {
+                        tags = tags + "|";
+                    }
+                    tags = tags+(String) tag;
+                    count++;
+                    if (count >= MAX_TAGS) {
+                        break;
+                    }
+                }
+            }
+        }
+
+        json.remove("subjects");
 
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = objectMapper.readValue(json.toString(), Book.class);
@@ -206,6 +231,14 @@ public class Book
     public void setAuthors(String authors)
     {
         this.authors = authors;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     @Override
