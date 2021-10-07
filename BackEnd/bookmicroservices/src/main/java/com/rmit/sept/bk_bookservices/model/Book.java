@@ -158,7 +158,7 @@ public class Book
         this.edition = edition;
     }
 
-    public int getPages()
+    public Integer getPages()
     {
         return pages;
     }
