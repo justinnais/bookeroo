@@ -17,4 +17,6 @@ public interface TransactionItemRepository extends CrudRepository<TransactionIte
             "WHERE t.buyerId = :buyerId")
     List<Double[]> getTransItemByBuyerId(@Param("buyerId") Long buyerId);
     // TODO: Create an object to hold the response rather than using an array
+
+    void deleteAllByTransactionId(double transactionId);
 }
