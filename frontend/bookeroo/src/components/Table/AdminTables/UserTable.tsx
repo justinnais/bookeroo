@@ -116,12 +116,14 @@ export default function UserTable() {
         },
     ];
 
+
     return (
         <GenericTable
             data={users}
             columns={columns}
             onRowClick={handleClick}
             isLoading={isLoading}
+            isError={isError}
             printButton
         />
     );

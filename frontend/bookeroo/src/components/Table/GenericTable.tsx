@@ -15,6 +15,7 @@ import {
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import React, { useState } from "react";
+import { useAlertStore } from "../../stores/useAlertStore";
 import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
 
@@ -37,12 +38,12 @@ export interface TableColumn<T, K extends keyof T> {
 /**
  * The table takes a generic array of data and creates columns from the keys
  */
-interface TableProps<T, K extends keyof T> {
+export interface TableProps<T, K extends keyof T> {
     data: Array<T>;
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
-    isLoading?: boolean;
-    // actions?: React.ReactNode[];
+    isLoading: boolean;
+    isError: boolean;
     printButton?: boolean;
 }
 
@@ -154,6 +155,11 @@ export default function GenericTable<T, K extends keyof T>(
 
     /* rows per page setting */
     const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
 
     /* callback to pass generic row back to parent */
     const handleClick = (row: T) => {
@@ -312,7 +318,7 @@ export default function GenericTable<T, K extends keyof T>(
                         height: 53 * emptyRows,
                     }}
                 >
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={columns.length} />
                 </TableRow>
             );
         }
@@ -333,6 +339,17 @@ export default function GenericTable<T, K extends keyof T>(
                             ))}
                         </TableRow>
                     ))}
+                </TableBody>
+            );
+        } else if (props.isError) {
+            return (
+                <TableBody>
+                    <TableRow>
+                        <TableCell colSpan={columns.length}>
+                            There was a problem loading the data. Please try
+                            again.
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             );
         } else {
@@ -361,12 +378,12 @@ export default function GenericTable<T, K extends keyof T>(
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                         />
-
                         <TableRows
                             columns={columns}
                             data={data}
                             onRowClick={(row: T) => handleClick(row)}
                             isLoading={props.isLoading}
+                            isError={props.isError}
                         />
                     </Table>
                 </TableContainer>
