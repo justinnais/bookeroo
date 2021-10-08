@@ -92,29 +92,10 @@ jobs:
           user: "ec2-user"
           server: $BOOK_AWS_2
 
-
-
-  #build-frontend:
-  #  docker:
-  #    - image: cimg/node:16.8.0
-  #  steps:
-  #    - checkout
-  #    - run:
-  #        name: test
-  #        command: |
-  #          cd frontend/bookeroo/
-  #          npm install
-  #          CI=false npm run build
-
-
-        
-
-
 workflows:
   build-and-test: 
     jobs:
       - build-backend
-    #  - build-frontend
 
     
 
