@@ -5,7 +5,7 @@ export interface IListing {
     isUsed: boolean;
     condition: string; // TODO add enum to this
     conditionDesc: string;
-    // price: string;
+    price: string;
 }
 
 export interface CreateListingRequest {

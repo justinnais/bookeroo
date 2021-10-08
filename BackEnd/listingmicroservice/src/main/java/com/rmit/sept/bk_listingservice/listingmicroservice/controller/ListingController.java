@@ -41,7 +41,7 @@ public class ListingController
         Listing listing = new Listing();
         listing.setUserId(body.userId);
         listing.setbookIsbn(body.bookIsbn);
-        listing.setUsed(body.used);
+        listing.setUsed(body.isUsed);
         listing.setCondition(body.condition);
         listing.setConditionDesc(body.conditionDesc);
 
@@ -74,7 +74,7 @@ public class ListingController
             obj.put("id", listing.getId());
             obj.put("userId", listing.getUserId());
             obj.put("bookIsbn", listing.getbookIsbn());
-            obj.put("used", listing.isUsed());
+            obj.put("isUsed", listing.isUsed());
             obj.put("condition", listing.getCondition());
             obj.put("conditionDesc", listing.getConditionDesc());
 
@@ -105,7 +105,7 @@ public class ListingController
             JSONObject listing = new JSONObject();
             listing.put("condition", details[0]);
             listing.put("conditionDesc", details[1]);
-            listing.put("used", details[2]);
+            listing.put("isUsed", details[2]);
             listing.put("price", details[3]);
 
             listings.put(listing);

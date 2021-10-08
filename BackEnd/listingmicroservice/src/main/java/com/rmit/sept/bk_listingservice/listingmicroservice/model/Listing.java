@@ -13,7 +13,7 @@ public class Listing
 
     private Long bookIsbn;
 
-    private boolean used;
+    private boolean isUsed;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cond")
@@ -54,12 +54,12 @@ public class Listing
 
     public boolean isUsed()
     {
-        return used;
+        return isUsed;
     }
 
     public void setUsed(boolean used)
     {
-        this.used = used;
+        this.isUsed = used;
     }
 
     public Condition getCondition()
