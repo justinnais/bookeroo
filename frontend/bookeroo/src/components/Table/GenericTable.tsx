@@ -14,7 +14,7 @@ import {
     TableFooter,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
-import React from "react";
+import React, { useState } from "react";
 import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
 
@@ -132,18 +132,6 @@ enum PossibleIds {
     isbn = "isbn",
 }
 
-function convertToCSV<T>(data: T[]) {
-    const replacer = (value: string | number) => (value === null ? "" : value);
-    const headers = Object.keys(data[0]);
-
-    const csv = [
-        headers.join(","),
-        data.map((j) => Object.values(j).join(",")).join("\n"),
-    ];
-
-    console.log("csv", csv);
-}
-
 /**
  *
  * @param props data, columns and row click action to be passed to generic table
@@ -156,16 +144,16 @@ export default function GenericTable<T, K extends keyof T>(
     const classes = useStyles();
 
     /* ascending or descending order of table */
-    const [order, setOrder] = React.useState<Order>("asc");
+    const [order, setOrder] = useState<Order>("asc");
 
     /* which column to sort table by */
-    const [orderBy, setOrderBy] = React.useState<keyof T>();
+    const [orderBy, setOrderBy] = useState<keyof T>();
 
     /* pages for pagination of table */
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = useState(0);
 
     /* rows per page setting */
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
 
     /* callback to pass generic row back to parent */
     const handleClick = (row: T) => {
@@ -356,7 +344,7 @@ export default function GenericTable<T, K extends keyof T>(
         <Button
             variant="outlined"
             color="secondary"
-            onClick={() => convertToCSV(data)}
+            onClick={() => console.log("data", data)} // TODO create CSV with data
         >
             Print
         </Button>
