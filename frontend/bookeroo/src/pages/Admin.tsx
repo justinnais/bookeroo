@@ -28,7 +28,6 @@ import GenericTable, { TableColumn } from "../components/Table/GenericTable";
 import Button from "../components/Button/Button";
 import Menu, { IMenuItem } from "../components/Layout/Menu";
 import { AccountStatus } from "../util/enums";
-import { useAdminStore } from "../stores/useAdminStore";
 import { useAlertStore } from "../stores/useAlertStore";
 import UserTable from "../components/Table/AdminTables/UserTable";
 import Tabs from "../components/Layout/Tabs";

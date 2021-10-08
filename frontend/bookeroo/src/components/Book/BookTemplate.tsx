@@ -39,6 +39,7 @@ import CreateListingForm from "./CreateListingForm";
 import { IListing } from "../../api/models/Listing";
 import { getUser } from "../../api/stores/user";
 import { IAccount } from "../../api/models/Account";
+import ListTable from "./ListTable";
 
 interface Props {
     book: IBook;
@@ -63,27 +64,9 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
-function getDisplayName(id: string): string {
-    let displayName = id;
-    getUser(id).then((res) => {
-        if (res.status === 200) {
-            const user = res.data as IAccount;
-            displayName = user.displayName;
-        } else {
-            displayName = "uh oh";
-        }
-    });
-    return displayName;
-}
-
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
     const [isSubmitting, setSubmitting] = useState(false);
-    const { isLoading, data } = useQuery("listBookListings", () =>
-        listBookListings(props.book.isbn || props.book.isbn)
-    );
-
-    const listings = data ? data.data : [];
 
     const authors = createAuthorArray(props.book.authors);
 
@@ -140,18 +123,6 @@ export default function BookTemplate(props: Props) {
         </Button>
     );
 
-    // TODO check that table fills out correctly when data gets fixed
-    const columns: TableColumn<IListing, keyof IListing>[] = [
-        { key: "id", header: "ID" },
-        { key: "condition" },
-        { key: "conditionDesc", header: "Condition Description" },
-        {
-            key: "userId",
-            header: "User",
-            dataTransform: (id: string) => getDisplayName(id),
-        },
-    ];
-
     return (
         <div>
             <Container noMargin>
@@ -165,7 +136,7 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
-                {/* <GenericTable data={listings} columns={columns} /> */}
+                <ListTable isbn={props.book.isbn} />
                 <CreateListingForm book={props.book} />
             </Container>
         </div>
