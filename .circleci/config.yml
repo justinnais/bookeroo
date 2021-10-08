@@ -47,10 +47,10 @@ jobs:
       - run: ssh-keyscan $BOOK_AWS_2 >> ~/.ssh/known_hosts
 
       - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
-      - run: ssh ubuntu@$BOOK_AWS_2 '(sudo ~/clean-docker.sh)'
+      - run: ssh ec2-user@$BOOK_AWS_2 '(sudo ~/clean-docker.sh)'
 
       - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
-      - run: ssh ubuntu@$BOOK_AWS_2 '(sudo docker system prune -f && sudo docker image prune -f)'
+      - run: ssh ec2-user@$BOOK_AWS_2 '(sudo docker system prune -f && sudo docker image prune -f)'
 
       - deploy-microservice:
           git-folder: loginmicroservices
