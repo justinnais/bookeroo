@@ -92,6 +92,7 @@ jobs:
           user: "ec2-user"
           server: $BOOK_AWS_2
 
+          
 workflows:
   build-and-test: 
     jobs:
