@@ -11,6 +11,7 @@ import {
     TableHead,
     TableSortLabel,
     TablePagination,
+    TableFooter,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
 import React from "react";
@@ -41,6 +42,8 @@ interface TableProps<T, K extends keyof T> {
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
     isLoading?: boolean;
+    // actions?: React.ReactNode[];
+    printButton?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -65,6 +68,12 @@ const useStyles = makeStyles((theme: Theme) =>
             position: "absolute",
             top: 20,
             width: 1,
+        },
+        tableFooter: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-end",
         },
     })
 );
@@ -123,6 +132,18 @@ enum PossibleIds {
     isbn = "isbn",
 }
 
+function convertToCSV<T>(data: T[]) {
+    const replacer = (value: string | number) => (value === null ? "" : value);
+    const headers = Object.keys(data[0]);
+
+    const csv = [
+        headers.join(","),
+        data.map((j) => Object.values(j).join(",")).join("\n"),
+    ];
+
+    console.log("csv", csv);
+}
+
 /**
  *
  * @param props data, columns and row click action to be passed to generic table
@@ -131,7 +152,7 @@ enum PossibleIds {
 export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
-    const { data, columns, onRowClick } = props;
+    const { data, columns, onRowClick, printButton } = props;
     const classes = useStyles();
 
     /* ascending or descending order of table */
@@ -331,15 +352,21 @@ export default function GenericTable<T, K extends keyof T>(
         }
     };
 
+    const PrintButton = () => (
+        <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => convertToCSV(data)}
+        >
+            Print
+        </Button>
+    );
+
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        aria-label="enhanced table"
-                    >
+                    <Table className={classes.table}>
                         <TableHeader
                             columns={columns}
                             order={order}
@@ -355,16 +382,19 @@ export default function GenericTable<T, K extends keyof T>(
                         />
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    // TODO this pagination is fine for now but will be better to use paginated requests from React Query and database
-                    rowsPerPageOptions={[10, 20, 40]}
-                    component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                <div className={classes.tableFooter}>
+                    {printButton ? <PrintButton /> : undefined}
+                    <TablePagination
+                        // TODO this pagination is fine for now but will be better to use paginated requests from React Query and database
+                        rowsPerPageOptions={[10, 20, 40]}
+                        component="div"
+                        count={data.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </div>
             </Paper>
         </div>
     );

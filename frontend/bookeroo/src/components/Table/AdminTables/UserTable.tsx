@@ -5,6 +5,7 @@ import { IAccount } from "../../../api/models/Account";
 import { listUsers, editUser } from "../../../api/stores/user";
 import { useAlertStore } from "../../../stores/useAlertStore";
 import { AccountStatus } from "../../../util/enums";
+import Button from "../../Button/Button";
 import Menu, { IMenuItem } from "../../Layout/Menu";
 import GenericTable, { TableColumn } from "../GenericTable";
 
@@ -114,12 +115,15 @@ export default function UserTable() {
             ),
         },
     ];
+
     return (
         <GenericTable
             data={users}
             columns={columns}
             onRowClick={handleClick}
             isLoading={isLoading}
+            printButton
         />
     );
 }
+
