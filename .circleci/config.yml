@@ -17,6 +17,7 @@ commands:
       server:
         type: string
     steps:
+      - run:
           name: build-and-test-<<parameters.docker-container>>
           command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean package
       - run:
