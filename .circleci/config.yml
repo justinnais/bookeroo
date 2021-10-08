@@ -23,7 +23,7 @@ commands:
       - run:
           name: deploy-<<parameters.docker-container>>
           command:
-            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> <<parameters.user>>@<<parameters.server>>:~/BackEnd<<parameters.git-folder>>/target/<<parameters.jar>> &&
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> <<parameters.user>>@<<parameters.server>>:~/BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> &&
             scp BackEnd/<<parameters.git-folder>>/Dockerfile <<parameters.user>>@<<parameters.server>>:~/BackEnd/<<parameters.git-folder>>/Dockerfile &&
             ssh <<parameters.user>>@<<parameters.server>> '(
               cd BackEnd/<<parameters.git-folder>>/ && 
