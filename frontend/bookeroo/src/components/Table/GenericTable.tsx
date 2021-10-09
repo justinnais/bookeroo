@@ -11,9 +11,13 @@ import {
     TableHead,
     TableSortLabel,
     TablePagination,
+    TableFooter,
 } from "@material-ui/core";
-import React from "react";
+import { Skeleton } from "@material-ui/lab";
+import React, { useState } from "react";
+import { useAlertStore } from "../../stores/useAlertStore";
 import { titleCase } from "../../util/stringManipulation";
+import Button from "../Button/Button";
 
 // https://react.christmas/2020/22
 
@@ -24,19 +28,23 @@ import { titleCase } from "../../util/stringManipulation";
  * dataTransform passes a function to convert into more appropriate content - eg. sellerId passed through transform that fetches the sellers name, displays 'John Smith' instead of 85747032
  */
 export interface TableColumn<T, K extends keyof T> {
-    key: K;
+    key: K | "custom"; // allows for custom columns
     header?: string;
     align?: "left" | "right";
     dataTransform?: (data: any) => string | number;
+    customComponent?: (data: any) => React.ReactNode; // must be provided when using a custom field
 }
 
 /**
  * The table takes a generic array of data and creates columns from the keys
  */
-interface TableProps<T, K extends keyof T> {
+export interface TableProps<T, K extends keyof T> {
     data: Array<T>;
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
+    isLoading: boolean;
+    isError: boolean;
+    printButton?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -61,6 +69,12 @@ const useStyles = makeStyles((theme: Theme) =>
             position: "absolute",
             top: 20,
             width: 1,
+        },
+        tableFooter: {
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "flex-end",
         },
     })
 );
@@ -127,20 +141,25 @@ enum PossibleIds {
 export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
-    const { data, columns, onRowClick } = props;
+    const { data, columns, onRowClick, printButton } = props;
     const classes = useStyles();
 
     /* ascending or descending order of table */
-    const [order, setOrder] = React.useState<Order>("asc");
+    const [order, setOrder] = useState<Order>("asc");
 
     /* which column to sort table by */
-    const [orderBy, setOrderBy] = React.useState<keyof T>();
+    const [orderBy, setOrderBy] = useState<keyof T>();
 
     /* pages for pagination of table */
-    const [page, setPage] = React.useState(0);
+    const [page, setPage] = useState(0);
 
     /* rows per page setting */
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(10);
+
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
 
     /* callback to pass generic row back to parent */
     const handleClick = (row: T) => {
@@ -187,7 +206,7 @@ export default function GenericTable<T, K extends keyof T>(
 
         const headers = columns.map((column, index) => {
             return {
-                key: `header-${column.key}`,
+                key: `header-${column.key}-${index}`,
                 label: column.header || titleCase(column.key.toString()),
                 align: column.align ? column.align : "left",
             };
@@ -250,6 +269,19 @@ export default function GenericTable<T, K extends keyof T>(
 
         // sort<T>(data, getComparator(order, orderBy));
 
+        const getTableCell = (column: TableColumn<T, K>, row: T) => {
+            // if a custom component is provided, pass data back and render
+            if (column.key === "custom") {
+                return column.customComponent
+                    ? column.customComponent(row)
+                    : null;
+            } else if (column.dataTransform) {
+                return column.dataTransform(row[column.key]);
+            } else {
+                return row[column.key];
+            }
+        };
+
         // divide data into pages
         const slicedPages = data.slice(
             page * rowsPerPage,
@@ -260,14 +292,13 @@ export default function GenericTable<T, K extends keyof T>(
             return (
                 <TableRow
                     hover
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleClick(row)}
                     key={`row-${rowIndex}`}
                 >
                     {columns.map((column, colIndex) => (
                         <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
-                            {column.dataTransform
-                                ? column.dataTransform(row[column.key])
-                                : row[column.key]}
+                            {getTableCell(column, row)}
                         </TableCell>
                     ))}
                 </TableRow>
@@ -282,27 +313,65 @@ export default function GenericTable<T, K extends keyof T>(
         if (emptyRows > 0) {
             rows.push(
                 <TableRow
+                    key={"fillerRow"}
                     style={{
                         height: 53 * emptyRows,
                     }}
                 >
-                    <TableCell colSpan={6} />
+                    <TableCell colSpan={columns.length} />
                 </TableRow>
             );
         }
 
-        return <TableBody>{rows}</TableBody>;
+        if (props.isLoading) {
+            const skeletonRows: number[] = [...Array(rowsPerPage)];
+            // return skeleton rows if loading
+            return (
+                <TableBody>
+                    {skeletonRows.map((row, rowIndex) => (
+                        <TableRow key={`skeleton-row-${rowIndex}`}>
+                            {columns.map((column, colIndex) => (
+                                <TableCell
+                                    key={`skeleton-row-${rowIndex}-cell-${colIndex}`}
+                                >
+                                    <Skeleton variant="text" />
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            );
+        } else if (props.isError) {
+            return (
+                <TableBody>
+                    <TableRow>
+                        <TableCell colSpan={columns.length}>
+                            There was a problem loading the data. Please try
+                            again.
+                        </TableCell>
+                    </TableRow>
+                </TableBody>
+            );
+        } else {
+            return <TableBody>{rows}</TableBody>;
+        }
     };
+
+    const PrintButton = () => (
+        <Button
+            variant="outlined"
+            color="secondary"
+            onClick={() => console.log("data", data)} // TODO create CSV with data
+        >
+            Print
+        </Button>
+    );
 
     return (
         <div className={classes.root}>
             <Paper className={classes.paper}>
                 <TableContainer>
-                    <Table
-                        className={classes.table}
-                        aria-labelledby="tableTitle"
-                        aria-label="enhanced table"
-                    >
+                    <Table className={classes.table}>
                         <TableHeader
                             columns={columns}
                             order={order}
@@ -313,19 +382,24 @@ export default function GenericTable<T, K extends keyof T>(
                             columns={columns}
                             data={data}
                             onRowClick={(row: T) => handleClick(row)}
+                            isLoading={props.isLoading}
+                            isError={props.isError}
                         />
                     </Table>
                 </TableContainer>
-                <TablePagination
-                    // TODO this pagination is fine for now but will be better to use paginated requests from React Query and database
-                    rowsPerPageOptions={[10, 20, 40]}
-                    component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                />
+                <div className={classes.tableFooter}>
+                    {printButton ? <PrintButton /> : undefined}
+                    <TablePagination
+                        // TODO this pagination is fine for now but will be better to use paginated requests from React Query and database
+                        rowsPerPageOptions={[10, 20, 40]}
+                        component="div"
+                        count={data.length}
+                        rowsPerPage={rowsPerPage}
+                        page={page}
+                        onPageChange={handleChangePage}
+                        onRowsPerPageChange={handleChangeRowsPerPage}
+                    />
+                </div>
             </Paper>
         </div>
     );

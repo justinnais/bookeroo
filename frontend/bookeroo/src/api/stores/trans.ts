@@ -3,6 +3,7 @@
 import { apiTrans } from "../api";
 import { CreateTransactionRequest } from "../models/Listing";
 
+// ! this fails
 export function listTrans() {
     return apiTrans.get("");
 }

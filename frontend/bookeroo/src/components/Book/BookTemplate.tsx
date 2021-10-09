@@ -165,7 +165,7 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <Typography variant="h4">Sellers</Typography>
-                <GenericTable data={listings} columns={columns} />
+                {/* <GenericTable data={listings} columns={columns} /> */}
                 <CreateListingForm book={props.book} />
             </Container>
         </div>
