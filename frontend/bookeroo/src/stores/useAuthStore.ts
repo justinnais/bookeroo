@@ -1,6 +1,6 @@
 import create from "zustand";
 import { IAccount } from "../api/models/Account";
-import { AccountType } from "../util/enums";
+import { AccountStatus, AccountType } from "../util/enums";
 import storage from "../util/storage";
 import jwt from "jsonwebtoken";
 
@@ -18,17 +18,16 @@ export const useAuthStore = create<IAuthStore>((set) => ({
         ? (jwt.decode(storage.getToken()) as IAccount)
         : undefined,
     isAuthenticated: !!storage.getToken(),
-    isAdmin: true,
+    isAdmin: storage.getToken()
+        ? (jwt.decode(storage.getToken()) as IAccount).accountType ===
+          AccountType.ADMIN
+        : false,
     login: (user: IAccount) => {
         const isAuthenticated = !!user; // if user is provided, set true
 
         // if user is provided, check if admin
-        const isAdmin =
-            user && Object.values(user).length > 0
-                ? (user as IAccount).accountType === AccountType.ADMIN
-                : false;
+        const isAdmin = user ? user.accountType === AccountType.ADMIN : false;
 
-        console.log("login", user, isAuthenticated, isAdmin);
         set({ user, isAuthenticated, isAdmin });
     },
     logout: () => {

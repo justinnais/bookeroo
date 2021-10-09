@@ -14,6 +14,7 @@ import bookshelfImage from "../assets/bookshelf.jpg";
 import booksWindowImage from "../assets/books-window.jpg";
 import booksWithLeavesImage from "../assets/books-with-leaves.jpg";
 import { IAccount } from "../api/models/Account";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -26,8 +27,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Landing() {
     const classes = useStyles();
-
-    const user: IAccount | undefined = undefined; // TODO get user from store
+    const user = useAuthStore((state) => state.user);
 
     const WelcomeCard = (props: { user: IAccount | undefined }) => {
         const { user } = props;

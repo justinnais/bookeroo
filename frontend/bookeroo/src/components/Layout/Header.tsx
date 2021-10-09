@@ -82,7 +82,9 @@ export default function Header() {
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
                 {/* <Button to={Routes.Checkout}>Cart</Button> */}
-
+                {isAuthenticated && (
+                    <Button to={`/user/${user!.displayName}`}>Profile</Button>
+                )}
                 {isAdmin && <Button to={Routes.Admin}>Admin Portal</Button>}
             </div>
             {isAuthenticated ? (
