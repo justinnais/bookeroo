@@ -153,13 +153,13 @@ class ListingControllerTest
         JSONArray responseArray = new JSONArray(response.getContentAsString());
 
         JSONObject first = responseArray.getJSONObject(0);
-        Assertions.assertEquals(123, first.get("price"));
+        Assertions.assertEquals(123.0, first.get("price"));
         Assertions.assertEquals(false, first.get("used"));
         Assertions.assertEquals("NEW", first.get("condition"));
         Assertions.assertEquals("N/A", first.get("conditionDesc"));
 
         JSONObject second = responseArray.getJSONObject(1);
-        Assertions.assertEquals(123, second.get("price"));
+        Assertions.assertEquals(123.0, second.get("price"));
         Assertions.assertEquals(true, second.get("used"));
         Assertions.assertEquals("FAIR", second.get("condition"));
         Assertions.assertEquals("Crease in spine", second.get("conditionDesc"));
