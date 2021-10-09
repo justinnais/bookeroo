@@ -22,6 +22,16 @@ public class TransController
     @PostMapping("")
     public ResponseEntity<?> transaction(@RequestBody Transaction transaction)
     {
+        if (transaction.getTransactionId() != null)
+            return new ResponseEntity<>("Request cannot contain transaction id",
+                    HttpStatus.BAD_REQUEST);
+        if (transaction.getBuyerId() == null)
+            return new ResponseEntity<>("buyerId property required", HttpStatus.BAD_REQUEST);
+        if (transaction.getPrice() == null)
+            return new ResponseEntity<>("price property required", HttpStatus.BAD_REQUEST);
+        if (transaction.getListingId() == null)
+            return new ResponseEntity<>("listingId property required", HttpStatus.BAD_REQUEST);
+
         transactionRepository.save(transaction);
         return new ResponseEntity<>(HttpStatus.OK);
     }
