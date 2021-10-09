@@ -66,8 +66,6 @@ class ListingControllerTest
         MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
-
-        Assertions.assertTrue(deleteSellListing("1555"));
     }
 
     @Test
@@ -104,7 +102,7 @@ class ListingControllerTest
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .get("/api/listing").contentType(MediaType.APPLICATION_JSON);
 
-        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM sell_listing")
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM listing")
                 .executeQuery();
         Assertions.assertTrue(result.next());
         long count = result.getLong("count");
@@ -163,8 +161,6 @@ class ListingControllerTest
         Assertions.assertEquals(true, second.get("used"));
         Assertions.assertEquals("FAIR", second.get("condition"));
         Assertions.assertEquals("Crease in spine", second.get("conditionDesc"));
-
-        Assertions.assertTrue(deleteSellListing("2555"));
     }
 
     @Test
@@ -177,28 +173,6 @@ class ListingControllerTest
 
         JSONArray responseArray = new JSONArray(response.getContentAsString());
         Assertions.assertEquals(0, responseArray.length());
-    }
-
-    private boolean deleteSellListing(String bookIsbn)
-    {
-        try
-        {
-            PreparedStatement statement = db.prepareStatement(
-                    "SELECT id FROM listing WHERE book_isbn" + " = '" + bookIsbn + "'");
-            ResultSet result = statement.executeQuery();
-            while (result.next())
-            {
-                long id = result.getLong("id");
-                db.prepareStatement("DELETE FROM listing WHERE id = '" + id + "'").execute();
-                db.prepareStatement("DELETE FROM sell_listing WHERE listing_id = '" + id + "'")
-                        .execute();
-            }
-            return true;
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)

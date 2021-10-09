@@ -8,19 +8,15 @@ public class Listing
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long userId;
-
     private Long bookIsbn;
-
     private boolean used;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "cond")
     private Condition condition;
-
     @Column(name = "cond_desc")
     private String conditionDesc;
+    private Long price;
 
     public Long getId()
     {
