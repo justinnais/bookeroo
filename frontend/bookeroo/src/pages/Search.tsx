@@ -77,7 +77,7 @@ export default function Search() {
                     onRowClick={handleClick}
                     isLoading={isLoading}
                     isError={isError}
-                    filter={searchQuery.get("q") || ""}
+                    // filter={searchQuery.get("q") || ""}
                 />
             </Container>
         </div>

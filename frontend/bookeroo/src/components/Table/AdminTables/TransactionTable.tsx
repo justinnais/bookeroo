@@ -27,5 +27,12 @@ export default function TransactionTable() {
         { key: "condition" },
         { key: "conditionDesc", header: "Condtion Description" },
     ];
-    return <GenericTable data={data} columns={columns} isLoading={isLoading} />;
+    return (
+        <GenericTable
+            data={data}
+            columns={columns}
+            isLoading={isLoading}
+            isError={isError}
+        />
+    );
 }

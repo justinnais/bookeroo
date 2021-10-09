@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "react-query";
+import { isError, useQuery } from "react-query";
 import { IAccount } from "../../api/models/Account";
 import { IListing } from "../../api/models/Listing";
 import { listBookListings, listListings } from "../../api/stores/listing";
@@ -25,8 +25,9 @@ async function getDisplayName(id: string) {
 }
 
 export default function ListTable(props: { isbn: string }) {
-    const { isLoading, data, refetch } = useQuery("listBookListings", () =>
-        listBookListings(props.isbn)
+    const { isLoading, data, refetch, isError } = useQuery(
+        "listBookListings",
+        () => listBookListings(props.isbn)
     );
 
     // TODO check that table fills out correctly when data gets fixed
@@ -52,5 +53,12 @@ export default function ListTable(props: { isbn: string }) {
         },
     ];
 
-    return <GenericTable data={data} columns={columns} isLoading={isLoading} />;
+    return (
+        <GenericTable
+            data={data}
+            columns={columns}
+            isLoading={isLoading}
+            isError={isError}
+        />
+    );
 }
