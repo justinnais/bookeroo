@@ -14,6 +14,18 @@ public class Transaction
 
     private Date datetime;
 
+    private Status status;
+
+    public Status getStatus()
+    {
+        return status;
+    }
+
+    public void setStatus(Status status)
+    {
+        this.status = status;
+    }
+
     public Long getTransactionId()
     {
         return transactionId;
@@ -48,5 +60,6 @@ public class Transaction
     protected void onCreate()
     {
         datetime = new Date();
+        status = Status.PENDING;
     }
 }

@@ -9,6 +9,7 @@ import { AccountStatus } from "../../../util/enums";
 import Menu, { IMenuItem } from "../../Layout/Menu";
 import GenericTable, { TableColumn } from "../GenericTable";
 import { listTrans } from "../../../api/stores/trans";
+import { ITransaction } from "../../../api/models/Transaction";
 
 export default function TransactionTable() {
     const history = useHistory();
