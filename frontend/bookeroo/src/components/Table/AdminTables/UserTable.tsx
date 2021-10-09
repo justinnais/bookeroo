@@ -14,7 +14,6 @@ export default function UserTable() {
         "listUsers",
         listUsers
     );
-    const users = data ? (data.data as IAccount[]) : [];
     const alert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => alert(message);
 
@@ -116,7 +115,7 @@ export default function UserTable() {
     ];
     return (
         <GenericTable
-            data={users}
+            data={data}
             columns={columns}
             onRowClick={handleClick}
             isLoading={isLoading}

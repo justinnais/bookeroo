@@ -13,6 +13,7 @@ import {
     TablePagination,
 } from "@material-ui/core";
 import { Skeleton } from "@material-ui/lab";
+import { AxiosResponse } from "axios";
 import React from "react";
 import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
@@ -37,7 +38,7 @@ export interface TableColumn<T, K extends keyof T> {
  * The table takes a generic array of data and creates columns from the keys
  */
 interface TableProps<T, K extends keyof T> {
-    data: Array<T>;
+    data: AxiosResponse<T> | undefined;
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
     isLoading?: boolean;
@@ -123,6 +124,21 @@ enum PossibleIds {
     isbn = "isbn",
 }
 
+function handleAxiosData<T>(axios: AxiosResponse<T> | undefined): Array<T> {
+    let data: Array<T> = [];
+    if (axios === undefined) {
+        return [];
+    }
+    if (axios.status === 200) {
+        if (Array.isArray(axios.data)) {
+            data = axios.data;
+        } else {
+            data = [axios.data];
+        }
+    }
+    return data;
+}
+
 /**
  *
  * @param props data, columns and row click action to be passed to generic table
@@ -131,7 +147,8 @@ enum PossibleIds {
 export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
-    const { data, columns, onRowClick } = props;
+    const { columns, onRowClick } = props;
+    const data = handleAxiosData(props.data);
     const classes = useStyles();
 
     /* ascending or descending order of table */
@@ -239,7 +256,8 @@ export default function GenericTable<T, K extends keyof T>(
      * @returns mapped out rows of generic table data
      */
     const TableRows = <T, K extends keyof T>(props: TableProps<T, K>) => {
-        const { data, columns, onRowClick } = props;
+        const { columns, onRowClick } = props;
+        const data = handleAxiosData(props.data);
         // on row click, pass the row back to parent
         const handleClick = (row: T) => {
             if (onRowClick) {
@@ -268,6 +286,7 @@ export default function GenericTable<T, K extends keyof T>(
         };
 
         // divide data into pages
+
         const slicedPages = data.slice(
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage
@@ -349,7 +368,7 @@ export default function GenericTable<T, K extends keyof T>(
 
                         <TableRows
                             columns={columns}
-                            data={data}
+                            data={props.data}
                             onRowClick={(row: T) => handleClick(row)}
                             isLoading={props.isLoading}
                         />

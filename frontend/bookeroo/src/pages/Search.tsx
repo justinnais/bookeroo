@@ -49,10 +49,10 @@ export default function Search() {
     const searchQuery = useSearchParams();
 
     const { isLoading, data } = useQuery("listBooks", listBooks);
-    const books = data ? (data.data as IBook[]) : [];
-    const filteredBooks = books.filter((book) =>
+    // TODO add filter to generic table
+    /*  const filteredBooks = books.filter((book) =>
         filterResults(searchQuery.get("q"), book)
-    );
+    ); */
 
     const columns: TableColumn<IBook, keyof IBook>[] = [
         { key: "title" },
@@ -70,7 +70,7 @@ export default function Search() {
         <div className={classes.root}>
             <Container>
                 <GenericTable
-                    data={filteredBooks}
+                    data={data}
                     columns={columns}
                     onRowClick={handleClick}
                     isLoading={isLoading}

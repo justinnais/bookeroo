@@ -2,7 +2,7 @@ import React from "react";
 import { useQuery } from "react-query";
 import { IAccount } from "../../api/models/Account";
 import { IListing } from "../../api/models/Listing";
-import { listBookListings } from "../../api/stores/listing";
+import { listBookListings, listListings } from "../../api/stores/listing";
 import { getUser } from "../../api/stores/user";
 import Button from "../Button/Button";
 import GenericTable, { TableColumn } from "../Table/GenericTable";
@@ -28,7 +28,6 @@ export default function ListTable(props: { isbn: string }) {
     const { isLoading, data, refetch } = useQuery("listBookListings", () =>
         listBookListings(props.isbn)
     );
-    let listings = data ? [data.data] : [];
 
     // TODO check that table fills out correctly when data gets fixed
     const columns: TableColumn<IListing, keyof IListing>[] = [
@@ -53,13 +52,5 @@ export default function ListTable(props: { isbn: string }) {
         },
     ];
 
-    console.log("displayname", getDisplayName("47"));
-
-    console.log("data", data);
-    console.log("listings", listings);
-
-    return (
-        <GenericTable data={listings} columns={columns} isLoading={isLoading} />
-        // <div>foo</div>
-    );
+    return <GenericTable data={data} columns={columns} isLoading={isLoading} />;
 }

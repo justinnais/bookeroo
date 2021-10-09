@@ -16,7 +16,6 @@ export default function TransactionTable() {
         "listTransactions",
         listTrans
     );
-    const listings = data ? (data.data as IListing[]) : [];
     const alert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => alert(message);
 
@@ -27,7 +26,5 @@ export default function TransactionTable() {
         { key: "condition" },
         { key: "conditionDesc", header: "Condtion Description" },
     ];
-    return (
-        <GenericTable data={listings} columns={columns} isLoading={isLoading} />
-    );
+    return <GenericTable data={data} columns={columns} isLoading={isLoading} />;
 }
