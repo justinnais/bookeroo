@@ -90,7 +90,8 @@ jobs:
           port: "8085"
           docker-container: review-microservice
           user: "ec2-user"
-          server: $BOOK_AWS_2          
+          server: $BOOK_AWS_2
+          
 workflows:
   build-and-test: 
     jobs:
