@@ -18,6 +18,26 @@ public class Listing
     private String conditionDesc;
     private Long price;
 
+    public Long getBookIsbn()
+    {
+        return bookIsbn;
+    }
+
+    public void setBookIsbn(Long bookIsbn)
+    {
+        this.bookIsbn = bookIsbn;
+    }
+
+    public Long getPrice()
+    {
+        return price;
+    }
+
+    public void setPrice(Long price)
+    {
+        this.price = price;
+    }
+
     public Long getId()
     {
         return id;
@@ -38,17 +58,7 @@ public class Listing
         this.userId = userId;
     }
 
-    public Long getbookIsbn()
-    {
-        return bookIsbn;
-    }
-
-    public void setbookIsbn(Long bookIsbn)
-    {
-        this.bookIsbn = bookIsbn;
-    }
-
-    public boolean isUsed()
+    public Boolean isUsed()
     {
         return used;
     }
