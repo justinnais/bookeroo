@@ -9,12 +9,31 @@ public class Transaction
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long transactionId;
-
     private Long buyerId;
-
     private Date datetime;
-
     private Status status;
+    private Long listingId;
+    private Long price;
+
+    public Long getListingId()
+    {
+        return listingId;
+    }
+
+    public void setListingId(Long listingId)
+    {
+        this.listingId = listingId;
+    }
+
+    public Long getPrice()
+    {
+        return price;
+    }
+
+    public void setPrice(Long price)
+    {
+        this.price = price;
+    }
 
     public Status getStatus()
     {

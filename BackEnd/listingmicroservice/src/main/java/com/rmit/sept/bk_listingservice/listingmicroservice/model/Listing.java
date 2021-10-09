@@ -8,19 +8,36 @@ public class Listing
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long userId;
-
     private Long bookIsbn;
-
     private boolean isUsed;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "cond")
     private Condition condition;
-
     @Column(name = "cond_desc")
     private String conditionDesc;
+    private Long price;
+
+    public Long getBookIsbn()
+    {
+        return bookIsbn;
+    }
+
+    public void setBookIsbn(Long bookIsbn)
+    {
+        this.bookIsbn = bookIsbn;
+    }
+
+    public Long getPrice()
+    {
+        return price;
+    }
+
+    public void setPrice(Long price)
+    {
+        this.price = price;
+    }
 
     public Long getId()
     {
@@ -42,17 +59,7 @@ public class Listing
         this.userId = userId;
     }
 
-    public Long getbookIsbn()
-    {
-        return bookIsbn;
-    }
-
-    public void setbookIsbn(Long bookIsbn)
-    {
-        this.bookIsbn = bookIsbn;
-    }
-
-    public boolean isUsed()
+    public Boolean isUsed()
     {
         return isUsed;
     }
