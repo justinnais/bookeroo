@@ -64,15 +64,12 @@ class TransControllerTest
     public void CreateValidTransaction() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
-
-        JSONArray listings = new JSONArray();
-        listings.put(createListing(123, 15551));
-        listings.put(createListing(543, 15552));
+                .post("/api/trans").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
-        transJSON.put("buyer_id", 25551);
-        transJSON.put("listings", listings);
+        transJSON.put("buyerId", 25551);
+        transJSON.put("price", 321);
+        transJSON.put("listingId", 312);
 
         MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
