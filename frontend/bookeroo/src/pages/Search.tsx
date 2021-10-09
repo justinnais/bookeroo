@@ -47,14 +47,7 @@ export default function Search() {
     const classes = useStyles();
     const history = useHistory();
     const searchQuery = useSearchParams();
-
     const { isLoading, data, isError } = useQuery("listBooks", listBooks);
-    // TODO add filter to generic table
-    /*  const filteredBooks = books.filter((book) =>
-    const books = data ? (data.data as IBook[]) : [];
-    const filteredBooks = books.filter((book) =>
-        filterResults(searchQuery.get("q"), book)
-    ); */
 
     const columns: TableColumn<IBook, keyof IBook>[] = [
         { key: "title" },
@@ -77,7 +70,11 @@ export default function Search() {
                     onRowClick={handleClick}
                     isLoading={isLoading}
                     isError={isError}
-                    // filter={searchQuery.get("q") || ""}
+                    filter={(data: IBook[]) =>
+                        data.filter((book) =>
+                            filterResults(searchQuery.get("q"), book)
+                        )
+                    }
                 />
             </Container>
         </div>

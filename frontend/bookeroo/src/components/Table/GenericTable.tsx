@@ -1,24 +1,17 @@
 import {
     Paper,
     TableContainer,
-    TableBody,
-    TableRow,
-    TableCell,
     createStyles,
     makeStyles,
     Theme,
     Table,
-    TableHead,
-    TableSortLabel,
     TablePagination,
-    TableFooter,
 } from "@material-ui/core";
-import { Skeleton } from "@material-ui/lab";
 import { AxiosResponse } from "axios";
-import React, { useState } from "react";
-import { useAlertStore } from "../../stores/useAlertStore";
-import { titleCase } from "../../util/stringManipulation";
+import React, { useEffect, useState } from "react";
 import Button from "../Button/Button";
+import TableHeader from "./TableHeader";
+import TableRows from "./TableRows";
 
 // https://react.christmas/2020/22
 
@@ -44,10 +37,9 @@ interface TableProps<T, K extends keyof T> {
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
     isLoading?: boolean;
-
     isError: boolean;
     printButton?: boolean;
-    filter?: string;
+    filter?: (data: T[]) => T[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -62,17 +54,6 @@ const useStyles = makeStyles((theme: Theme) =>
         table: {
             minWidth: 750,
         },
-        visuallyHidden: {
-            border: 0,
-            clip: "rect(0 0 0 0)",
-            height: 1,
-            margin: -1,
-            overflow: "hidden",
-            padding: 0,
-            position: "absolute",
-            top: 20,
-            width: 1,
-        },
         tableFooter: {
             display: "flex",
             flexDirection: "row",
@@ -81,16 +62,6 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
-
-interface TableHeaderProps<T, K extends keyof T> {
-    columns: Array<TableColumn<T, K>>;
-    order: Order;
-    orderBy: K | undefined;
-    onRequestSort: (
-        event: React.MouseEvent<unknown>,
-        property: keyof T
-    ) => void;
-}
 
 type Order = "asc" | "desc";
 
@@ -131,12 +102,9 @@ function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
     return 0;
 }
 
-enum PossibleIds {
-    id = "id",
-    isbn = "isbn",
-}
-
-function handleAxiosData<T>(axios: AxiosResponse<T> | undefined): Array<T> {
+export function handleAxiosData<T>(
+    axios: AxiosResponse<T> | undefined
+): Array<T> {
     let data: Array<T> = [];
     if (axios === undefined) {
         return [];
@@ -148,17 +116,7 @@ function handleAxiosData<T>(axios: AxiosResponse<T> | undefined): Array<T> {
             data = [axios.data];
         }
     }
-
     return data;
-}
-
-function filterResults<T>(searchString: string, item: T) {
-    if (searchString) {
-        const search = searchString.toLowerCase();
-        return Object.values(item).join(" ").toLowerCase().includes(search);
-    } else {
-        return true;
-    }
 }
 
 /**
@@ -170,11 +128,13 @@ export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
     const { columns, onRowClick, printButton } = props;
+
     let data = handleAxiosData(props.data);
+
     if (props.filter) {
-        data = data.filter((item) => filterResults(props.filter || "", item));
-        console.log("data", data);
+        data = props.filter(data);
     }
+
     const classes = useStyles();
 
     /* ascending or descending order of table */
@@ -188,11 +148,6 @@ export default function GenericTable<T, K extends keyof T>(
 
     /* rows per page setting */
     const [rowsPerPage, setRowsPerPage] = useState(10);
-
-    const setAlert = useAlertStore((state) => state.setAlert);
-    const toast = (message: string) => {
-        setAlert(message);
-    };
 
     /* callback to pass generic row back to parent */
     const handleClick = (row: T) => {
@@ -222,182 +177,6 @@ export default function GenericTable<T, K extends keyof T>(
         setPage(0);
     };
 
-    /**
-     * Table Header component that takes an array of id's and converts them into table heading cells
-     * @param props array of columns to convert, and sorting props
-     * @returns sortable table heading
-     */
-    const TableHeader = <T, K extends keyof T>(
-        props: TableHeaderProps<T, K>
-    ): JSX.Element => {
-        const { columns, order, orderBy, onRequestSort } = props;
-
-        const createSortHandler =
-            (property: keyof T) => (event: React.MouseEvent<unknown>) => {
-                onRequestSort(event, property);
-            };
-
-        const headers = columns.map((column, index) => {
-            return {
-                key: `header-${column.key}-${index}`,
-                label: column.header || titleCase(column.key.toString()),
-                align: column.align ? column.align : "left",
-            };
-        });
-
-        return (
-            <TableHead>
-                <TableRow>
-                    {headers.map((column) => (
-                        <TableCell
-                            key={column.key}
-                            align={column.align}
-                            sortDirection={
-                                orderBy === column.key ? order : false
-                            }
-                        >
-                            <TableSortLabel
-                                active={orderBy === column.key}
-                                direction={
-                                    orderBy === column.key ? order : "asc"
-                                }
-                                onClick={createSortHandler(
-                                    column.key as keyof T
-                                )}
-                            >
-                                {column.label}
-                                {orderBy === column.key ? (
-                                    <span className={classes.visuallyHidden}>
-                                        {order === "desc"
-                                            ? "sorted descending"
-                                            : "sorted ascending"}
-                                    </span>
-                                ) : null}
-                            </TableSortLabel>
-                        </TableCell>
-                    ))}
-                </TableRow>
-            </TableHead>
-        );
-    };
-
-    /**
-     * Converts generic data objects into sortable table rows based on its provided columns
-     * @param props generic data of type T, and its columns, row action callback
-     * @returns mapped out rows of generic table data
-     */
-    const TableRows = <T, K extends keyof T>(props: TableProps<T, K>) => {
-        const { columns, onRowClick } = props;
-        let data: T[] = [];
-        if (props.filter) {
-            data = data.filter((item) =>
-                filterResults(props.filter || "", item)
-            );
-        }
-        // data = handleAxiosData(props.data);
-        // on row click, pass the row back to parent
-        const handleClick = (row: T) => {
-            if (onRowClick) {
-                onRowClick(row);
-            }
-        };
-
-        // const sortedRows = stableSort(
-        //     data,
-        //     getComparator(order, orderBy)
-        // ).slice(page * rowsPerPage, rowsPerPage + rowsPerPage);
-
-        // sort<T>(data, getComparator(order, orderBy));
-
-        const getTableCell = (column: TableColumn<T, K>, row: T) => {
-            // if a custom component is provided, pass data back and render
-            if (column.key === "custom") {
-                return column.customComponent
-                    ? column.customComponent(row)
-                    : null;
-            } else if (column.dataTransform) {
-                return column.dataTransform(row[column.key]);
-            } else {
-                return row[column.key];
-            }
-        };
-
-        // divide data into pages
-
-        const slicedPages = data.slice(
-            page * rowsPerPage,
-            page * rowsPerPage + rowsPerPage
-        );
-        // map each row of data, then in each row map the cells
-        const rows = slicedPages.map((row, rowIndex) => {
-            return (
-                <TableRow
-                    hover
-                    style={{ cursor: "pointer" }}
-                    onClick={() => handleClick(row)}
-                    key={`row-${rowIndex}`}
-                >
-                    {columns.map((column, colIndex) => (
-                        <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
-                            {getTableCell(column, row)}
-                        </TableCell>
-                    ))}
-                </TableRow>
-            );
-        });
-
-        //empty row to display to keep table same height
-        const emptyRows =
-            rowsPerPage -
-            Math.min(rowsPerPage, data.length - page * rowsPerPage);
-
-        if (emptyRows > 0) {
-            rows.push(
-                <TableRow
-                    key={"fillerRow"}
-                    style={{
-                        height: 53 * emptyRows,
-                    }}
-                >
-                    <TableCell colSpan={columns.length} />
-                </TableRow>
-            );
-        }
-
-        if (props.isLoading) {
-            const skeletonRows: number[] = [...Array(rowsPerPage)];
-            // return skeleton rows if loading
-            return (
-                <TableBody>
-                    {skeletonRows.map((row, rowIndex) => (
-                        <TableRow key={`skeleton-row-${rowIndex}`}>
-                            {columns.map((column, colIndex) => (
-                                <TableCell
-                                    key={`skeleton-row-${rowIndex}-cell-${colIndex}`}
-                                >
-                                    <Skeleton variant="text" />
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    ))}
-                </TableBody>
-            );
-        } else if (props.isError) {
-            return (
-                <TableBody>
-                    <TableRow>
-                        <TableCell colSpan={columns.length}>
-                            There was a problem loading the data. Please try
-                            again.
-                        </TableCell>
-                    </TableRow>
-                </TableBody>
-            );
-        } else {
-            return <TableBody>{rows}</TableBody>;
-        }
-    };
-
     const PrintButton = () => (
         <Button
             variant="outlined"
@@ -421,10 +200,12 @@ export default function GenericTable<T, K extends keyof T>(
                         />
                         <TableRows
                             columns={columns}
-                            data={props.data}
+                            data={data}
                             onRowClick={(row: T) => handleClick(row)}
                             isLoading={props.isLoading}
                             isError={props.isError}
+                            page={page}
+                            rowsPerPage={rowsPerPage}
                         />
                     </Table>
                 </TableContainer>
