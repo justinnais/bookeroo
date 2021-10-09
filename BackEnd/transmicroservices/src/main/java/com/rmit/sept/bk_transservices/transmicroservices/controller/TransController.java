@@ -30,7 +30,7 @@ public class TransController
     TransactionRepository transactionRepository;
 
     // TODO update this to match other apis
-    @PostMapping("/transaction")
+    @PostMapping("")
     public ResponseEntity<?> transaction(@RequestBody TransApiBody transApiBody,
                                          BindingResult result)
     {

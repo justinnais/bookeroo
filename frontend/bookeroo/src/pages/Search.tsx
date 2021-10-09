@@ -48,7 +48,7 @@ export default function Search() {
     const history = useHistory();
     const searchQuery = useSearchParams();
 
-    const { isLoading, data } = useQuery("listBooks", listBooks);
+    const { isLoading, data, isError } = useQuery("listBooks", listBooks);
     const books = data ? (data.data as IBook[]) : [];
     const filteredBooks = books.filter((book) =>
         filterResults(searchQuery.get("q"), book)
@@ -74,6 +74,7 @@ export default function Search() {
                     columns={columns}
                     onRowClick={handleClick}
                     isLoading={isLoading}
+                    isError={isError}
                 />
             </Container>
         </div>

@@ -9,6 +9,7 @@ import { AccountStatus } from "../../../util/enums";
 import Menu, { IMenuItem } from "../../Layout/Menu";
 import GenericTable, { TableColumn } from "../GenericTable";
 import { listTrans } from "../../../api/stores/trans";
+import { ITransaction } from "../../../api/models/Transaction";
 
 export default function TransactionTable() {
     const history = useHistory();
@@ -16,7 +17,7 @@ export default function TransactionTable() {
         "listTransactions",
         listTrans
     );
-    const listings = data ? (data.data as IListing[]) : [];
+    /*  const transactions = data ? (data.data as ITransaction[]) : [];
     const alert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => alert(message);
 
@@ -26,8 +27,16 @@ export default function TransactionTable() {
         { key: "userId", header: "User" },
         { key: "condition" },
         { key: "conditionDesc", header: "Condtion Description" },
-    ];
+    ]; */
+
     return (
-        <GenericTable data={listings} columns={columns} isLoading={isLoading} />
+        <div>data: {JSON.stringify(data, null, 2)}</div>
+        // <GenericTable
+        //     data={transactions}
+        //     columns={columns}
+        //     isLoading={isLoading}
+        //     isError={isError}
+        //     // printButton
+        // />
     );
 }

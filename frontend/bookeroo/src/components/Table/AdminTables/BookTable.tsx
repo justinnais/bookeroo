@@ -35,6 +35,8 @@ export default function BookTable() {
             columns={columns}
             onRowClick={handleClick}
             isLoading={isLoading}
+            isError={isError}
+            printButton
         />
     );
 }
