@@ -1,7 +1,7 @@
 export enum AccountType {
-    STANDARD,
-    BUSINESS,
-    ADMIN,
+    STANDARD = "STANDARD",
+    BUSINESS = "BUSINESS",
+    ADMIN = "ADMIN",
 }
 
 export enum AccountStatus {
