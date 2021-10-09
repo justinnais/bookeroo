@@ -42,6 +42,7 @@ interface TableProps<T, K extends keyof T> {
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
     isLoading?: boolean;
+    filter?: string;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -136,7 +137,17 @@ function handleAxiosData<T>(axios: AxiosResponse<T> | undefined): Array<T> {
             data = [axios.data];
         }
     }
+
     return data;
+}
+
+function filterResults<T>(searchString: string, item: T) {
+    if (searchString) {
+        const search = searchString.toLowerCase();
+        return Object.values(item).join(" ").toLowerCase().includes(search);
+    } else {
+        return true;
+    }
 }
 
 /**
@@ -148,7 +159,11 @@ export default function GenericTable<T, K extends keyof T>(
     props: TableProps<T, K>
 ) {
     const { columns, onRowClick } = props;
-    const data = handleAxiosData(props.data);
+    let data = handleAxiosData(props.data);
+    if (props.filter) {
+        data = data.filter((item) => filterResults(props.filter || "", item));
+        console.log("data", data);
+    }
     const classes = useStyles();
 
     /* ascending or descending order of table */
@@ -257,7 +272,13 @@ export default function GenericTable<T, K extends keyof T>(
      */
     const TableRows = <T, K extends keyof T>(props: TableProps<T, K>) => {
         const { columns, onRowClick } = props;
-        const data = handleAxiosData(props.data);
+        let data: T[] = [];
+        if (props.filter) {
+            data = data.filter((item) =>
+                filterResults(props.filter || "", item)
+            );
+        }
+        // data = handleAxiosData(props.data);
         // on row click, pass the row back to parent
         const handleClick = (row: T) => {
             if (onRowClick) {

@@ -74,6 +74,7 @@ export default function Search() {
                     columns={columns}
                     onRowClick={handleClick}
                     isLoading={isLoading}
+                    filter={searchQuery.get("q")}
                 />
             </Container>
         </div>

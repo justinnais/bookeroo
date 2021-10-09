@@ -2,7 +2,7 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { request } from "http";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createListing } from "../../api/stores/listing";
+import { createListing, listBookListings } from "../../api/stores/listing";
 import { useAlertStore } from "../../stores/useAlertStore";
 import FormCard from "../Form/FormCard";
 import FormGenerator, { GeneratedField } from "../Form/FormGenerator";
@@ -12,6 +12,7 @@ import { IBook } from "../../api/models/Book";
 import SubmitButton from "../Button/SubmitButton";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { BookCondition } from "../../util/enums";
+import { useQuery } from "react-query";
 
 interface Props {
     book: IBook;
@@ -28,6 +29,10 @@ export default function CreateListingForm(props: Props) {
         setAlert(message);
     };
     const [isSubmitting, setSubmitting] = useState(false);
+
+    const { refetch } = useQuery("listBookListings", () =>
+        listBookListings(props.book.isbn)
+    );
 
     const formId = "listingForm";
 
@@ -71,6 +76,7 @@ export default function CreateListingForm(props: Props) {
     const handleResponse = (res: any, request: CreateListingRequest) => {
         if (res.status === 200) {
             toast(`Successfully created listing for ${props.book.title}`);
+            refetch();
         }
     };
 
