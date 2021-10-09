@@ -94,7 +94,7 @@ class BookControllerTest
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
-
+    /*
     @Test
     public void SearchByValidTitle() throws UnsupportedEncodingException, JSONException
     {
@@ -128,7 +128,7 @@ class BookControllerTest
         Assertions.assertNotNull(response);
         Assertions.assertEquals(404, response.getStatus());
     }
-
+    */
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
         try
@@ -142,4 +142,5 @@ class BookControllerTest
         }
         return null;
     }
+    
 }

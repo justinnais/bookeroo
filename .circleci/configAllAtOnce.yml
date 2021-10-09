@@ -1,0 +1,65 @@
+version: 2.1
+
+commands:
+  copy-microservice:
+    parameters:
+      git-folder:
+        type: string
+      jar:
+        type: string
+    steps:
+      - run:
+          name: build-and-test-<<parameters.git-folder>>
+          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean package
+      - run:
+          name: copy-<<parameters.git-folder>>
+          command:
+            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>>
+
+jobs:
+  build-backend:  
+    docker:
+      - image: cimg/openjdk:11.0
+    steps:
+      - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
+
+      - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+
+      - run: ssh ubuntu@$BOOK_AWS '(sudo ~/clean-docker.sh)'
+
+      - run: ssh ubuntu@$BOOK_AWS '(sudo docker system prune -f && sudo docker image prune -f)'
+    
+      - copy-microservice:
+          git-folder: loginmicroservices
+          jar: loginmicroservices-0.0.1.jar
+
+      - copy-microservice:
+          git-folder: bookmicroservices
+          jar: bookmicroservices-0.0.1.jar
+
+      - copy-microservice:
+          git-folder: transmicroservices
+          jar: transmicroservices-0.0.1.jar
+          
+      - copy-microservice:   
+          git-folder: listingmicroservice
+          jar: listingmicroservice-0.0.1.jar
+
+      - copy-microservice:
+          git-folder: reviewmicroservices
+          jar: reviewmicroservices-0.0.1.jar
+
+      
+      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/BackEnd/docker-entrypoint.sh
+      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/BackEnd/Dockerfile
+      - run: scp BackEnd/docker-compose.yml ubuntu@$BOOK_AWS:~/BackEnd/docker-compose.yml
+      - run: ssh ubuntu@$BOOK_AWS '(cd BackEnd/ && sudo chmod +x docker-entrypoint.sh && sudo docker build . -t bookeroo && sudo docker-compose up -d)'
+
+workflows:
+  build-and-test: 
+    jobs:
+      - build-backend
