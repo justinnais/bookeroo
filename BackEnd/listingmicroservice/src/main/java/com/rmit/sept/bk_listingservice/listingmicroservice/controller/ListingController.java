@@ -22,6 +22,8 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ListingController
 {
+    // TODO: Scrap different listing types and make everything a sell listing
+
     @Autowired
     ListingRepository listingRepository;
 
@@ -86,8 +88,8 @@ public class ListingController
     @GetMapping("")
     public ResponseEntity<?> listListings()
     {
-        List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
-        return new ResponseEntity<>(listingBybookIsbn.toString(), HttpStatus.OK);
+        List<Listing> listingBybookIsbn = listingRepository.getAllListings();
+        return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
     }
 
     // TODO: Get specific listing
