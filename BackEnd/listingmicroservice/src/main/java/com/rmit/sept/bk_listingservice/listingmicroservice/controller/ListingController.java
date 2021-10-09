@@ -1,12 +1,14 @@
 package com.rmit.sept.bk_listingservice.listingmicroservice.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.Listing;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.ListingApiBody;
 import com.rmit.sept.bk_listingservice.listingmicroservice.model.SellListing;
 import com.rmit.sept.bk_listingservice.listingmicroservice.repositories.ListingRepository;
 import com.rmit.sept.bk_listingservice.listingmicroservice.repositories.SellListingRepository;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,8 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class ListingController
 {
+    // TODO: Scrap different listing types and make everything a sell listing
+
     @Autowired
     ListingRepository listingRepository;
 
@@ -63,55 +67,29 @@ public class ListingController
     @GetMapping("/list/{bookIsbn}")
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
-        // This is way more hacky than it should be, but weird errors keep happening with the test
-        // Talk to Josh if you want more info
-        // TODO: Investigate JSON null bug with tests
         List<Listing> listingBookIsbn = listingRepository.getListingByBookIsbn(bookIsbn);
-        JSONArray array = new JSONArray();
+        Gson gson = new Gson();
+        JsonArray array = new JsonArray();
+
         for (Listing listing : listingBookIsbn)
         {
-            JSONObject obj = new JSONObject();
-            obj.put("id", listing.getId());
-            obj.put("userId", listing.getUserId());
-            obj.put("bookIsbn", listing.getbookIsbn());
-            obj.put("isUsed", listing.isUsed());
-            obj.put("condition", listing.getCondition());
-            obj.put("conditionDesc", listing.getConditionDesc());
+            JsonObject obj = (JsonObject) JsonParser.parseString(gson.toJson(listing));
+            SellListing sl = sellListingRepository
+                    .getSellListingByListingId(obj.get("id").getAsLong());
+            obj.addProperty("price", sl.getPrice());
 
-            SellListing sl = sellListingRepository.getSellListingByListingId(listing.getId());
-            obj.put("price", sl.getPrice());
-
-            array.put(obj);
+            array.add(obj);
         }
-        return ResponseEntity.ok().header("Content-Type", "application/json")
-                .body(array.toString());
+
+        return ResponseEntity.ok().body(array.toString());
     }
 
     // LIST ALL 
     @GetMapping("")
     public ResponseEntity<?> listListings()
     {
-        JSONArray listings = new JSONArray();
-        List<Object[]> listingBybookIsbn = listingRepository.getAllListings();
-
-        return new ResponseEntity<>(listingBybookIsbn.toString(), HttpStatus.OK);
-    }
-
-    private ResponseEntity<?> responseToArray(List<Object[]> listingBybookIsbn)
-    {
-        JSONArray listings = new JSONArray();
-        for (Object[] details : listingBybookIsbn)
-        {
-            JSONObject listing = new JSONObject();
-            listing.put("condition", details[0]);
-            listing.put("conditionDesc", details[1]);
-            listing.put("isUsed", details[2]);
-            listing.put("price", details[3]);
-
-            listings.put(listing);
-        }
-
-        return ResponseEntity.ok(listings.toString());
+        List<Listing> listingBybookIsbn = listingRepository.getAllListings();
+        return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
     }
 
     // TODO: Get specific listing
