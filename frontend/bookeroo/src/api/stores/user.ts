@@ -2,7 +2,7 @@
 
 import { AccountStatus } from "../../util/enums";
 import storage from "../../util/storage";
-import { apiLogin } from "../api";
+import { api } from "../api";
 import {
     CreateBusinessAccountRequest,
     CreatePersonalAccountRequest,
@@ -12,27 +12,27 @@ import {
 // https://www.bezkoder.com/react-hooks-jwt-auth/
 
 export function listUsers() {
-    return apiLogin.get("");
+    return api.get("/user");
 }
 
 export function getUser(id: string) {
-    return apiLogin.get(`/${id}`);
+    return api.get(`/user/${id}`);
 }
 
 export function getProfile(displayName: string) {
-    return apiLogin.get(`/profile/${displayName}`);
+    return api.get(`/user/profile/${displayName}`);
 }
 
 export function registerUser(
     user: CreatePersonalAccountRequest | CreateBusinessAccountRequest
 ) {
-    return apiLogin.post(`/register`, user);
+    return api.post(`/user/register`, user);
 }
 
 export function loginUser(auth: LoginAccountRequest) {
-    return apiLogin.post(`/login`, auth);
+    return api.post(`/user/login`, auth);
 }
 
 export function editUser(id: number, user: Partial<IAccount>) {
-    return apiLogin.patch(`/${id}`, user);
+    return api.patch(`/user/${id}`, user);
 }

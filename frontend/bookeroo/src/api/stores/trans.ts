@@ -1,19 +1,19 @@
 // transaction microservice store
 
-import { apiTrans } from "../api";
+import { api } from "../api";
 import { CreateTransactionRequest } from "../models/Listing";
 
 // ! this fails
 export function listTrans() {
-    return apiTrans.get("");
+    return api.get("/trans");
 }
 
 // TODO implement
 export function getTrans(id: number) {
-    return apiTrans.get(`/${id}`);
+    return api.get(`/trans/${id}`);
 }
 
 // TODO implement
 export function createTrans(trans: CreateTransactionRequest) {
-    return apiTrans.post("/trans/create", trans);
+    return api.post("/trans/trans/create", trans);
 }
