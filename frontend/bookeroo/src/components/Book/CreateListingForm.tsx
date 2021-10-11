@@ -2,7 +2,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { request } from "http";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createListing, listBookListings } from "../../api/stores/listing";
+import {
+    createListing,
+    listBookListings,
+    listListings,
+} from "../../api/stores/listing";
 import { useAlertStore } from "../../stores/useAlertStore";
 import FormCard from "../Form/FormCard";
 import FormGenerator, { GeneratedField } from "../Form/FormGenerator";
@@ -34,6 +38,8 @@ export default function CreateListingForm(props: Props) {
         listBookListings(props.book.isbn)
     );
 
+    console.log("listings", listListings());
+
     const formId = "listingForm";
 
     const fields: GeneratedField[] = [
@@ -48,6 +54,11 @@ export default function CreateListingForm(props: Props) {
             type: "text",
             schema: yup.string().required("Condtion Description is required"),
         },
+        {
+            label: "Price",
+            type: "number",
+            schema: yup.string().required("Price is required"),
+        },
     ];
 
     const onSubmit = (values: any) => {
@@ -60,6 +71,7 @@ export default function CreateListingForm(props: Props) {
                 conditionDesc: values.conditionDescription,
                 isUsed: values.condition !== BookCondition.NEW,
                 userId: user.id,
+                price: values.price,
             };
 
             createListing("sell", request).then(

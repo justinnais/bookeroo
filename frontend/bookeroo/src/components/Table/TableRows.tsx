@@ -111,6 +111,15 @@ export default function TableRows<T, K extends keyof T>(
                 </TableRow>
             </TableBody>
         );
+    } else if (data.length === 0) {
+        return (
+            <TableBody>
+                <TableRow>
+                    <TableCell colSpan={columns.length}>No results.</TableCell>
+                </TableRow>
+                {rows}
+            </TableBody>
+        );
     } else {
         return <TableBody>{rows}</TableBody>;
     }

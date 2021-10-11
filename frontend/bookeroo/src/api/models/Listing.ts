@@ -14,6 +14,7 @@ export interface CreateListingRequest {
     isUsed: boolean;
     condition: string;
     conditionDesc: string;
+    price: string;
 }
 
 export interface CreateTransactionRequest {

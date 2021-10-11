@@ -10,7 +10,7 @@ import { createYupSchema } from "./yupSchema";
 export interface GeneratedField {
     label: string;
     schema: yup.AnySchema;
-    type: "text" | "email" | "password" | "select";
+    type: "text" | "email" | "password" | "select" | "number";
     options?: string[];
     initialValue?: string;
 }

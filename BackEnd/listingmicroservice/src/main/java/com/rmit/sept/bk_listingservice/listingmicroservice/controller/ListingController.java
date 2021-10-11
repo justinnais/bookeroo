@@ -20,7 +20,7 @@ public class ListingController
     @Autowired
     ListingRepository listingRepository;
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<?> createListing(@RequestBody Listing listing)
     {
         if (listing.getId() != null)

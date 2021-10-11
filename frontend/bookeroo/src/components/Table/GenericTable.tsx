@@ -110,7 +110,9 @@ export function handleAxiosData<T>(
         return [];
     }
     if (axios.status === 200) {
-        if (Array.isArray(axios.data)) {
+        if (typeof axios.data === "string") {
+            data = [];
+        } else if (Array.isArray(axios.data)) {
             data = axios.data;
         } else {
             data = [axios.data];
