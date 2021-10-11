@@ -7,19 +7,18 @@ export function listListings() {
     return api.get("/listing");
 }
 
-// TODO implement in backend
 export function getListing(id: number) {
     return api.get(`/listing/${id}`);
 }
 
-// TODO implement in backend
 export function listBookListings(isbn: string) {
-    return api.get(`/listing/list/${isbn}`); // todo change list to book
+    return api.get(`/listing/book/${isbn}`);
 }
 
 export function createListing(
     type: "swap" | "sell",
     listing: CreateListingRequest
 ) {
-    return api.post(`/listing/create/${type}`, listing);
+    return api.post(`/listing/create`, listing);
+    // return api.post(`/listing/create/${type}`, listing);
 }

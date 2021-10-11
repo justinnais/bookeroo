@@ -3,17 +3,22 @@
 import { api } from "../api";
 import { CreateTransactionRequest } from "../models/Listing";
 
-// ! this fails
 export function listTrans() {
     return api.get("/trans");
 }
 
-// TODO implement
 export function getTrans(id: number) {
     return api.get(`/trans/${id}`);
 }
 
-// TODO implement
+export function getUsersTrans(buyerId: number) {
+    return api.get(`/trans/user/${buyerId}`);
+}
+
 export function createTrans(trans: CreateTransactionRequest) {
-    return api.post("/trans/trans/create", trans);
+    return api.post("/trans/create", trans);
+}
+
+export function deleteTrans(id: number) {
+    return api.delete(`/trans/delete${id}`);
 }

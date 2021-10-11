@@ -53,7 +53,7 @@ class ListingControllerTest
     public void CreateValidListing() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/listing").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/listing/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject listingJSON = new JSONObject();
         listingJSON.put("userId", 35550);
@@ -72,7 +72,7 @@ class ListingControllerTest
     public void CreateListingMissingId() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/listing").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/listing/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject listingJSON = new JSONObject();
         listingJSON.put("used", false);
@@ -89,7 +89,7 @@ class ListingControllerTest
     public void CreateEmptyListing()
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/listing").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/listing/create").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
@@ -145,7 +145,7 @@ class ListingControllerTest
         }
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/listing/list/2555").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/listing/book/2555").contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
         JSONArray responseArray = new JSONArray(response.getContentAsString());
@@ -167,7 +167,7 @@ class ListingControllerTest
     public void GetNonExistingBookListings() throws JSONException, UnsupportedEncodingException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/listing/list/8555").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/listing/book/8555").contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
 
