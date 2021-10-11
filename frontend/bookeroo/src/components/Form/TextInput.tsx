@@ -72,8 +72,6 @@ export default function TextInput(props: Props) {
             helperText={helperText}
             // size="small"
             {...props.formik.getFieldProps(id)}
-        >
-            <InputAdornment position="start">$</InputAdornment>
-        </TextField>
+        />
     );
 }
