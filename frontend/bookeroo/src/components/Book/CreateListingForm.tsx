@@ -38,8 +38,6 @@ export default function CreateListingForm(props: Props) {
         listBookListings(props.book.isbn)
     );
 
-    console.log("listings", listListings());
-
     const formId = "listingForm";
 
     const fields: GeneratedField[] = [
@@ -50,7 +48,7 @@ export default function CreateListingForm(props: Props) {
             schema: yup.string().required("Condition is required"),
         },
         {
-            label: "Condtion Description",
+            label: "Condition Description",
             type: "text",
             schema: yup.string().required("Condtion Description is required"),
         },
@@ -67,7 +65,7 @@ export default function CreateListingForm(props: Props) {
             const { book } = props;
             const request: CreateListingRequest = {
                 bookIsbn: book.isbn || book.isbn13,
-                condition: values.condtion,
+                condition: values.condition,
                 conditionDesc: values.conditionDescription,
                 isUsed: values.condition !== BookCondition.NEW,
                 userId: user.id,
