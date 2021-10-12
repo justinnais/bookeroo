@@ -44,6 +44,12 @@ class ListingControllerTest
     }
 
     @AfterAll
+    static void cleanup() throws SQLException
+    {
+        db.prepareStatement("DELETE FROM listing WHERE book_isbn LIKE '%555%'").execute();
+    }
+
+    @AfterAll
     static void dbClose() throws SQLException
     {
         db.close();
