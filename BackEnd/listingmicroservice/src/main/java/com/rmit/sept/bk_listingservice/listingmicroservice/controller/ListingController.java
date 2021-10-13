@@ -58,8 +58,8 @@ public class ListingController
     @GetMapping("")
     public ResponseEntity<?> listListings()
     {
-        List<Listing> listingBybookIsbn = listingRepository.getAllListings();
-        return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
+        List<Listing> allListings = listingRepository.getAllListings();
+        return new ResponseEntity<>(allListings, HttpStatus.OK);
     }
 
     // TODO: Get specific listing
