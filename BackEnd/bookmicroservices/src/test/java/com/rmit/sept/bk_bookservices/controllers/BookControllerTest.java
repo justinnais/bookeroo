@@ -94,41 +94,7 @@ class BookControllerTest
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
-    /*
-    @Test
-    public void SearchByValidTitle() throws UnsupportedEncodingException, JSONException
-    {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/Leviathan Wakes").contentType(MediaType.APPLICATION_JSON);
-        MockHttpServletResponse response = getResponse(requestBuilder);
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(200, response.getStatus());
 
-        JSONArray responseArray = new JSONArray(response.getContentAsString());
-        boolean found = false;
-        for (int i = 0; i < responseArray.length(); i++)
-        {
-            JSONObject obj = responseArray.getJSONObject(i);
-            if (obj.get("isbn").equals("0316129089"))
-            {
-                found = true;
-                break;
-            }
-        }
-        Assertions.assertTrue(found);
-    }
-
-    @Test
-    public void SearchByInvalidTitle()
-    {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/nsILBUR8943BG38BP8VB")
-                .contentType(MediaType.APPLICATION_JSON);
-        MockHttpServletResponse response = getResponse(requestBuilder);
-        Assertions.assertNotNull(response);
-        Assertions.assertEquals(404, response.getStatus());
-    }
-    */
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
     {
         try
