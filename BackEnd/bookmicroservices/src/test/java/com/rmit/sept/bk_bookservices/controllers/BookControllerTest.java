@@ -95,11 +95,41 @@ class BookControllerTest
         Assertions.assertEquals(400, response.getStatus());
     }
 
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
+    @Test
+    public void UpdateBook() throws UnsupportedEncodingException, JSONException
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/book/0316129089").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        JSONObject preUpdateObject = new JSONObject(response.getContentAsString());
+
+        Assertions.assertEquals("Leviathan Wakes", preUpdateObject.get("title"));
+
+        requestBuilder = MockMvcRequestBuilders.patch("/api/book/0316129089")
+                .contentType(MediaType.APPLICATION_JSON);
+        response = getResponse(requestBuilder, "{\"title\": \"Leviathan Wakes1\"}");
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+        JSONObject postUpdateObject = new JSONObject(response.getContentAsString());
+
+        Assertions.assertEquals("Leviathan Wakes1", postUpdateObject.get("title"));
+
+        requestBuilder = MockMvcRequestBuilders.patch("/api/book/0316129089")
+                .contentType(MediaType.APPLICATION_JSON);
+        response = getResponse(requestBuilder, "{\"title\": \"Leviathan Wakes\"}");
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+        JSONObject finalUpdateObject = new JSONObject(response.getContentAsString());
+
+        Assertions.assertEquals("Leviathan Wakes", finalUpdateObject.get("title"));
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder, String body)
     {
         try
         {
-            ResultActions resultActions = mvc.perform(requestBuilder);
+            ResultActions resultActions = mvc.perform(requestBuilder.content(body));
             resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
@@ -108,5 +138,11 @@ class BookControllerTest
         }
         return null;
     }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
+    {
+        return getResponse(requestBuilder, "");
+    }
+
     
 }
