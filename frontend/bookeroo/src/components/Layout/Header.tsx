@@ -62,6 +62,7 @@ export default function Header() {
     const isAuthenticated: boolean = useAuthStore(
         (state) => state.isAuthenticated
     );
+    const isAdmin: boolean = useAuthStore((state) => state.isAdmin);
     const user: IAccount | undefined = useAuthStore((state) => state.user);
     const logout = useAuthStore((state) => state.logout);
 
@@ -80,7 +81,9 @@ export default function Header() {
             <div className={classes.navButtons}>
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
-                <Button to={Routes.Checkout}>Cart</Button>
+                {/* <Button to={Routes.Checkout}>Cart</Button> */}
+
+                {isAdmin && <Button to={Routes.Admin}>Admin Portal</Button>}
             </div>
             {isAuthenticated ? (
                 <div className={classes.navButtons}>

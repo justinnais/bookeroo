@@ -12,8 +12,10 @@ import {
     TableSortLabel,
     TablePagination,
 } from "@material-ui/core";
+import { Skeleton } from "@material-ui/lab";
 import React from "react";
 import { titleCase } from "../../util/stringManipulation";
+import Button from "../Button/Button";
 
 // https://react.christmas/2020/22
 
@@ -24,10 +26,11 @@ import { titleCase } from "../../util/stringManipulation";
  * dataTransform passes a function to convert into more appropriate content - eg. sellerId passed through transform that fetches the sellers name, displays 'John Smith' instead of 85747032
  */
 export interface TableColumn<T, K extends keyof T> {
-    key: K;
+    key: K | "custom"; // allows for custom columns
     header?: string;
     align?: "left" | "right";
     dataTransform?: (data: any) => string | number;
+    customComponent?: (data: any) => React.ReactNode; // must be provided when using a custom field
 }
 
 /**
@@ -37,6 +40,7 @@ interface TableProps<T, K extends keyof T> {
     data: Array<T>;
     columns: Array<TableColumn<T, K>>;
     onRowClick?: (row: T) => void; // passes back row information to the parent on click
+    isLoading?: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -187,7 +191,7 @@ export default function GenericTable<T, K extends keyof T>(
 
         const headers = columns.map((column, index) => {
             return {
-                key: `header-${column.key}`,
+                key: `header-${column.key}-${index}`,
                 label: column.header || titleCase(column.key.toString()),
                 align: column.align ? column.align : "left",
             };
@@ -250,6 +254,19 @@ export default function GenericTable<T, K extends keyof T>(
 
         // sort<T>(data, getComparator(order, orderBy));
 
+        const getTableCell = (column: TableColumn<T, K>, row: T) => {
+            // if a custom component is provided, pass data back and render
+            if (column.key === "custom") {
+                return column.customComponent
+                    ? column.customComponent(row)
+                    : null;
+            } else if (column.dataTransform) {
+                return column.dataTransform(row[column.key]);
+            } else {
+                return row[column.key];
+            }
+        };
+
         // divide data into pages
         const slicedPages = data.slice(
             page * rowsPerPage,
@@ -260,14 +277,13 @@ export default function GenericTable<T, K extends keyof T>(
             return (
                 <TableRow
                     hover
+                    style={{ cursor: "pointer" }}
                     onClick={() => handleClick(row)}
                     key={`row-${rowIndex}`}
                 >
                     {columns.map((column, colIndex) => (
                         <TableCell key={`row-${rowIndex}-cell-${colIndex}`}>
-                            {column.dataTransform
-                                ? column.dataTransform(row[column.key])
-                                : row[column.key]}
+                            {getTableCell(column, row)}
                         </TableCell>
                     ))}
                 </TableRow>
@@ -282,6 +298,7 @@ export default function GenericTable<T, K extends keyof T>(
         if (emptyRows > 0) {
             rows.push(
                 <TableRow
+                    key={"fillerRow"}
                     style={{
                         height: 53 * emptyRows,
                     }}
@@ -291,7 +308,27 @@ export default function GenericTable<T, K extends keyof T>(
             );
         }
 
-        return <TableBody>{rows}</TableBody>;
+        if (props.isLoading) {
+            const skeletonRows: number[] = [...Array(rowsPerPage)];
+            // return skeleton rows if loading
+            return (
+                <TableBody>
+                    {skeletonRows.map((row, rowIndex) => (
+                        <TableRow key={`skeleton-row-${rowIndex}`}>
+                            {columns.map((column, colIndex) => (
+                                <TableCell
+                                    key={`skeleton-row-${rowIndex}-cell-${colIndex}`}
+                                >
+                                    <Skeleton variant="text" />
+                                </TableCell>
+                            ))}
+                        </TableRow>
+                    ))}
+                </TableBody>
+            );
+        } else {
+            return <TableBody>{rows}</TableBody>;
+        }
     };
 
     return (
@@ -309,10 +346,12 @@ export default function GenericTable<T, K extends keyof T>(
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
                         />
+
                         <TableRows
                             columns={columns}
                             data={data}
                             onRowClick={(row: T) => handleClick(row)}
+                            isLoading={props.isLoading}
                         />
                     </Table>
                 </TableContainer>
