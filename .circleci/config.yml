@@ -159,10 +159,7 @@ jobs:
       - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
 
       - run: cd frontend/bookeroo && npm install && npm test 
-      - run: ls
-      - run: cd ../..
-      - run: ls
-      - run: sudo frontend/bookeroo/build.sh
+      - run: sudo sh frontend/bookeroo/build.sh
       - run: ssh ubuntu@$BOOK_AWS '(sudo rm -r /var/www/html/*)'
       - run: scp -r frontend/bookeroo/build ubuntu@$BOOK_AWS:/var/www/html/
 

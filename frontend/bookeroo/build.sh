@@ -1,8 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 #if run build runs with warnings, circleci dies
 #This script intercepts that and only errors if the code is not 0 or 1
-sudo apt-get install -y npm
 cd frontend/bookeroo && sudo npm run build
 CODE=$?
 if [[ $CODE -gt 1 ]]
