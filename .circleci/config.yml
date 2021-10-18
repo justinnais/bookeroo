@@ -151,8 +151,15 @@ jobs:
       - image: cimg/node:16.11.1
     steps:
       - checkout
+
+      - add_ssh_keys:
+          fingerprints:
+            - "c9:2c:4e:b5:b4:8c:a2:5c:8e:49:a0:b8:06:1c:1a:c3"
+
+      - run: ssh-keyscan $BOOK_AWS >> ~/.ssh/known_hosts
+
       - run: cd frontend/bookeroo && npm install && npm test 
-      - run: cd frontend/bookeroo && npm build
+      - run: cd frontend/bookeroo && npm run build
 
 workflows:
   build-and-test: 
