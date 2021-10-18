@@ -1,4 +1,8 @@
 #!/bin/bash
+
+#if run build runs with warnings, circleci dies
+#This script intercepts that and only errors if the code is not 0 or 1
+
 npm run build
 CODE=$?
 if [[ $CODE -gt 1 ]]
