@@ -152,6 +152,7 @@ jobs:
     steps:
       - checkout
       - run: cd frontend/bookeroo && npm install && npm test 
+      - run: cd frontend/bookeroo && npm build
 
 workflows:
   build-and-test: 
