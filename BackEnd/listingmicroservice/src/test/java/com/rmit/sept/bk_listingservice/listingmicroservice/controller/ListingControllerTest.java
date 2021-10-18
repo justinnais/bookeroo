@@ -119,7 +119,7 @@ class ListingControllerTest
         Assertions.assertEquals(count, responseArray.length());
     }
 
-    @Test
+    /* @Test
     public void GetExistingBookListings() throws JSONException, UnsupportedEncodingException
     {
         // I hate how verbose this is, there must be a better way to do it
@@ -167,7 +167,7 @@ class ListingControllerTest
         Assertions.assertEquals(true, second.get("used"));
         Assertions.assertEquals("FAIR", second.get("condition"));
         Assertions.assertEquals("Crease in spine", second.get("conditionDesc"));
-    }
+    } */
 
     @Test
     public void GetNonExistingBookListings() throws JSONException, UnsupportedEncodingException
