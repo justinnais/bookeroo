@@ -166,7 +166,7 @@ jobs:
 workflows:
   build-and-test: 
     jobs:
-      #- build-backend
+      - build-backend
       - build-frontend
 
     
