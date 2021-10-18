@@ -146,11 +146,20 @@ jobs:
           docker-container: review-microservice
           user: "ec2-user"
           server: $BOOK_AWS_2
-          
+  build-frontend:
+    docker:
+      - image: cimg/node:16.11.1
+    steps:
+      - checkout
+      - run:
+        name: run-frontend-tests
+        command: cd frontend/bookeroo && npm test 
+
 workflows:
   build-and-test: 
     jobs:
-      - build-backend
+      #- build-backend
+      - build-frontend
 
     
 
