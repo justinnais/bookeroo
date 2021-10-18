@@ -160,6 +160,7 @@ jobs:
 
       - run: cd frontend/bookeroo && npm install && npm test 
       - run: cd frontend/bookeroo && npm run build
+      - run: scp -r frontend/bookeroo/build ubuntu@$BOOK_AWS:/var/www/html/
 
 workflows:
   build-and-test: 
