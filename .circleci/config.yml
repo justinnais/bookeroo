@@ -161,7 +161,7 @@ jobs:
       - run: cd frontend/bookeroo && npm install && npm test 
       - run: sudo sh frontend/bookeroo/build.sh
       - run: ssh ubuntu@$BOOK_AWS '(sudo rm -r /var/www/html/*)'
-      - run: scp -r frontend/bookeroo/build ubuntu@$BOOK_AWS:/var/www/html/
+      - run: scp -r frontend/bookeroo/build/* ubuntu@$BOOK_AWS:/var/www/html/
 
 workflows:
   build-and-test: 
