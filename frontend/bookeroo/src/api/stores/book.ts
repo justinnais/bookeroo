@@ -1,13 +1,11 @@
 // book microservice store
 
-import { api, apiBook } from "../api";
+import { api } from "../api";
 
 export function listBooks() {
-    return apiBook.get("");
+    return api.get("/book");
 }
 
 export function getBook(isbn: string) {
-    return apiBook.get(`/${isbn}`);
+    return api.get(`/book/${isbn}`);
 }
-
-// TODO search api

@@ -1,25 +1,24 @@
 // listing microservice store
 
-import { api, apiListing } from "../api";
+import { api } from "../api";
 import { CreateListingRequest } from "../models/Listing";
 
 export function listListings() {
-    return apiListing.get("");
+    return api.get("/listing");
 }
 
-// TODO implement in backend
 export function getListing(id: number) {
-    return apiListing.get(`/${id}`);
+    return api.get(`/listing/${id}`);
 }
 
-// TODO implement in backend
 export function listBookListings(isbn: string) {
-    return apiListing.get(`/list/${isbn}`); // todo change list to book
+    return api.get(`/listing/book/${isbn}`);
 }
 
 export function createListing(
     type: "swap" | "sell",
     listing: CreateListingRequest
 ) {
-    return apiListing.post(`/create/${type}`, listing);
+    return api.post(`/listing/create`, listing);
+    // return api.post(`/listing/create/${type}`, listing);
 }

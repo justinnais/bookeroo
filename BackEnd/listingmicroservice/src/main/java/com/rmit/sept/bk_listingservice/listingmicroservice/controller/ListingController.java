@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/listing")
@@ -42,7 +43,8 @@ public class ListingController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/list/{bookIsbn}")
+    // get listings for specific book
+    @GetMapping("/book/{bookIsbn}")
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
         Gson gson = new Gson();
@@ -62,5 +64,17 @@ public class ListingController
         return new ResponseEntity<>(listingBybookIsbn, HttpStatus.OK);
     }
 
-    // TODO: Get specific listing
+    // GET SINGLE LISTING
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> getListing(@PathVariable Long id)
+    {
+        Optional<Listing> listing = listingRepository.findById(id);
+
+        if (listing.isEmpty()) {
+            return new ResponseEntity<>("No listing exists with that id", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(listing.get(), HttpStatus.OK);
+        }
+    }
+
 }
