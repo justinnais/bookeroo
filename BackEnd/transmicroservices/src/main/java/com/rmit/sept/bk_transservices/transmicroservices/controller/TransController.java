@@ -19,8 +19,9 @@ public class TransController
     @Autowired
     TransactionRepository transactionRepository;
 
-    @PostMapping("")
-    public ResponseEntity<?> transaction(@RequestBody Transaction transaction)
+    // create
+    @PostMapping("/create")
+    public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction)
     {
         if (transaction.getTransactionId() != null)
             return new ResponseEntity<>("Request cannot contain transaction id",
@@ -36,14 +37,35 @@ public class TransController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping(value = "/list/{buyerId}")
-    public ResponseEntity<?> list(@PathVariable("buyerId") Long buyerId)
+    // Get all transactions 
+    @GetMapping(value = "")
+    public ResponseEntity<?> listTransactions()
+    {
+        return new ResponseEntity<>(transactionRepository.findAll(), HttpStatus.OK);
+    }
+
+    // Get single transaction
+    @GetMapping(value = "/{transId}")
+    public ResponseEntity<?> getTransaction(@PathVariable Long transId)
+    {
+        Optional<Transaction> transaction = transactionRepository.findById(transId);
+
+        if (transaction.isEmpty()) {
+            return new ResponseEntity<>("No transaction exists with that id", HttpStatus.NOT_FOUND);
+        } else {
+            return new ResponseEntity<>(transaction.get(), HttpStatus.OK);
+        }
+    }
+
+    // Get transactions for specific user
+    @GetMapping(value = "/user/{buyerId}")
+    public ResponseEntity<?> listUsersTransactions(@PathVariable("buyerId") Long buyerId)
     {
         List<Transaction> transactions = transactionRepository.getTransactionByBuyerId(buyerId);
         return ResponseEntity.ok(transactions);
     }
 
-    @DeleteMapping("/{transId}")
+    @DeleteMapping("/delete/{transId}")
     public ResponseEntity<?> deleteTransaction(@PathVariable("transId") Long transId)
     {
         Optional<Transaction> transResult = transactionRepository.findById(transId);
