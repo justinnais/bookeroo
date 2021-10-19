@@ -38,7 +38,7 @@ public class ReviewController
         Set<Review> reviews = reviewService.listReviewsForBook(isbn);
 
         //TODO: See if Justin wants an error code for this
-        
+
 //         if (reviews.size() == 0) {
 //
 //         }
@@ -56,6 +56,9 @@ public class ReviewController
     @PostMapping("/post")
     public ResponseEntity<?> postReview(@Valid @RequestBody Review review)
     {
+        if (review.getBookIsbn() == null)
+            return new ResponseEntity<>("bookIsbn parameter is required", HttpStatus.BAD_REQUEST);
+
         try
         {
             reviewService.postReview(review);
