@@ -1,5 +1,6 @@
 package com.rmit.sept.bk_reviewservices.controllers;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -16,10 +17,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Properties;
 
 @SpringBootTest
@@ -116,6 +114,69 @@ class ReviewControllerTest
         MockHttpServletResponse response = getResponse(requestBuilder, review.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
+    }
+
+    @Test
+    public void ListAllReviews() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/review").contentType(MediaType.APPLICATION_JSON);
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+
+        JSONArray responseArray = new JSONArray(response.getContentAsString());
+
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM review")
+                .executeQuery();
+        Assertions.assertTrue(result.next());
+
+        Assertions.assertEquals(result.getLong("count"), responseArray.length());
+    }
+
+    @Test
+    public void GetExistingReview() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject review = new JSONObject();
+        review.put("bookIsbn", "321123");
+        review.put("review", "This is a test review");
+        review.put("score", 4.0);
+        review.put("userId", 1);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, review.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(201, response.getStatus());
+
+        requestBuilder = MockMvcRequestBuilders.get("/api/review/321123")
+                .contentType(MediaType.APPLICATION_JSON);
+        response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+
+        JSONArray jsonResponse = new JSONArray(response.getContentAsString());
+        JSONObject element = jsonResponse.getJSONObject(0);
+        for (String field : new String[]{"bookIsbn", "review", "score", "userId"})
+            Assertions.assertEquals(review.get(field), element.get(field));
+
+        Assertions.assertTrue(deleteTestReviews());
+    }
+
+    @Test
+    public void GetNonExistingReview() throws Exception
+    {
+        Assertions.assertTrue(deleteTestReviews());
+
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/review/321123").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+
+        JSONArray jsonResponse = new JSONArray(response.getContentAsString());
+        Assertions.assertEquals(0, jsonResponse.length());
     }
 
     private static boolean deleteTestReviews()
