@@ -57,7 +57,7 @@ class ReviewControllerTest
     }
 
     @Test
-    public void createValidReview() throws Exception
+    public void CreateValidReview() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
@@ -77,6 +77,45 @@ class ReviewControllerTest
             Assertions.assertEquals(review.get(field), jsonResponse.get(field));
 
         Assertions.assertTrue(deleteTestReviews());
+    }
+
+    @Test
+    public void CreateDuplicateReview() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject review = new JSONObject();
+        review.put("bookIsbn", "321123");
+        review.put("review", "This is a test review");
+        review.put("score", 4.0);
+        review.put("userId", 1);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, review.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(201, response.getStatus());
+
+        response = getResponse(requestBuilder, review.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(409, response.getStatus());
+
+        Assertions.assertTrue(deleteTestReviews());
+    }
+
+    @Test
+    public void CreateReviewWithoutIsbn() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject review = new JSONObject();
+        review.put("review", "This is a test review");
+        review.put("score", 4.0);
+        review.put("userId", 1);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, review.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(400, response.getStatus());
     }
 
     private static boolean deleteTestReviews()
