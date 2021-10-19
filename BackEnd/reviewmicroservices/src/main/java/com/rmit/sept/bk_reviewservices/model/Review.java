@@ -3,8 +3,8 @@ package com.rmit.sept.bk_reviewservices.model;
 import javax.persistence.*;
 
 @Entity
-public class Review {
-
+public class Review
+{
     public static double MAX_SCORE = 5.0;
     public static int MAX_LENGTH = 240;
 
@@ -21,45 +21,57 @@ public class Review {
     @Column(columnDefinition = "TEXT")
     private String review;
 
-    public Review() {}
+    public Review()
+    {
+    }
 
-    public Long getReviewId() {
+    public Long getReviewId()
+    {
         return reviewId;
     }
 
-    public void setReviewId(Long reviewId) {
+    public void setReviewId(Long reviewId)
+    {
         this.reviewId = reviewId;
     }
 
-    public Long getUserId() {
+    public Long getUserId()
+    {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(Long userId)
+    {
         this.userId = userId;
     }
 
-    public String getBookIsbn() {
+    public String getBookIsbn()
+    {
         return bookIsbn;
     }
 
-    public void setBookIsbn(String bookIsbn) {
+    public void setBookIsbn(String bookIsbn)
+    {
         this.bookIsbn = bookIsbn;
     }
 
-    public double getScore() {
+    public double getScore()
+    {
         return score;
     }
 
-    public void setScore(double score) {
+    public void setScore(double score)
+    {
         this.score = score;
     }
 
-    public String getReview() {
+    public String getReview()
+    {
         return review;
     }
 
-    public void setReview(String review) {
+    public void setReview(String review)
+    {
         this.review = review;
     }
 }
