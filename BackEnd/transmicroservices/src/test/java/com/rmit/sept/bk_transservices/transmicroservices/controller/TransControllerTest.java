@@ -62,7 +62,7 @@ class TransControllerTest
     public void CreateValidTransaction() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
         transJSON.put("buyerId", 25551);
@@ -80,7 +80,7 @@ class TransControllerTest
     public void CreateTransactionWithoutListingId() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
         transJSON.put("buyerId", 25551);
@@ -95,7 +95,7 @@ class TransControllerTest
     public void CreateTransactionWithoutBuyerId() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
         transJSON.put("listingId", 6532);
@@ -111,7 +111,7 @@ class TransControllerTest
     {
         String buyerId = "95559";
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+                .get("/api/trans/user/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
@@ -128,7 +128,7 @@ class TransControllerTest
         createTransaction(buyerId, listingId);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+                .get("/api/trans/user/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
@@ -145,7 +145,7 @@ class TransControllerTest
     private void createTransaction(long buyerId, long listingId) throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
         transJSON.put("buyerId", buyerId);
