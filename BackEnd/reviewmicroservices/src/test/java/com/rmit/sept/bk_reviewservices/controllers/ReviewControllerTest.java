@@ -1,23 +1,26 @@
 package com.rmit.sept.bk_reviewservices.controllers;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,12 +40,59 @@ class ReviewControllerTest
         connectionProps.put("password", "(rN9p:NdKHD:");
         db = DriverManager.getConnection("jdbc:mysql://bookeroo-db.cy3gnqvujqx0.ap-southeast-2" +
                 ".rds.amazonaws.com:3306/bookeroo", connectionProps);
+
+        deleteTestReviews();
+    }
+
+    @AfterAll
+    static void cleanup()
+    {
+        deleteTestReviews();
     }
 
     @AfterAll
     static void dbClose() throws SQLException
     {
         db.close();
+    }
+
+    @Test
+    public void createValidReview() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject review = new JSONObject();
+        review.put("bookIsbn", "321123");
+        review.put("review", "This is a test review");
+        review.put("score", 4.0);
+        review.put("userId", 1);
+
+        MockHttpServletResponse response = getResponse(requestBuilder, review.toString());
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(201, response.getStatus());
+
+        JSONObject jsonResponse = new JSONObject(response.getContentAsString());
+        for (String field : new String[]{"bookIsbn", "review", "score", "userId"})
+            Assertions.assertEquals(review.get(field), jsonResponse.get(field));
+
+        Assertions.assertTrue(deleteTestReviews());
+    }
+
+    private static boolean deleteTestReviews()
+    {
+        try
+        {
+            PreparedStatement statement =
+                    db.prepareStatement("DELETE FROM review WHERE book_isbn = '321123'");
+            statement.execute();
+            return true;
+        } catch (SQLException e)
+        {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder) throws Exception
