@@ -70,7 +70,7 @@ class LoginControllerTest
                 "accountType", "username"))
             userJson.put(s, "");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(400, response.getStatus());
     }
 
@@ -88,7 +88,7 @@ class LoginControllerTest
         userJson.put("username", "username@registertest.com-test");
         userJson.put("accountType", AccountType.STANDARD);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(201, response.getStatus());
 
         Assertions.assertTrue(deleteUser("username@registertest.com-test"));
@@ -110,7 +110,7 @@ class LoginControllerTest
         userJson.put("abn", "51824753556");
         userJson.put("companyName", "companyName");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(201, response.getStatus());
 
         Assertions.assertTrue(deleteUser("username@registertest.com-test"));
@@ -126,7 +126,7 @@ class LoginControllerTest
         userJson.put("username", "");
         userJson.put("password", "");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(400, response.getStatus());
     }
 
@@ -140,7 +140,7 @@ class LoginControllerTest
         userJson.put("username", "asdf");
         userJson.put("password", "asdf");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(401, response.getStatus());
     }
 
@@ -156,7 +156,7 @@ class LoginControllerTest
         userJson.put("username", "username@logintest.com-test");
         userJson.put("password", "password");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(200, response.getStatus());
 
         Assertions.assertTrue(deleteUser("username@logintest.com-test"));
@@ -168,7 +168,7 @@ class LoginControllerTest
         MockHttpServletRequestBuilder activeRequestBuilder = MockMvcRequestBuilders
                 .get("/api/user/status/active").contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse activeResponse = getResponse(activeRequestBuilder, true);
+        MockHttpServletResponse activeResponse = getResponse(activeRequestBuilder);
         Assertions.assertNotNull(activeResponse);
         Assertions.assertEquals(200, activeResponse.getStatus());
         JSONArray activeResponseJson = new JSONArray(activeResponse.getContentAsString());
@@ -178,11 +178,28 @@ class LoginControllerTest
         MockHttpServletRequestBuilder pendingRequestBuilder = MockMvcRequestBuilders
                 .get("/api/user/status/pending").contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse pendingResponse = getResponse(pendingRequestBuilder, true);
+        MockHttpServletResponse pendingResponse = getResponse(pendingRequestBuilder);
         Assertions.assertEquals(200, pendingResponse.getStatus());
         JSONArray pendingResponseJson = new JSONArray(pendingResponse.getContentAsString());
 
         Assertions.assertEquals(countAccountsByStatus(3), pendingResponseJson.length());
+    }
+
+    @Test
+    public void GetAllUsers() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/user").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+        JSONArray responseJson = new JSONArray(response.getContentAsString());
+
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM user").executeQuery();
+
+        Assertions.assertTrue(result.next());
+        Assertions.assertEquals(result.getLong("count"), responseJson.length());
     }
 
     private int countAccountsByStatus(int status) throws SQLException
@@ -197,18 +214,16 @@ class LoginControllerTest
         return pendingResults.getInt("count");
     }
 
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                boolean print) throws Exception
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder) throws Exception
     {
-        return getResponse(requestBuilder, "", print);
+        return getResponse(requestBuilder, "");
     }
 
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content, boolean print) throws Exception
+                                                String content) throws Exception
     {
         ResultActions resultActions = mvc.perform(requestBuilder.content(content));
-        if (print)
-            resultActions.andDo(MockMvcResultHandlers.print());
+        resultActions.andDo(MockMvcResultHandlers.print());
         Assertions.assertNotNull(resultActions);
         return resultActions.andReturn().getResponse();
     }
@@ -233,7 +248,7 @@ class LoginControllerTest
             return false;
         }
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), false);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         return response.getStatus() == 201;
     }
 

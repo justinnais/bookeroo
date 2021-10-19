@@ -53,8 +53,8 @@ public class BookService
             log.warn("Couldn't find book with isbn: " + isbn + ", checking isbndb");
             try
             {
-                HttpResponse<JsonNode> response = Unirest
-                        .get(isbndbUrl + "/book/" + isbn).header("Authorization", isbndbKey).asJson();
+                HttpResponse<JsonNode> response = Unirest.get(isbndbUrl + "/book/" + isbn)
+                        .header("Authorization", isbndbKey).asJson();
                 if (response.getStatus() != 200)
                 {
                     log.error("Book not found, returning null");

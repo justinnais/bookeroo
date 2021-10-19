@@ -13,7 +13,4 @@ public interface ListingRepository extends CrudRepository<Listing, Long>
 
     @Query("SELECT l FROM Listing l")
     List<Listing> getAllListings();
-
-    // TODO: Create an object to hold the response rather than using an array
-    // TODO: Consider if swap listings should be returned here
 }
