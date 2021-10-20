@@ -67,7 +67,7 @@ export default function CreateListingForm(props: Props) {
                 bookIsbn: book.isbn || book.isbn13,
                 condition: values.condition,
                 conditionDesc: values.conditionDescription,
-                isUsed: values.condition !== BookCondition.NEW,
+                used: values.condition !== BookCondition.NEW,
                 userId: user.id,
                 price: values.price,
             };
