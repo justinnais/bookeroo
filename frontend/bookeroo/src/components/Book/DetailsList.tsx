@@ -27,8 +27,8 @@ export default function DetailsList(props: Props) {
     return (
         <Paper>
             <List className={classes.details}>
-                {props.items.map((item) => (
-                    <ListItem>
+                {props.items.map((item, key) => (
+                    <ListItem key={key}>
                         <ListItemText
                             primary={item.value}
                             secondary={item.label}
