@@ -84,7 +84,8 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
-            <Typography variant="body2" component="p">
+            <Typography variant="body2" component="div">
+                {/* This has issues with parse creating an array but then not providing keys */}
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
         </TextCard>,

@@ -65,7 +65,7 @@ export default function CreateListingForm(props: Props) {
             const { book } = props;
             const request: CreateListingRequest = {
                 bookIsbn: book.isbn || book.isbn13,
-                condition: values.condition,
+                condition: (values.condition as string).toUpperCase(),
                 conditionDesc: values.conditionDescription,
                 used: values.condition !== BookCondition.NEW,
                 userId: user.id,
