@@ -5,6 +5,10 @@ import {
     makeStyles,
     Theme,
     TextFieldProps,
+    FormControl,
+    Input,
+    InputAdornment,
+    InputLabel,
 } from "@material-ui/core";
 import { Formik, FormikProps } from "formik";
 import React from "react";
@@ -12,7 +16,7 @@ import { camelCase } from "../../util/stringManipulation";
 
 interface Props extends Omit<OutlinedTextFieldProps, "variant"> {
     label: string;
-    type?: "text" | "email" | "password";
+    type?: "text" | "email" | "password" | "number";
     formik: {
         touched: { [x: string]: any };
         errors: {

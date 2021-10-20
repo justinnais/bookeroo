@@ -2,7 +2,11 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { request } from "http";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import { createListing } from "../../api/stores/listing";
+import {
+    createListing,
+    listBookListings,
+    listListings,
+} from "../../api/stores/listing";
 import { useAlertStore } from "../../stores/useAlertStore";
 import FormCard from "../Form/FormCard";
 import FormGenerator, { GeneratedField } from "../Form/FormGenerator";
@@ -12,6 +16,7 @@ import { IBook } from "../../api/models/Book";
 import SubmitButton from "../Button/SubmitButton";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { BookCondition } from "../../util/enums";
+import { useQuery } from "react-query";
 
 interface Props {
     book: IBook;
@@ -29,6 +34,10 @@ export default function CreateListingForm(props: Props) {
     };
     const [isSubmitting, setSubmitting] = useState(false);
 
+    const { refetch } = useQuery("listBookListings", () =>
+        listBookListings(props.book.isbn)
+    );
+
     const formId = "listingForm";
 
     const fields: GeneratedField[] = [
@@ -39,9 +48,14 @@ export default function CreateListingForm(props: Props) {
             schema: yup.string().required("Condition is required"),
         },
         {
-            label: "Condtion Description",
+            label: "Condition Description",
             type: "text",
             schema: yup.string().required("Condtion Description is required"),
+        },
+        {
+            label: "Price",
+            type: "number",
+            schema: yup.string().required("Price is required"),
         },
     ];
 
@@ -51,10 +65,11 @@ export default function CreateListingForm(props: Props) {
             const { book } = props;
             const request: CreateListingRequest = {
                 bookIsbn: book.isbn || book.isbn13,
-                condition: values.condtion,
+                condition: values.condition,
                 conditionDesc: values.conditionDescription,
-                isUsed: values.condition !== BookCondition.NEW,
+                used: values.condition !== BookCondition.NEW,
                 userId: user.id,
+                price: values.price,
             };
 
             createListing("sell", request).then(
@@ -71,6 +86,7 @@ export default function CreateListingForm(props: Props) {
     const handleResponse = (res: any, request: CreateListingRequest) => {
         if (res.status === 200) {
             toast(`Successfully created listing for ${props.book.title}`);
+            refetch();
         }
     };
 

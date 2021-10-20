@@ -12,7 +12,6 @@ export default function BookTable() {
         "listBooks",
         listBooks
     );
-    const books = data ? (data.data as IBook[]) : [];
 
     const handleClick = (book: IBook) => {
         history.push(`/book/${book.isbn || book.isbn13}`);
@@ -31,7 +30,7 @@ export default function BookTable() {
     ];
     return (
         <GenericTable
-            data={books}
+            data={data}
             columns={columns}
             onRowClick={handleClick}
             isLoading={isLoading}

@@ -47,12 +47,7 @@ export default function Search() {
     const classes = useStyles();
     const history = useHistory();
     const searchQuery = useSearchParams();
-
     const { isLoading, data, isError } = useQuery("listBooks", listBooks);
-    const books = data ? (data.data as IBook[]) : [];
-    const filteredBooks = books.filter((book) =>
-        filterResults(searchQuery.get("q"), book)
-    );
 
     const columns: TableColumn<IBook, keyof IBook>[] = [
         { key: "title" },
@@ -70,11 +65,16 @@ export default function Search() {
         <div className={classes.root}>
             <Container>
                 <GenericTable
-                    data={filteredBooks}
+                    data={data}
                     columns={columns}
                     onRowClick={handleClick}
                     isLoading={isLoading}
                     isError={isError}
+                    filter={(data: IBook[]) =>
+                        data.filter((book) =>
+                            filterResults(searchQuery.get("q"), book)
+                        )
+                    }
                 />
             </Container>
         </div>

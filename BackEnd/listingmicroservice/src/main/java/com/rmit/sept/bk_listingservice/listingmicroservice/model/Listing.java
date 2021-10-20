@@ -11,6 +11,7 @@ public class Listing
     private Long userId;
     private Long bookIsbn;
     private boolean used;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "cond")
     private Condition condition;

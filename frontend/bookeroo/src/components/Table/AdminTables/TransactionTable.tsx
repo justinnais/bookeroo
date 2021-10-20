@@ -17,7 +17,6 @@ export default function TransactionTable() {
         "listTransactions",
         listTrans
     );
-    /*  const transactions = data ? (data.data as ITransaction[]) : [];
     const alert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => alert(message);
 
@@ -27,16 +26,13 @@ export default function TransactionTable() {
         { key: "userId", header: "User" },
         { key: "condition" },
         { key: "conditionDesc", header: "Condtion Description" },
-    ]; */
-
+    ];
     return (
-        <div>data: {JSON.stringify(data, null, 2)}</div>
-        // <GenericTable
-        //     data={transactions}
-        //     columns={columns}
-        //     isLoading={isLoading}
-        //     isError={isError}
-        //     // printButton
-        // />
+        <GenericTable
+            data={data}
+            columns={columns}
+            isLoading={isLoading}
+            isError={isError}
+        />
     );
 }
