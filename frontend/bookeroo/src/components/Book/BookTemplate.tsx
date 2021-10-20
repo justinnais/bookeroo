@@ -10,7 +10,7 @@ import {
     Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
     DataGrid,
     GridCellParams,
@@ -69,6 +69,14 @@ export default function BookTemplate(props: Props) {
     const [isSubmitting, setSubmitting] = useState(false);
 
     const authors = createAuthorArray(props.book.authors);
+    const tableRef = useRef<HTMLDivElement>(null);
+    const formRef = useRef<HTMLDivElement>(null);
+
+    function scrollToRef(ref: React.RefObject<HTMLDivElement>) {
+        if (ref.current) {
+            ref.current.scrollIntoView();
+        }
+    }
 
     const firstCard = [
         <TextCard
@@ -76,16 +84,23 @@ export default function BookTemplate(props: Props) {
             titleSize="h4"
             subtitle={authors.join(", ")}
             buttons={[
-                <Button color="secondary" variant="contained">
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => scrollToRef(tableRef)}
+                >
                     View Sellers
                 </Button>,
-                <Button color="secondary" variant="outlined">
+                <Button
+                    color="secondary"
+                    variant="outlined"
+                    onClick={() => scrollToRef(formRef)}
+                >
                     Sell your copy
                 </Button>,
             ]}
         >
             <Typography variant="body2" component="div">
-                {/* This has issues with parse creating an array but then not providing keys */}
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
         </TextCard>,
@@ -118,12 +133,6 @@ export default function BookTemplate(props: Props) {
         <DetailsList items={firstList} />,
     ];
 
-    const addToCartButton = (params: GridCellParams) => (
-        <Button variant="contained" color="secondary">
-            Add to cart
-        </Button>
-    );
-
     return (
         <div>
             <Container noMargin>
@@ -136,9 +145,13 @@ export default function BookTemplate(props: Props) {
                 <GridLayout items={secondCard} spacing={2} />
             </Container>
             <Container>
-                <Typography variant="h4">Sellers</Typography>
-                <ListTable isbn={props.book.isbn} />
-                <CreateListingForm book={props.book} />
+                <div ref={tableRef}>
+                    <Typography variant="h4">Sellers</Typography>
+                    <ListTable isbn={props.book.isbn} />
+                </div>
+                <div ref={formRef}>
+                    <CreateListingForm book={props.book} />
+                </div>
             </Container>
         </div>
     );
