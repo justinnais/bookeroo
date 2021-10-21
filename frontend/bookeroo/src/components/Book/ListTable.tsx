@@ -1,9 +1,11 @@
 import React from "react";
+import { PayPalButton } from "react-paypal-button-v2";
 import { isError, useQuery } from "react-query";
 import { IAccount } from "../../api/models/Account";
 import { IListing } from "../../api/models/Listing";
 import { listBookListings, listListings } from "../../api/stores/listing";
 import { getUser } from "../../api/stores/user";
+import { useAlertStore } from "../../stores/useAlertStore";
 import Button from "../Button/Button";
 import GenericTable, { TableColumn } from "../Table/GenericTable";
 
@@ -29,6 +31,10 @@ export default function ListTable(props: { isbn: string }) {
         "listBookListings",
         () => listBookListings(props.isbn)
     );
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
 
     // TODO check that table fills out correctly when data gets fixed
     const columns: TableColumn<IListing, keyof IListing>[] = [
@@ -43,22 +49,51 @@ export default function ListTable(props: { isbn: string }) {
                 getDisplayName(id).then((res) => res), */
         },
         {
+            key: "price",
+            dataTransform: (price: number) => `$${price}`,
+        },
+        {
             key: "custom",
-            customComponent: () => (
-                <Button variant="contained" color="secondary">
-                    Purchase
-                </Button>
+            customComponent: (listing: IListing) => (
+                <PayPalButton
+                    amount={listing.price}
+                    style={{
+                        layout: "horizontal",
+                        color: "black",
+                        shape: "rect",
+                        label: "paypal",
+                        tagline: false,
+                    }}
+                    onSuccess={(details: any) => {
+                        console.log("success", details);
+                        toast("successful purchase");
+                        /* const request: CreateTransactionRequest = {
+                                listings: listings,
+                                buyer_id: buyerId,
+                            };
+                            createTrans(request); */
+                    }}
+                    catchError={(err: any) => {
+                        console.error("transaction error", err);
+                    }}
+                    onError={(err: any) => {
+                        console.error(err);
+                    }}
+                />
             ),
             header: " ",
         },
     ];
 
     return (
-        <GenericTable
-            data={data}
-            columns={columns}
-            isLoading={isLoading}
-            isError={isError}
-        />
+        <div>
+            <GenericTable
+                data={data}
+                columns={columns}
+                isLoading={isLoading}
+                isError={isError}
+            />
+            <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
+        </div>
     );
 }

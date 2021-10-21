@@ -98,7 +98,9 @@ export default function CreateListingForm(props: Props) {
 
     const handleError = (err: any) => {
         const errors: { [key: string]: string } = err.response.data;
-        Object.values(errors).map((error) => toast(error));
+        Object.values(errors).map((error) =>
+            toast("Error creating a listing, please try again")
+        );
     };
 
     const form = FormGenerator(formId, fields, onSubmit);
