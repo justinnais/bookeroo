@@ -115,6 +115,10 @@ export default function BookTemplate(props: Props) {
         { label: "Page Count", value: props.book.pages },
     ];
 
+    const secondList = [
+        { label: "Table Of Contents", value: props.book.tableOfContents },
+    ];
+
     const quote = (
         <div className={classes.quote}>
             <FormatQuoteIcon className={classes.icon} />
@@ -130,7 +134,7 @@ export default function BookTemplate(props: Props) {
     const secondCard = [
         quote,
         <DetailsList items={firstList} />,
-        <DetailsList items={firstList} />,
+        <DetailsList items={secondList} />,
     ];
 
     return (
