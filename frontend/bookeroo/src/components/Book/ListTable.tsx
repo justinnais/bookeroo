@@ -2,10 +2,12 @@ import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
 import { isError, useQuery } from "react-query";
 import { IAccount } from "../../api/models/Account";
-import { IListing } from "../../api/models/Listing";
+import { CreateTransactionRequest, IListing } from "../../api/models/Listing";
 import { listBookListings, listListings } from "../../api/stores/listing";
+import { createTrans } from "../../api/stores/trans";
 import { getUser } from "../../api/stores/user";
 import { useAlertStore } from "../../stores/useAlertStore";
+import { useAuthStore } from "../../stores/useAuthStore";
 import Button from "../Button/Button";
 import GenericTable, { TableColumn } from "../Table/GenericTable";
 
@@ -35,6 +37,8 @@ export default function ListTable(props: { isbn: string }) {
     const toast = (message: string) => {
         setAlert(message);
     };
+
+    const user = useAuthStore((state) => state.user);
 
     // TODO check that table fills out correctly when data gets fixed
     const columns: TableColumn<IListing, keyof IListing>[] = [
@@ -67,11 +71,12 @@ export default function ListTable(props: { isbn: string }) {
                     onSuccess={(details: any) => {
                         console.log("success", details);
                         toast("successful purchase");
-                        /* const request: CreateTransactionRequest = {
-                                listings: listings,
-                                buyer_id: buyerId,
-                            };
-                            createTrans(request); */
+                        const request: CreateTransactionRequest = {
+                            listingId: listing.id,
+                            buyerId: user!.id, // TODO fix this
+                            price: listing.price,
+                        };
+                        createTrans(request);
                     }}
                     catchError={(err: any) => {
                         console.error("transaction error", err);

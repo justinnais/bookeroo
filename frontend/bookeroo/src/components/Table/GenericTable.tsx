@@ -183,7 +183,7 @@ export default function GenericTable<T, K extends keyof T>(
         <Button
             variant="outlined"
             color="secondary"
-            onClick={() => console.log("data", data)} // TODO create CSV with data
+            onClick={() => console.log("columns", columns, "data", data)} // TODO create CSV with data
         >
             Print
         </Button>
