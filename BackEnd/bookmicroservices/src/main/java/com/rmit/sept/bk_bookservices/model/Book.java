@@ -52,10 +52,12 @@ public class Book
 
     private String tags;
 
-    private String tableOfContents = "{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}";
+    @JsonProperty("table_of_contents")
+    private String tableOfContents;
 
     public Book()
     {
+        setTableOfContents("{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}");
     }
 
     public static Book fromJson(JSONObject json) throws JsonProcessingException
@@ -89,6 +91,7 @@ public class Book
 
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = objectMapper.readValue(json.toString(), Book.class);
+
         book.setAuthors(authors);
 
         return book;
@@ -240,6 +243,14 @@ public class Book
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public String getTableOfContents() {
+        return tableOfContents;
+    }
+
+    public void setTableOfContents(String tableOfContents) {
+        this.tableOfContents = tableOfContents;
     }
 
     @Override
