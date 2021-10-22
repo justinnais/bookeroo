@@ -21,4 +21,5 @@ export interface CreateTransactionRequest {
     listingId: number;
     price: string;
     buyerId: number;
+    captureId: string;
 }

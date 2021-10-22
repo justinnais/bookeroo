@@ -1,3 +1,12 @@
+import {
+    Dialog,
+    DialogTitle,
+    List,
+    ListItem,
+    ListItemAvatar,
+    Avatar,
+    ListItemText,
+} from "@material-ui/core";
 import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
 import { isError, useQuery } from "react-query";
@@ -29,14 +38,22 @@ async function getDisplayName(id: string) {
 }
 
 export default function ListTable(props: { isbn: string }) {
+    const [open, setOpen] = React.useState(false);
+    const [selectedListing, setSelectedListing] = React.useState<IListing>();
+
+    const handleClickOpen = (listing: IListing) => {
+        setOpen(true);
+        setSelectedListing(listing);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+        setSelectedListing(undefined);
+    };
     const { isLoading, data, refetch, isError } = useQuery(
         "listBookListings",
         () => listBookListings(props.isbn)
     );
-    const setAlert = useAlertStore((state) => state.setAlert);
-    const toast = (message: string) => {
-        setAlert(message);
-    };
 
     const user = useAuthStore((state) => state.user);
 
@@ -58,7 +75,59 @@ export default function ListTable(props: { isbn: string }) {
         },
         {
             key: "custom",
+            header: " ",
             customComponent: (listing: IListing) => (
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleClickOpen(listing)}
+                >
+                    Buy
+                </Button>
+            ),
+        },
+    ];
+
+    return (
+        <div>
+            <GenericTable
+                data={data}
+                columns={columns}
+                isLoading={isLoading}
+                isError={isError}
+            />
+            {selectedListing && (
+                <PayPalDialog
+                    listing={selectedListing}
+                    open={open}
+                    onClose={handleClose}
+                />
+            )}
+        </div>
+    );
+}
+
+export interface PayPalDialogProps {
+    open: boolean;
+    listing: IListing;
+    onClose: () => void;
+}
+
+function PayPalDialog(props: PayPalDialogProps) {
+    const { onClose, listing, open } = props;
+    const setAlert = useAlertStore((state) => state.setAlert);
+    const toast = (message: string) => {
+        setAlert(message);
+    };
+
+    const handleClose = () => {
+        onClose();
+    };
+
+    return (
+        <Dialog onClose={handleClose} open={open}>
+            <DialogTitle>Checkout with PayPal</DialogTitle>
+            <div style={{ padding: "1rem" }}>
                 <PayPalButton
                     amount={listing.price}
                     style={{
@@ -71,12 +140,13 @@ export default function ListTable(props: { isbn: string }) {
                     onSuccess={(details: any) => {
                         console.log("success", details);
                         toast("successful purchase");
-                        const request: CreateTransactionRequest = {
-                            listingId: listing.id,
-                            buyerId: user!.id, // TODO fix this
-                            price: listing.price,
-                        };
-                        createTrans(request);
+                        /* const request: CreateTransactionRequest = {
+                        listingId: listing.id,
+                        buyerId: user!.id, // TODO fix this
+                        price: listing.price,
+                        
+                    };
+                    createTrans(request); */
                     }}
                     catchError={(err: any) => {
                         console.error("transaction error", err);
@@ -85,20 +155,8 @@ export default function ListTable(props: { isbn: string }) {
                         console.error(err);
                     }}
                 />
-            ),
-            header: " ",
-        },
-    ];
-
-    return (
-        <div>
-            <GenericTable
-                data={data}
-                columns={columns}
-                isLoading={isLoading}
-                isError={isError}
-            />
-            <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
-        </div>
+                <script src="https://www.paypal.com/sdk/js?client-id=sd&currency=AUD" />
+            </div>
+        </Dialog>
     );
 }
