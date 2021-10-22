@@ -79,7 +79,6 @@ public class Transaction
     public String getCaptureId()
     {
         return captureId;
-
     }
 
     public void setCaptureId(String captureId)

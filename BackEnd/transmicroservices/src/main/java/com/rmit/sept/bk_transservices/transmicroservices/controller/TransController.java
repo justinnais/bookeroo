@@ -1,5 +1,8 @@
 package com.rmit.sept.bk_transservices.transmicroservices.controller;
 
+import com.paypal.http.HttpResponse;
+import com.paypal.payments.Refund;
+import com.rmit.sept.bk_transservices.transmicroservices.model.RefundOrder;
 import com.rmit.sept.bk_transservices.transmicroservices.model.Transaction;
 import com.rmit.sept.bk_transservices.transmicroservices.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -52,9 +56,11 @@ public class TransController
     {
         Optional<Transaction> transaction = transactionRepository.findById(transId);
 
-        if (transaction.isEmpty()) {
+        if (transaction.isEmpty())
+        {
             return new ResponseEntity<>("No transaction exists with that id", HttpStatus.NOT_FOUND);
-        } else {
+        } else
+        {
             return new ResponseEntity<>(transaction.get(), HttpStatus.OK);
         }
     }
@@ -67,8 +73,8 @@ public class TransController
         return ResponseEntity.ok(transactions);
     }
 
-    @DeleteMapping("/delete/{transId}")
-    public ResponseEntity<?> deleteTransaction(@PathVariable("transId") Long transId)
+    @PutMapping("/refund/{transId}")
+    public ResponseEntity<?> refundTransaction(@PathVariable("transId") Long transId)
     {
         Optional<Transaction> transResult = transactionRepository.findById(transId);
         if (transResult.isEmpty())
@@ -81,7 +87,16 @@ public class TransController
             return new ResponseEntity<>("More than 2 hours have elapsed since this transaction " +
                     "was made", HttpStatus.LOCKED);
 
-        transactionRepository.deleteById(transId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        HttpResponse<Refund> refund;
+        try
+        {
+            refund = RefundOrder.refundOrder(transaction.getCaptureId(), transaction.getPrice());
+        } catch (IOException e)
+        {
+            return new ResponseEntity<>("Exception occured when refunding order:\n" + e.getMessage(),
+                    HttpStatus.EXPECTATION_FAILED);
+        }
+
+        return new ResponseEntity<>(refund.result(), HttpStatus.OK);
     }
 }
