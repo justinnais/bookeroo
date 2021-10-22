@@ -3,6 +3,7 @@ package com.rmit.sept.bk_transservices.transmicroservices.controller;
 import com.paypal.http.HttpResponse;
 import com.paypal.payments.Refund;
 import com.rmit.sept.bk_transservices.transmicroservices.model.RefundOrder;
+import com.rmit.sept.bk_transservices.transmicroservices.model.Status;
 import com.rmit.sept.bk_transservices.transmicroservices.model.Transaction;
 import com.rmit.sept.bk_transservices.transmicroservices.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,6 +97,9 @@ public class TransController
             return new ResponseEntity<>("Exception occured when refunding order:\n" + e.getMessage(),
                     HttpStatus.EXPECTATION_FAILED);
         }
+
+        transaction.setStatus(Status.CANCELLED);
+        transactionRepository.save(transaction);
 
         return new ResponseEntity<>(refund.result(), HttpStatus.OK);
     }
