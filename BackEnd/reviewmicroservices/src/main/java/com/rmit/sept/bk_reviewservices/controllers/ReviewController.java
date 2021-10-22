@@ -4,6 +4,7 @@ import com.rmit.sept.bk_reviewservices.exceptions.BadReviewScoreException;
 import com.rmit.sept.bk_reviewservices.exceptions.BadReviewTextException;
 import com.rmit.sept.bk_reviewservices.exceptions.DuplicateReviewException;
 import com.rmit.sept.bk_reviewservices.model.BookReview;
+import com.rmit.sept.bk_reviewservices.model.UserReview;
 import com.rmit.sept.bk_reviewservices.repositories.BookReviewRepository;
 import com.rmit.sept.bk_reviewservices.repositories.UserReviewRepository;
 import com.rmit.sept.bk_reviewservices.services.BookReviewService;
@@ -65,8 +66,8 @@ public class ReviewController
         return new ResponseEntity<>(userReviewRepository.findUserReviewsByReviewerUserId(reviewerUserId), HttpStatus.OK);
     }
 
-    @PostMapping("/post")
-    public ResponseEntity<?> postReview(@Valid @RequestBody BookReview bookReview)
+    @PostMapping("/book/post")
+    public ResponseEntity<?> postBookReview(@Valid @RequestBody BookReview bookReview)
     {
         if (bookReview.getBookIsbn() == null)
             return new ResponseEntity<>("bookIsbn parameter is required", HttpStatus.BAD_REQUEST);
@@ -86,5 +87,22 @@ public class ReviewController
         }
 
         return new ResponseEntity<>(bookReview, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/user/post")
+    public ResponseEntity<?> postUserReview(@RequestBody UserReview userReview)
+    {
+        if (userReview.getReviewId() != null)
+            return new ResponseEntity<>("Request cannot contain reviewId", HttpStatus.BAD_REQUEST);
+        else if (userReview.getReviewerUserId() == null)
+            return new ResponseEntity<>("reviewerUserId parameter is required",
+                    HttpStatus.BAD_REQUEST);
+        else if (userReview.getReviewedUserId() == null)
+            return new ResponseEntity<>("reviewedUserId parameter is required",
+                    HttpStatus.BAD_REQUEST);
+        else if (userReview.getScore() == null)
+            return new ResponseEntity<>("score parameter is required", HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(userReviewRepository.save(userReview), HttpStatus.CREATED);
     }
 }
