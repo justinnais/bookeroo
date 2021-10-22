@@ -5,6 +5,7 @@ import com.rmit.sept.bk_reviewservices.exceptions.BadReviewTextException;
 import com.rmit.sept.bk_reviewservices.exceptions.DuplicateReviewException;
 import com.rmit.sept.bk_reviewservices.model.BookReview;
 import com.rmit.sept.bk_reviewservices.repositories.BookReviewRepository;
+import com.rmit.sept.bk_reviewservices.repositories.UserReviewRepository;
 import com.rmit.sept.bk_reviewservices.services.BookReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,13 +27,19 @@ public class ReviewController
     @Autowired
     private BookReviewRepository bookReviewRepository;
 
+    @Autowired
+    private UserReviewRepository userReviewRepository;
+
     @GetMapping("/{type}")
     public ResponseEntity<?> listReviews(@PathVariable("type") String type)
     {
         if (type.equals("book"))
             return new ResponseEntity<>(bookReviewRepository.findAll(), HttpStatus.OK);
-//        else if (type.equals("user"))
-//            return new ResponseEntity<>()
+        else if (type.equals("user"))
+            return new ResponseEntity<>(userReviewRepository.findAll(), HttpStatus.OK);
+        else
+            return new ResponseEntity<>("type path variable must be \"book\" or \"user\"",
+                    HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{isbn}")
