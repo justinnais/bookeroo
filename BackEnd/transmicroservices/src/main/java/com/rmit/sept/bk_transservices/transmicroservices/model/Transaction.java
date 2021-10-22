@@ -14,6 +14,7 @@ public class Transaction
     private Status status;
     private Long listingId;
     private Long price;
+    private String captureId;
 
     public Long getListingId()
     {
@@ -73,6 +74,16 @@ public class Transaction
     public void setDatetime(Date datetime)
     {
         this.datetime = datetime;
+    }
+
+    public String getCaptureId()
+    {
+        return captureId;
+    }
+
+    public void setCaptureId(String captureId)
+    {
+        this.captureId = captureId;
     }
 
     @PrePersist

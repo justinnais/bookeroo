@@ -32,6 +32,8 @@ public class TransController
             return new ResponseEntity<>("price property required", HttpStatus.BAD_REQUEST);
         if (transaction.getListingId() == null)
             return new ResponseEntity<>("listingId property required", HttpStatus.BAD_REQUEST);
+        if (transaction.getCaptureId() == null)
+            return new ResponseEntity<>("captureId property required", HttpStatus.BAD_REQUEST);
 
         transactionRepository.save(transaction);
         return new ResponseEntity<>(HttpStatus.OK);

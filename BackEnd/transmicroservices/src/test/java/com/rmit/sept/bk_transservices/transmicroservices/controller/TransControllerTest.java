@@ -68,6 +68,7 @@ class TransControllerTest
         transJSON.put("buyerId", 25551);
         transJSON.put("price", 321);
         transJSON.put("listingId", 312);
+        transJSON.put("captureId", "123");
 
         MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
@@ -151,6 +152,7 @@ class TransControllerTest
         transJSON.put("buyerId", buyerId);
         transJSON.put("listingId", listingId);
         transJSON.put("price", 123);
+        transJSON.put("captureId", "123");
 
         MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
