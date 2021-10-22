@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.Set;
 
 
 @RestController
@@ -30,30 +29,40 @@ public class ReviewController
     @Autowired
     private UserReviewRepository userReviewRepository;
 
-    @GetMapping("/{type}")
-    public ResponseEntity<?> listReviews(@PathVariable("type") String type)
+    @GetMapping("/book")
+    public ResponseEntity<?> listBookReviews()
     {
-        if (type.equals("book"))
-            return new ResponseEntity<>(bookReviewRepository.findAll(), HttpStatus.OK);
-        else if (type.equals("user"))
-            return new ResponseEntity<>(userReviewRepository.findAll(), HttpStatus.OK);
-        else
-            return new ResponseEntity<>("type path variable must be \"book\" or \"user\"",
-                    HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(bookReviewRepository.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/{isbn}")
-    public ResponseEntity<?> getReviewsByBook(@PathVariable String isbn)
+    @GetMapping("/user")
+    public ResponseEntity<?> listUserReviews()
     {
-        Set<BookReview> bookReviews = bookReviewService.listReviewsForBook(isbn);
-        return new ResponseEntity<>(bookReviews, HttpStatus.OK);
+        return new ResponseEntity<>(userReviewRepository.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getReviewsByUser(@PathVariable Long userId)
+    @GetMapping("/book/{isbn}")
+    public ResponseEntity<?> getBookReviewsByBook(@PathVariable String isbn)
     {
-        Set<BookReview> bookReviews = bookReviewService.listReviewsForUser(userId);
-        return new ResponseEntity<>(bookReviews, HttpStatus.OK);
+        return new ResponseEntity<>(bookReviewService.listReviewsForBook(isbn), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/{reviewedUserId}")
+    public ResponseEntity<?> getUserReviewByReviewed(@PathVariable Long reviewedUserId)
+    {
+        return new ResponseEntity<>(userReviewRepository.findUserReviewsByReviewedUserId(reviewedUserId), HttpStatus.OK);
+    }
+
+    @GetMapping("/book/byUser/{userId}")
+    public ResponseEntity<?> getBookReviewsByUser(@PathVariable Long userId)
+    {
+        return new ResponseEntity<>(bookReviewService.listReviewsForUser(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/user/byUser/{reviewerUserId}")
+    public ResponseEntity<?> getUserReviewsByReviewer(@PathVariable Long reviewerUserId)
+    {
+        return new ResponseEntity<>(userReviewRepository.findUserReviewsByReviewerUserId(reviewerUserId), HttpStatus.OK);
     }
 
     @PostMapping("/post")
