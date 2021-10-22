@@ -36,7 +36,9 @@ public class BookReviewService
         if (bookReview.getScore() > BookReview.MAX_SCORE || bookReview.getScore() < 0.0)
             throw new BadReviewScoreException("Score must be between 0.0 and 5.0");
 
-        if (bookReview.getReview().length() > BookReview.MAX_LENGTH)
+
+        String reviewText = bookReview.getReview();
+        if (reviewText != null && reviewText.length() > BookReview.MAX_LENGTH)
             throw new BadReviewTextException("Review is too long, must be less than 240 " +
                     "characters");
 
