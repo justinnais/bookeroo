@@ -71,7 +71,7 @@ class ListingControllerTest
 
         MockHttpServletResponse response = getResponse(requestBuilder, listingJSON.toString());
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(200, response.getStatus());
+        Assertions.assertEquals(201, response.getStatus());
     }
 
     @Test
@@ -147,7 +147,7 @@ class ListingControllerTest
                     .post("/api/listing/create").contentType(MediaType.APPLICATION_JSON);
             MockHttpServletResponse response = getResponse(requestBuilder, json.toString());
             Assertions.assertNotNull(response);
-            Assertions.assertEquals(200, response.getStatus());
+            Assertions.assertEquals(201, response.getStatus());
         }
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders

@@ -58,7 +58,7 @@ class ReviewControllerTest
     public void CreateValidReview() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/review/book/post").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject review = new JSONObject();
         review.put("bookIsbn", "321123");
@@ -81,7 +81,7 @@ class ReviewControllerTest
     public void CreateDuplicateReview() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/review/book/post").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject review = new JSONObject();
         review.put("bookIsbn", "321123");
@@ -104,7 +104,7 @@ class ReviewControllerTest
     public void CreateReviewWithoutIsbn() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/review/book/post").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject review = new JSONObject();
         review.put("review", "This is a test review");
@@ -120,13 +120,13 @@ class ReviewControllerTest
     public void ListAllReviews() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/review").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/review/book").contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
 
         JSONArray responseArray = new JSONArray(response.getContentAsString());
 
-        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM review")
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM book_review")
                 .executeQuery();
         Assertions.assertTrue(result.next());
 
@@ -137,7 +137,7 @@ class ReviewControllerTest
     public void GetExistingReview() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/review/post").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/review/book/post").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject review = new JSONObject();
         review.put("bookIsbn", "321123");
@@ -149,7 +149,7 @@ class ReviewControllerTest
         Assertions.assertNotNull(response);
         Assertions.assertEquals(201, response.getStatus());
 
-        requestBuilder = MockMvcRequestBuilders.get("/api/review/321123")
+        requestBuilder = MockMvcRequestBuilders.get("/api/review/book/321123")
                 .contentType(MediaType.APPLICATION_JSON);
         response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
@@ -169,7 +169,7 @@ class ReviewControllerTest
         Assertions.assertTrue(deleteTestReviews());
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/review/321123").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/review/book/321123").contentType(MediaType.APPLICATION_JSON);
 
         MockHttpServletResponse response = getResponse(requestBuilder);
         Assertions.assertNotNull(response);
@@ -184,7 +184,7 @@ class ReviewControllerTest
         try
         {
             PreparedStatement statement =
-                    db.prepareStatement("DELETE FROM review WHERE book_isbn = '321123'");
+                    db.prepareStatement("DELETE FROM book_review WHERE book_isbn = '321123'");
             statement.execute();
             return true;
         } catch (SQLException e)
