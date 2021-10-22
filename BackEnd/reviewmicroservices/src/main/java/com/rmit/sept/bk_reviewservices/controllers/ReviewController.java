@@ -44,7 +44,7 @@ public class ReviewController
     @GetMapping("/book/{isbn}")
     public ResponseEntity<?> getBookReviewsByBook(@PathVariable String isbn)
     {
-        return new ResponseEntity<>(bookReviewService.listReviewsForBook(isbn), HttpStatus.OK);
+        return new ResponseEntity<>(bookReviewRepository.findByBookIsbn(isbn), HttpStatus.OK);
     }
 
     @GetMapping("/user/{reviewedUserId}")
@@ -56,7 +56,7 @@ public class ReviewController
     @GetMapping("/book/byUser/{userId}")
     public ResponseEntity<?> getBookReviewsByUser(@PathVariable Long userId)
     {
-        return new ResponseEntity<>(bookReviewService.listReviewsForUser(userId), HttpStatus.OK);
+        return new ResponseEntity<>(bookReviewRepository.findByUserId(userId), HttpStatus.OK);
     }
 
     @GetMapping("/user/byUser/{reviewerUserId}")

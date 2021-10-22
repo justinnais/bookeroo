@@ -8,23 +8,11 @@ import com.rmit.sept.bk_reviewservices.repositories.BookReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class BookReviewService
 {
     @Autowired
     private BookReviewRepository bookReviewRepository;
-
-    public List<BookReview> listReviewsForBook(String isbn)
-    {
-        return bookReviewRepository.findByBookIsbn(isbn);
-    }
-
-    public List<BookReview> listReviewsForUser(Long userId)
-    {
-        return bookReviewRepository.findByUserId(userId);
-    }
 
     public void postReview(BookReview bookReview) throws DuplicateReviewException,
             BadReviewScoreException, BadReviewTextException
