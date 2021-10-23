@@ -20,6 +20,7 @@ import { listListings } from "../api/stores/listing";
 import ListTable from "../components/Table/ListTable";
 import { IListing } from "../api/models/Listing";
 import Star from "../components/Rating/Star";
+import UserRating from "../components/Rating/UserRating";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -93,16 +94,14 @@ export default function Profile() {
                     {isLoading ? (
                         <Skeleton variant="text" width={150} />
                     ) : (
-                        <div>
-                            Member since {convertDate(profile.dateCreated)}
-                        </div>
+                        `Member since ${convertDate(profile.dateCreated)}`
                     )}
                 </Typography>
                 <Typography variant="body2" component="p">
                     {isLoading ? (
                         <Skeleton variant="text" width={100} />
                     ) : (
-                        <div>foo</div>
+                        <UserRating userId={profile.id} />
                     )}
                 </Typography>
             </div>

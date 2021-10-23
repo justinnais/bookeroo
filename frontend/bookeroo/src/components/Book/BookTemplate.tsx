@@ -24,6 +24,7 @@ import Badge from "../Badge/Badge";
 import { createTagsArray } from "../../util/createTagsArray";
 import BadgeGroup from "../Badge/BadgeGroup";
 import ListTable from "../Table/ListTable";
+import BookRatings from "../Rating/BookRatings";
 
 interface Props {
     book: IBook;
@@ -73,7 +74,7 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
-            <Star isbn={props.book.isbn} type="book" />
+            <BookRatings isbn={props.book.isbn} />
             <BadgeGroup tags={tags} />
             <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
