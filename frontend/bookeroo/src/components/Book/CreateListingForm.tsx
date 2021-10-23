@@ -34,7 +34,7 @@ export default function CreateListingForm(props: Props) {
     };
     const [isSubmitting, setSubmitting] = useState(false);
 
-    const { refetch } = useQuery("listBookListings", () =>
+    const { refetch } = useQuery(`listBookListings-${props.book.isbn}`, () =>
         listBookListings(props.book.isbn)
     );
 
@@ -84,7 +84,7 @@ export default function CreateListingForm(props: Props) {
     };
 
     const handleResponse = (res: any, request: CreateListingRequest) => {
-        if (res.status === 200) {
+        if (res.status === 201) {
             toast(`Successfully created listing for ${props.book.title}`);
             refetch();
         }
