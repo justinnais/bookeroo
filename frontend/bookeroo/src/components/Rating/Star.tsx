@@ -1,15 +1,16 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import { Rating } from "@material-ui/lab";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { Theme } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/styles";
 import { useQuery } from "react-query";
-import { createReview, getReviewsForBook } from "../../api/stores/review";
+import { createBookReview, getReviewsForBook } from "../../api/stores/review";
 import { CreateReviewRequest, IReview } from "../../api/models/Review";
 import { useAlertStore } from "../../stores/useAlertStore";
 
 interface Props {
     isbn: string;
+    type: "book" | "user";
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -31,7 +32,7 @@ export default function Star(props: Props) {
     };
 
     const { isLoading, isError, data, refetch } = useQuery(
-        `getReviews-${props.isbn}`,
+        `getBookReviews-${props.isbn}`,
         () => getReviewsForBook(props.isbn)
     );
 
@@ -66,7 +67,7 @@ export default function Star(props: Props) {
                     review: "wow", // TODO fix
                 };
 
-                createReview(review).then(
+                createBookReview(review).then(
                     (res) => handleResponse(res, review),
                     (err) => handleError(err)
                 );
@@ -83,7 +84,7 @@ export default function Star(props: Props) {
         const handleError = (err: any) => {
             try {
                 if (err.toString().includes("409")) {
-                    toast("You have already left a review for this book!");
+                    toast("You have already left a review!");
                 } else toast(`${err}`);
             } catch (error) {
                 console.error(error);

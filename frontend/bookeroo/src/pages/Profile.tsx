@@ -19,6 +19,7 @@ import OrderTable from "../components/Profile/OrderTable";
 import { listListings } from "../api/stores/listing";
 import ListTable from "../components/Table/ListTable";
 import { IListing } from "../api/models/Listing";
+import Star from "../components/Rating/Star";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -101,7 +102,7 @@ export default function Profile() {
                     {isLoading ? (
                         <Skeleton variant="text" width={100} />
                     ) : (
-                        <div>Add user ratings</div>
+                        <div>foo</div>
                     )}
                 </Typography>
             </div>

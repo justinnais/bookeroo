@@ -1,5 +1,6 @@
 export interface IReview {
-    bookIsbn: string;
+    bookIsbn?: string;
+    otherUserId?: number;
     reviewId: number;
     userId: number;
     score: number;

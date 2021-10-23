@@ -73,7 +73,7 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
-            <Star isbn={props.book.isbn} />
+            <Star isbn={props.book.isbn} type="book" />
             <BadgeGroup tags={tags} />
             <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
