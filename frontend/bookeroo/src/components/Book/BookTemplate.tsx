@@ -7,7 +7,6 @@ import {
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import React, { useRef, useState } from "react";
-import { GridCellParams } from "@material-ui/data-grid";
 import parse from "html-react-parser";
 import { useQuery } from "react-query";
 import { IBook } from "../../api/models/Book";
@@ -21,7 +20,6 @@ import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
 import CreateListingForm from "./CreateListingForm";
 import Star from "../Rating/Star";
-import { getReviewsForBook } from "../../api/stores/review";
 import Badge from "../Badge/Badge";
 import { createTagsArray } from "../../util/createTagsArray";
 import BadgeGroup from "../Badge/BadgeGroup";
@@ -38,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "auto",
         },
         icon: {
-            // height: "100px",
             fontSize: 100,
         },
         details: {
@@ -52,16 +49,10 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
-    const [isSubmitting, setSubmitting] = useState(false);
     const authors = createAuthorArray(props.book.authors);
     const tags = createTagsArray(props.book.tags);
     const tableRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
-
-    const { isLoading: reviewsLoading, data: reviewData } = useQuery(
-        `getReviews-${props.book.isbn}`,
-        () => getReviewsForBook(props.book.isbn)
-    );
 
     const { isLoading, data, refetch, isError } = useQuery(
         `listBookListings-${props.book.isbn}`,
@@ -124,7 +115,6 @@ export default function BookTemplate(props: Props) {
     const secondCard = [
         quote,
         <DetailsList items={firstList} />,
-        <DetailsList items={firstList} />,
         <DetailsList items={toc} />,
     ];
 
@@ -142,7 +132,11 @@ export default function BookTemplate(props: Props) {
             <Container>
                 <div ref={tableRef}>
                     <Typography variant="h4">Sellers</Typography>
-                    <ListTable isLoading isError data={reviewData} />
+                    <ListTable
+                        isLoading={isLoading}
+                        isError={isError}
+                        data={data}
+                    />
                 </div>
                 <div ref={formRef}>
                     <CreateListingForm book={props.book} />
