@@ -18,7 +18,11 @@ export default function TransactionTable() {
     const columns: TableColumn<ITransaction, keyof ITransaction>[] = [
         { key: "transactionId", header: "ID" },
         { key: "buyerId", header: "Buyer" },
-        { key: "datetime", header: "Date" },
+        {
+            key: "datetime",
+            header: "Date",
+            dataTransform: (date: string) => new Date(date).toDateString(),
+        },
         { key: "listingId", header: "Listing" },
         { key: "status" },
     ];
@@ -28,6 +32,7 @@ export default function TransactionTable() {
             columns={columns}
             isLoading={isLoading}
             isError={isError}
+            printButton
         />
     );
 }
