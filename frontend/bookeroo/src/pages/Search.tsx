@@ -17,6 +17,7 @@ import { theme } from "../styles/theme";
 import { createAuthorArray } from "../util/createAuthorArray";
 import GenericTable from "../components/Table/GenericTable";
 import { TableColumn } from "../components/Table/GenericTable";
+import { createTagsArray } from "../util/createTagsArray";
 
 const useStyles = makeStyles({
     root: {
@@ -51,10 +52,20 @@ export default function Search() {
 
     const columns: TableColumn<IBook, keyof IBook>[] = [
         { key: "title" },
-        { key: "authors" },
+        {
+            key: "authors",
+            dataTransform: (data: any) =>
+                createAuthorArray(data).splice(0, 2).join(", "),
+        },
         { key: "publisher" },
         { key: "isbn", header: "ISBN" },
         { key: "pages" },
+        {
+            key: "tags",
+            header: "Categories",
+            dataTransform: (data: any) =>
+                createTagsArray(data).splice(0, 2).join(", "),
+        },
     ];
 
     const handleClick = (book: IBook) => {

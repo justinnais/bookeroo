@@ -1,5 +1,6 @@
 export interface IReview {
-    bookIsbn: string;
+    bookIsbn?: string;
+    reviewedUserId?: number;
     reviewId: number;
     userId: number;
     score: number;
@@ -7,3 +8,7 @@ export interface IReview {
 }
 
 export interface CreateReviewRequest extends Omit<IReview, "reviewId"> {}
+export interface CreateUserReviewRequest
+    extends Omit<IReview, "reviewId" | "userId"> {
+    reviewerUserId: number;
+}
