@@ -8,12 +8,23 @@ import com.rmit.sept.bk_reviewservices.repositories.BookReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * Handles the saving of the book reviews
+ */
 @Service
 public class BookReviewService
 {
     @Autowired
     private BookReviewRepository bookReviewRepository;
 
+    /**
+     * Handles the "posting" of book reviews
+     *
+     * @param bookReview {@link BookReview} to save
+     * @throws DuplicateReviewException Thrown if the user has already reviewed the book
+     * @throws BadReviewScoreException  Thrown if the review score is outside the bounds
+     * @throws BadReviewTextException   Thrown if the review text is too long
+     */
     public void postReview(BookReview bookReview) throws DuplicateReviewException,
             BadReviewScoreException, BadReviewTextException
     {
