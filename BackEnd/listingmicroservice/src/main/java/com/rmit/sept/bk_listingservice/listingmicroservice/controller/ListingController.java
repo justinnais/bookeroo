@@ -39,8 +39,7 @@ public class ListingController
         if (listing.getUserId() == null)
             return new ResponseEntity<>("userId parameter is required", HttpStatus.BAD_REQUEST);
 
-        listingRepository.save(listing);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(listingRepository.save(listing), HttpStatus.CREATED);
     }
 
     // get listings for specific book
