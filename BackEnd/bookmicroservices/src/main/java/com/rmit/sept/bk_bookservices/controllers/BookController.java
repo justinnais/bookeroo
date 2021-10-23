@@ -13,7 +13,7 @@ import java.util.Set;
 
 @RestController
 @RequestMapping("/api/book")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
 public class BookController
 {
     private static final Logger log = Logger.getLogger(BookController.class);
