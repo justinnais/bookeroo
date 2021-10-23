@@ -1,5 +1,8 @@
 package com.rmit.sept.bk_loginservices.exceptions;
 
+/**
+ * Response returned in the event of a {@link UsernameAlreadyExistsException}
+ */
 public class UsernameAlreadyExistsResponse
 {
     private String username;

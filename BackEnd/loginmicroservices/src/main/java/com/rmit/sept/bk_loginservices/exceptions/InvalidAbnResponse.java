@@ -1,5 +1,8 @@
 package com.rmit.sept.bk_loginservices.exceptions;
 
+/**
+ * Response returned in the event of an {@link InvalidAbnException}
+ */
 public class InvalidAbnResponse
 {
     String message;

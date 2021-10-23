@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/**
+ * Maps custom Java exceptions to {@link ResponseEntity}s, so that in the event of a java exception,
+ * springboot can return an exception for the frontend, rather than just a 500
+ */
 @ControllerAdvice
 @RestController
 public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptionHandler

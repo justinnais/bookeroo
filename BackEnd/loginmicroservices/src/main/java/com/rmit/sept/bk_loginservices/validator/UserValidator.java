@@ -6,6 +6,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+/**
+ * Validates {@link User} objects, for checking password length, and handles company specific validation
+ * not possible within basic annotations
+ */
 @Component
 public class UserValidator implements Validator
 {
@@ -19,6 +23,7 @@ public class UserValidator implements Validator
     public void validate(Object object, Errors errors)
     {
         User user = (User) object;
+
 
         if (user.getPassword() == null)
             errors.rejectValue("password", "Missing", "Password is required");

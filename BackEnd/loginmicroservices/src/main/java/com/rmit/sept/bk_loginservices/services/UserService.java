@@ -10,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+/**
+ * Provides the ability to save users to the database,
+ * making checks for double up usernames, displaynames.
+ * Also encrypts their password.
+ */
 @Service
 public class UserService
 {

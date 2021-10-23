@@ -1,5 +1,8 @@
 package com.rmit.sept.bk_loginservices.payload;
 
+/**
+ * Response returned in the event a login call is successful. Stores a JWT token
+ */
 public class JWTLoginSuccessResponse
 {
     private boolean success;

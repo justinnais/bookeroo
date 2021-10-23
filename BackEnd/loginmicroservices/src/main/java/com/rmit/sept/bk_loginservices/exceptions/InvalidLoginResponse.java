@@ -1,5 +1,8 @@
 package com.rmit.sept.bk_loginservices.exceptions;
 
+/**
+ * Response returned when a user tries to log in with bad details
+ */
 public class InvalidLoginResponse
 {
     private String username;
