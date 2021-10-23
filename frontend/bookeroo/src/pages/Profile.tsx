@@ -15,6 +15,10 @@ import { IAccount } from "../api/models/Account";
 import { Skeleton } from "@material-ui/lab";
 import { AccountStatus } from "../util/enums";
 import { useAuthStore } from "../stores/useAuthStore";
+import OrderTable from "../components/Profile/OrderTable";
+import { listListings } from "../api/stores/listing";
+import ListTable from "../components/Table/ListTable";
+import { IListing } from "../api/models/Listing";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -42,30 +46,42 @@ export function convertDate(date: number) {
     return new Date(date).toDateString();
 }
 
-
 export default function Profile() {
     const classes = useStyles();
     const isAdmin = useAuthStore((state) => state.isAdmin);
     const user = useAuthStore((state) => state.user);
     const { displayName } = useParams<{ displayName: string }>();
-    const { isLoading, data } = useQuery("getProfile", () =>
+    const { isLoading, data, isError } = useQuery("getProfile", () =>
         getProfile(displayName)
     );
-    console.log(data);
+    const {
+        isLoading: listLoading,
+        isError: listError,
+        data: listData,
+    } = useQuery("listListings", () => listListings());
+
+    if (isError) {
+        return (
+            <Container className={classes.root}>
+                <div className={classes.topbar}>
+                    <Typography variant="h4" component="h4">
+                        There was an issue loading this profile. Please try
+                        again.
+                    </Typography>
+                </div>
+            </Container>
+        );
+    }
 
     const profile: IAccount = data ? data.data : undefined;
-    // TODO add error handling to this page when no user found
-    const isPending = profile
-        ? profile.accountStatus === AccountStatus.PENDING
-        : false;
 
-    const isOwnAccount = user && profile ? profile.id === user.id : false;
+    const isOwnAccount =
+        user && profile ? profile.id.toString() === user.id.toString() : false;
 
-    console.log("isPending", isPending, isAdmin);
     const UserDetails = () => (
         <div className={classes.userDetails}>
             <div>
-                <Typography variant="h4" component="h4">
+                <Typography variant="h5" component="h5">
                     {isLoading ? (
                         <Skeleton variant="text" width={200} />
                     ) : (
@@ -82,7 +98,11 @@ export default function Profile() {
                     )}
                 </Typography>
                 <Typography variant="body2" component="p">
-                    Rating TODO
+                    {isLoading ? (
+                        <Skeleton variant="text" width={100} />
+                    ) : (
+                        <div>Add user ratings</div>
+                    )}
                 </Typography>
             </div>
         </div>
@@ -92,33 +112,41 @@ export default function Profile() {
         <Container className={classes.root}>
             <div className={classes.topbar}>
                 <UserDetails />
-                <div>
-                    {isOwnAccount && (
-                        <Button color="secondary" variant="outlined">
-                            Recent Orders
-                        </Button>
-                    )}
-
-                    {isPending && isAdmin ? (
-                        <div>
-                            <Button color="secondary" variant="contained">
-                                Approve
-                            </Button>
-                            <Button color="secondary" variant="outlined">
-                                Deny
-                            </Button>
-                        </div>
-                    ) : null}
-                </div>
             </div>
-            <Typography variant="h5" component="h5">
-                Books For Sale
-            </Typography>
             {isLoading ? (
-                <Skeleton variant="rect" height={400} />
+                <div>
+                    <Typography variant="h5" component="h5" gutterBottom>
+                        <Skeleton variant="text" width={200} />
+                    </Typography>
+                    <Skeleton variant="rect" height={400} />
+                </div>
             ) : (
-                <div>add a filtered table of listings based on user id</div>
-                // <ProfileBooks userId={profile.id} />
+                <div>
+                    <Typography variant="h5" component="h5" gutterBottom>
+                        Books For Sale
+                    </Typography>
+                    <ListTable
+                        isLoading={listLoading}
+                        isError={listError}
+                        data={listData}
+                        filter={(data: IListing[]) =>
+                            data.filter(
+                                (listing: IListing) =>
+                                    listing.userId.toString() ===
+                                    profile.id.toString()
+                            )
+                        }
+                    />
+                </div>
+            )}
+
+            {isOwnAccount && (
+                <div>
+                    <Typography variant="h5" component="h5" gutterBottom>
+                        My Orders
+                    </Typography>
+                    <OrderTable buyerId={profile.id} />
+                </div>
             )}
         </Container>
     );

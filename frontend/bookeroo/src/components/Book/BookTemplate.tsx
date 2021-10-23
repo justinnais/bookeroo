@@ -18,7 +18,9 @@ import Container from "../Layout/Container";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
 import CreateListingForm from "./CreateListingForm";
-import ListTable from "./ListTable";
+import ListTable from "../Table/ListTable";
+import { useQuery } from "react-query";
+import { listBookListings } from "../../api/stores/listing";
 
 interface Props {
     book: IBook;
@@ -120,6 +122,11 @@ export default function BookTemplate(props: Props) {
         <DetailsList items={secondList} />,
     ];
 
+    const { isLoading, data, refetch, isError } = useQuery(
+        `listBookListings-${props.book.isbn}`,
+        () => listBookListings(props.book.isbn)
+    );
+
     return (
         <div>
             <Container noMargin>
@@ -134,7 +141,7 @@ export default function BookTemplate(props: Props) {
             <Container>
                 <div ref={tableRef}>
                     <Typography variant="h4">Sellers</Typography>
-                    <ListTable isbn={props.book.isbn} />
+                    <ListTable isLoading isError data={data} />
                 </div>
                 <div ref={formRef}>
                     <CreateListingForm book={props.book} />
