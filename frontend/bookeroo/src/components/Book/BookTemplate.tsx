@@ -4,21 +4,44 @@ import {
     createStyles,
     Button,
     Typography,
+    List,
+    ListItem,
+    ListItemText,
+    Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import {
+    DataGrid,
+    GridCellParams,
+    GridColDef,
+    GridValueGetterParams,
+} from "@material-ui/data-grid";
+import { useParams } from "react-router";
 import parse from "html-react-parser";
+import { useQuery } from "react-query";
 import { IBook } from "../../api/models/Book";
 import { theme } from "../../styles/theme";
 import GridLayout from "../Layout/GridLayout";
 import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
-
+import {
+    createListing,
+    listBookListings,
+    listListings,
+} from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
+import GenericTable, { TableColumn } from "../Table/GenericTable";
+import FormGenerator from "../Form/FormGenerator";
 import CreateListingForm from "./CreateListingForm";
-import ListTable from "../Table/ListTable";
+import { IListing } from "../../api/models/Listing";
+import { getUser } from "../../api/stores/user";
+import { IAccount } from "../../api/models/Account";
+import ListTable from "./ListTable";
+import Star from "../Rating/Star";
+import { getReviewsForBook } from "../../api/stores/review";
 import { useQuery } from "react-query";
 import { listBookListings } from "../../api/stores/listing";
 import Badge from "../Badge/Badge";
@@ -36,6 +59,7 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "auto",
         },
         icon: {
+            // height: "100px",
             fontSize: 100,
         },
         details: {
@@ -50,19 +74,14 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
     const [isSubmitting, setSubmitting] = useState(false);
-
     const authors = createAuthorArray(props.book.authors);
     const tags = createTagsArray(props.book.tags);
     const tableRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
 
-    function scrollToRef(ref: React.RefObject<HTMLDivElement>) {
-        if (ref.current) {
-            ref.current.scrollIntoView();
-        }
-    }
-
-    // console.log("json", JSON.parse(props.book.tableOfContents));
+    const { isLoading, data } = useQuery(`getReviews-${props.book.isbn}`, () =>
+        getReviewsForBook(props.book.isbn)
+    );
 
     const firstCard = [
         <TextCard
@@ -70,24 +89,17 @@ export default function BookTemplate(props: Props) {
             titleSize="h4"
             subtitle={authors.join(", ")}
             buttons={[
-                <Button
-                    color="secondary"
-                    variant="contained"
-                    onClick={() => scrollToRef(tableRef)}
-                >
+                <Button color="secondary" variant="contained">
                     View Sellers
                 </Button>,
-                <Button
-                    color="secondary"
-                    variant="outlined"
-                    onClick={() => scrollToRef(formRef)}
-                >
+                <Button color="secondary" variant="outlined">
                     Sell your copy
                 </Button>,
             ]}
         >
-            <BadgeGroup tags={tags} />
 
+            <Star isbn={props.book.isbn} />
+            <BadgeGroup tags={tags} />
             <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
@@ -128,9 +140,16 @@ export default function BookTemplate(props: Props) {
     const secondCard = [
         quote,
         <DetailsList items={firstList} />,
+        <DetailsList items={firstList} />,
         <DetailsList items={toc} />,
+
     ];
 
+    const addToCartButton = (params: GridCellParams) => (
+        <Button variant="contained" color="secondary">
+            Add to cart
+        </Button>
+    );
     const { isLoading, data, refetch, isError } = useQuery(
         `listBookListings-${props.book.isbn}`,
         () => listBookListings(props.book.isbn)
@@ -148,6 +167,9 @@ export default function BookTemplate(props: Props) {
                 <GridLayout items={secondCard} spacing={2} />
             </Container>
             <Container>
+                <Typography variant="h4">Sellers</Typography>
+                <ListTable isbn={props.book.isbn} />
+                <CreateListingForm book={props.book} />
                 <div ref={tableRef}>
                     <Typography variant="h4">Sellers</Typography>
                     <ListTable isLoading isError data={data} />
