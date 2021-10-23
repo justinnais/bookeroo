@@ -25,7 +25,7 @@ export interface TableColumn<T, K extends keyof T> {
     key: K | "custom"; // allows for custom columns
     header?: string;
     align?: "left" | "right";
-    dataTransform?: (data: any) => string | number | Promise<string | number>;
+    dataTransform?: (data: any) => string | number;
     customComponent?: (data: any) => React.ReactNode; // must be provided when using a custom field
 }
 
