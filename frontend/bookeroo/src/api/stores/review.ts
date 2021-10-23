@@ -16,5 +16,5 @@ export function getReviewsForUser(user: number) {
 }
 
 export function createReview(review: CreateReviewRequest) {
-    return api.post(`/review/post`, review);
+    return api.post(`/review/book/post`, review);
 }
