@@ -19,6 +19,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 
+/**
+ * Handles saving and getting {@link Book}s from the {@link BookRepository}
+ * Also handles getting books from ISBNDB
+ */
 @Service
 public class BookService
 {
@@ -33,13 +37,20 @@ public class BookService
     @Autowired
     private BookRepository bookRepository;
 
-    // LIST
+    /**
+     * @return {@link BookRepository#findAll()}
+     */
     public Set<Book> listBooks()
     {
         return new HashSet<>(bookRepository.findAll());
     }
 
-    // GET
+    /**
+     * Calls {@link BookRepository#findByIsbn(String)} or {@link BookRepository#findByIsbn13(String)},
+     * and if the book is null, then calls it from ISBNDB
+     * @param isbn - isbn to search on
+     * @return - Book object, or null if not founds
+     */
     public Book getBook(String isbn)
     {
         Book book;
@@ -73,6 +84,14 @@ public class BookService
         return book;
     }
 
+    /**
+     * Searches books by title, and retrieves more from ISBNDB.
+     * Deprecated, the frontend now handles this.
+     * Used to import books into the system for testing now.
+     * @param title - title to search on
+     * @return {@link Set} of {@link Book}s
+     */
+    @Deprecated
     @Transactional
     public Set<Book> searchByTitle(String title)
     {
