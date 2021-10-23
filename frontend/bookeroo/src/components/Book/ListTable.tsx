@@ -49,6 +49,30 @@ export default function ListTable(props: { isbn: string }) {
         }
     };
 
+    const deleteListing = (listing: IListing) => {
+        toast("TODO delete users listing");
+    };
+
+    const actionButton = (listing: IListing): React.ReactNode => {
+        return user && listing.userId.toString() === user.id.toString() ? (
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => deleteListing(listing)}
+            >
+                Delete
+            </Button>
+        ) : (
+            <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleBuyButton(listing)}
+            >
+                Buy
+            </Button>
+        );
+    };
+
     const handleClose = () => {
         setOpen(false);
         setSelectedListing(undefined);
@@ -76,15 +100,7 @@ export default function ListTable(props: { isbn: string }) {
         {
             key: "custom",
             header: " ",
-            customComponent: (listing: IListing) => (
-                <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleBuyButton(listing)}
-                >
-                    Buy
-                </Button>
-            ),
+            customComponent: (listing: IListing) => actionButton(listing),
         },
     ];
 
