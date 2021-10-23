@@ -57,6 +57,7 @@ export default function Book() {
     if (data) {
         book = data.data;
         book.datePublished = data.data.date_published;
+        book.tableOfContents = data.data.table_of_contents;
     }
 
     // TODO fix skeleton

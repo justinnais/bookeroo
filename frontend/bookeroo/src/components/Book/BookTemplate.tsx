@@ -40,6 +40,9 @@ import { IListing } from "../../api/models/Listing";
 import { getUser } from "../../api/stores/user";
 import { IAccount } from "../../api/models/Account";
 import ListTable from "./ListTable";
+import Badge from "../Badge/Badge";
+import { createTagsArray } from "../../util/createTagsArray";
+import BadgeGroup from "../Badge/BadgeGroup";
 
 interface Props {
     book: IBook;
@@ -69,6 +72,7 @@ export default function BookTemplate(props: Props) {
     const [isSubmitting, setSubmitting] = useState(false);
 
     const authors = createAuthorArray(props.book.authors);
+    const tags = createTagsArray(props.book.tags);
 
     const firstCard = [
         <TextCard
@@ -84,6 +88,8 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
+            <BadgeGroup tags={tags} />
+
             <Typography variant="body2" component="p">
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
