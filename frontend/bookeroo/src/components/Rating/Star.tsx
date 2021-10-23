@@ -82,7 +82,9 @@ export default function Star(props: Props) {
 
         const handleError = (err: any) => {
             try {
-                toast(`${err}`);
+                if (err.toString().includes("409")) {
+                    toast("You have already left a review for this book!");
+                } else toast(`${err}`);
             } catch (error) {
                 console.error(error);
             }
