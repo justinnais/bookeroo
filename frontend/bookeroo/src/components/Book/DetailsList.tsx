@@ -20,12 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
         details: {
             background: theme.palette.common.white,
         },
+        paper: {
+            minHeight: "24rem",
+        },
     })
 );
 export default function DetailsList(props: Props) {
     const classes = useStyles();
     return (
-        <Paper>
+        <Paper className={classes.paper}>
             <List className={classes.details}>
                 {props.items.map((item) => (
                     <ListItem>

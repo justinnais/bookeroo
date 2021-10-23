@@ -105,6 +105,16 @@ export default function BookTemplate(props: Props) {
         { label: "Page Count", value: props.book.pages },
     ];
 
+    const tocJSON = JSON.parse(props.book.tableOfContents);
+
+    // this is scuffed
+    const toc = Object.entries(tocJSON).map(
+        (entry): { label: string; value: string } => ({
+            label: entry[0],
+            value: entry[1] as string,
+        })
+    );
+
     const quote = (
         <div className={classes.quote}>
             <FormatQuoteIcon className={classes.icon} />
@@ -120,7 +130,7 @@ export default function BookTemplate(props: Props) {
     const secondCard = [
         quote,
         <DetailsList items={firstList} />,
-        <DetailsList items={firstList} />,
+        <DetailsList items={toc} />,
     ];
 
     const addToCartButton = (params: GridCellParams) => (
