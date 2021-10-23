@@ -13,4 +13,5 @@ export interface IBook {
     synopsys: string;
     authors: string;
     pages: number;
+    tableOfContents: string;
 }

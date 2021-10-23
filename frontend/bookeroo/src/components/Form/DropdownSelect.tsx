@@ -46,8 +46,10 @@ export default function DropdownSelect(props: Props) {
                 label={props.label}
                 {...props.formik.getFieldProps(id)}
             >
-                {props.options.map((option) => (
-                    <MenuItem value={option}>{option}</MenuItem>
+                {props.options.map((option, key) => (
+                    <MenuItem value={option} key={key}>
+                        {option}
+                    </MenuItem>
                 ))}
             </Select>
             <FormHelperText>{helperText}</FormHelperText>
