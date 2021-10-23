@@ -42,6 +42,9 @@ import { IAccount } from "../../api/models/Account";
 import ListTable from "./ListTable";
 import Star from "../Rating/Star";
 import { getReviewsForBook } from "../../api/stores/review";
+import Badge from "../Badge/Badge";
+import { createTagsArray } from "../../util/createTagsArray";
+import BadgeGroup from "../Badge/BadgeGroup";
 
 interface Props {
     book: IBook;
@@ -69,8 +72,10 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
     const [isSubmitting, setSubmitting] = useState(false);
-
     const authors = createAuthorArray(props.book.authors);
+    const tags = createTagsArray(props.book.tags);
+    const tableRef = useRef<HTMLDivElement>(null);
+    const formRef = useRef<HTMLDivElement>(null);
 
     const { isLoading, data } = useQuery(`getReviews-${props.book.isbn}`, () =>
         getReviewsForBook(props.book.isbn)
@@ -90,9 +95,10 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
-            <Star isbn={props.book.isbn} />
 
-            <Typography variant="body2" component="p">
+            <Star isbn={props.book.isbn} />
+            <BadgeGroup tags={tags} />
+            <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
         </TextCard>,
@@ -106,6 +112,16 @@ export default function BookTemplate(props: Props) {
         { label: "ISBN", value: props.book.isbn || props.book.isbn13 },
         { label: "Page Count", value: props.book.pages },
     ];
+
+    const tocJSON = JSON.parse(props.book.tableOfContents);
+
+    // this is scuffed
+    const toc = Object.entries(tocJSON).map(
+        (entry): { label: string; value: string } => ({
+            label: entry[0],
+            value: entry[1] as string,
+        })
+    );
 
     const quote = (
         <div className={classes.quote}>
@@ -123,6 +139,8 @@ export default function BookTemplate(props: Props) {
         quote,
         <DetailsList items={firstList} />,
         <DetailsList items={firstList} />,
+        <DetailsList items={toc} />,
+
     ];
 
     const addToCartButton = (params: GridCellParams) => (
