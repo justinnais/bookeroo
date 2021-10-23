@@ -20,5 +20,4 @@ export function createListing(
     listing: CreateListingRequest
 ) {
     return api.post(`/listing/create`, listing);
-    // return api.post(`/listing/create/${type}`, listing);
 }
