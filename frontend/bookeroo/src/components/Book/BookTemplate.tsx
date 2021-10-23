@@ -19,6 +19,9 @@ import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
 import CreateListingForm from "./CreateListingForm";
 import ListTable from "./ListTable";
+import Badge from "../Badge/Badge";
+import { createTagsArray } from "../../util/createTagsArray";
+import BadgeGroup from "../Badge/BadgeGroup";
 
 interface Props {
     book: IBook;
@@ -47,6 +50,7 @@ export default function BookTemplate(props: Props) {
     const [isSubmitting, setSubmitting] = useState(false);
 
     const authors = createAuthorArray(props.book.authors);
+    const tags = createTagsArray(props.book.tags);
     const tableRef = useRef<HTMLDivElement>(null);
     const formRef = useRef<HTMLDivElement>(null);
 
@@ -80,6 +84,8 @@ export default function BookTemplate(props: Props) {
                 </Button>,
             ]}
         >
+            <BadgeGroup tags={tags} />
+
             <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
@@ -95,12 +101,15 @@ export default function BookTemplate(props: Props) {
         { label: "Page Count", value: props.book.pages },
     ];
 
-    const secondList = [
-        {
-            label: "Table Of Contents",
-            value: props.book.tableOfContents,
-        },
-    ];
+    const tocJSON = JSON.parse(props.book.tableOfContents);
+
+    // this is scuffed
+    const toc = Object.entries(tocJSON).map(
+        (entry): { label: string; value: string } => ({
+            label: entry[0],
+            value: entry[1] as string,
+        })
+    );
 
     const quote = (
         <div className={classes.quote}>
@@ -117,7 +126,7 @@ export default function BookTemplate(props: Props) {
     const secondCard = [
         quote,
         <DetailsList items={firstList} />,
-        <DetailsList items={secondList} />,
+        <DetailsList items={toc} />,
     ];
 
     return (
