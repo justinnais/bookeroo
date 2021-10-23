@@ -5,21 +5,33 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Representation of the UserReview entity in the system
+ */
 @Entity
 public class UserReview
 {
-    private static final double MAX_SCORE = 5.0;
-
+    /**
+     * Unique identifier for the UserReview object
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reviewId;
+    /**
+     * Id of the user who created the review
+     */
     private Long reviewerUserId;
+    /**
+     * Id of the user for who the review relates
+     */
     private Long reviewedUserId;
+    /**
+     * Numerical score given as part of the review
+     */
     private Double score;
 
     public UserReview()
     {
-
     }
 
     public Long getReviewId()

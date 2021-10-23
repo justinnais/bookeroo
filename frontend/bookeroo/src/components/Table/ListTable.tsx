@@ -7,6 +7,7 @@ import {
     Avatar,
     ListItemText,
 } from "@material-ui/core";
+import { AxiosResponse } from "axios";
 import React from "react";
 import { PayPalButton } from "react-paypal-button-v2";
 import { isError, useQuery } from "react-query";
@@ -18,7 +19,7 @@ import { getUser } from "../../api/stores/user";
 import { useAlertStore } from "../../stores/useAlertStore";
 import { useAuthStore } from "../../stores/useAuthStore";
 import Button from "../Button/Button";
-import GenericTable, { TableColumn } from "../Table/GenericTable";
+import GenericTable, { TableColumn } from "./GenericTable";
 
 async function getDisplayName(id: string) {
     console.log("getting display name", id);
@@ -32,7 +33,14 @@ async function getDisplayName(id: string) {
     }
 }
 
-export default function ListTable(props: { isbn: string }) {
+interface Props {
+    isLoading: boolean;
+    data: AxiosResponse<any> | undefined;
+    isError: boolean;
+    filter?: (data: IListing[]) => IListing[];
+}
+
+export default function ListTable(props: Props) {
     const [open, setOpen] = React.useState(false);
     const [selectedListing, setSelectedListing] = React.useState<IListing>();
     const user = useAuthStore((state) => state.user);
@@ -77,10 +85,6 @@ export default function ListTable(props: { isbn: string }) {
         setOpen(false);
         setSelectedListing(undefined);
     };
-    const { isLoading, data, refetch, isError } = useQuery(
-        "listBookListings",
-        () => listBookListings(props.isbn)
-    );
 
     // TODO check that table fills out correctly when data gets fixed
     const columns: TableColumn<IListing, keyof IListing>[] = [
@@ -106,12 +110,22 @@ export default function ListTable(props: { isbn: string }) {
 
     return (
         <div>
-            <GenericTable
-                data={data}
-                columns={columns}
-                isLoading={isLoading}
-                isError={isError}
-            />
+            {props.filter !== undefined ? (
+                <GenericTable
+                    data={props.data}
+                    columns={columns}
+                    isLoading={props.isLoading}
+                    isError={props.isError}
+                    filter={(data: IListing[]) => props.filter!(data)}
+                />
+            ) : (
+                <GenericTable
+                    data={props.data}
+                    columns={columns}
+                    isLoading={props.isLoading}
+                    isError={props.isError}
+                />
+            )}
             {selectedListing && user && (
                 <PayPalDialog
                     listing={selectedListing}

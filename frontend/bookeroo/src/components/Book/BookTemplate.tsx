@@ -42,6 +42,8 @@ import { IAccount } from "../../api/models/Account";
 import ListTable from "./ListTable";
 import Star from "../Rating/Star";
 import { getReviewsForBook } from "../../api/stores/review";
+import { useQuery } from "react-query";
+import { listBookListings } from "../../api/stores/listing";
 import Badge from "../Badge/Badge";
 import { createTagsArray } from "../../util/createTagsArray";
 import BadgeGroup from "../Badge/BadgeGroup";
@@ -148,6 +150,10 @@ export default function BookTemplate(props: Props) {
             Add to cart
         </Button>
     );
+    const { isLoading, data, refetch, isError } = useQuery(
+        `listBookListings-${props.book.isbn}`,
+        () => listBookListings(props.book.isbn)
+    );
 
     return (
         <div>
@@ -164,6 +170,13 @@ export default function BookTemplate(props: Props) {
                 <Typography variant="h4">Sellers</Typography>
                 <ListTable isbn={props.book.isbn} />
                 <CreateListingForm book={props.book} />
+                <div ref={tableRef}>
+                    <Typography variant="h4">Sellers</Typography>
+                    <ListTable isLoading isError data={data} />
+                </div>
+                <div ref={formRef}>
+                    <CreateListingForm book={props.book} />
+                </div>
             </Container>
         </div>
     );

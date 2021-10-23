@@ -23,9 +23,6 @@ const useStyles = makeStyles((theme: Theme) =>
         details: {
             background: theme.palette.common.white,
         },
-        paper: {
-            minHeight: "24rem",
-        },
     })
 );
 export default function DetailsList(props: Props) {

@@ -15,12 +15,18 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/listing")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080", "https://bookeroo" +
+        ".danieljmills.com"})
 public class ListingController
 {
     @Autowired
-    ListingRepository listingRepository;
+    private ListingRepository listingRepository;
 
+    /**
+     * Endpoint for creating new listings when a user uploads a new book to sell
+     *
+     * @param listing A Listing object representing the new listing
+     */
     @PostMapping("/create")
     public ResponseEntity<?> createListing(@RequestBody Listing listing)
     {
@@ -42,7 +48,11 @@ public class ListingController
         return new ResponseEntity<>(listingRepository.save(listing), HttpStatus.CREATED);
     }
 
-    // get listings for specific book
+    /**
+     * Endpoint to retrieve all the listings for a specific book identified by the isbn
+     *
+     * @param bookIsbn ISBN of the book
+     */
     @GetMapping("/book/{bookIsbn}")
     public ResponseEntity<?> listListings(@PathVariable("bookIsbn") Long bookIsbn)
     {
@@ -55,7 +65,9 @@ public class ListingController
         return ResponseEntity.ok().body(array.toString());
     }
 
-    // LIST ALL 
+    /**
+     * Endpoint to return all listings in the system
+     */
     @GetMapping("")
     public ResponseEntity<?> listListings()
     {
@@ -63,17 +75,20 @@ public class ListingController
         return new ResponseEntity<>(allListings, HttpStatus.OK);
     }
 
-    // GET SINGLE LISTING
+    /**
+     * Endpoint to return a specific listing identified by its id
+     *
+     * @param id Id of the listing to return
+     */
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> getListing(@PathVariable Long id)
     {
         Optional<Listing> listing = listingRepository.findById(id);
 
-        if (listing.isEmpty()) {
+        if (listing.isEmpty())
             return new ResponseEntity<>("No listing exists with that id", HttpStatus.NOT_FOUND);
-        } else {
+        else
             return new ResponseEntity<>(listing.get(), HttpStatus.OK);
-        }
     }
 
 }

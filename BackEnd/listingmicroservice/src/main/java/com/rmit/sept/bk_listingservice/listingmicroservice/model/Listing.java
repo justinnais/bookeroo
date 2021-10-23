@@ -2,21 +2,44 @@ package com.rmit.sept.bk_listingservice.listingmicroservice.model;
 
 import javax.persistence.*;
 
+/**
+ * Represents the Listing entity in the system
+ */
 @Entity
 public class Listing
 {
+    /**
+     * id used to uniquely identify listings
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    /**
+     * id of the user who made the listing
+     */
     private Long userId;
+    /**
+     * ISBN of the book the listing is made for
+     */
     private Long bookIsbn;
+    /**
+     * Boolean representing if the book is new or used
+     */
     private boolean used;
-
+    /**
+     * Physical condition of the book
+     */
     @Enumerated(EnumType.STRING)
     @Column(name = "cond")
     private Condition condition;
+    /**
+     * Description of the condition of the book
+     */
     @Column(name = "cond_desc")
     private String conditionDesc;
+    /**
+     * Price assigned to this listing of the book
+     */
     private Long price;
 
     public Long getBookIsbn()
