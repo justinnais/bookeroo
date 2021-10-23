@@ -9,13 +9,13 @@ interface Props {
     stretch?: boolean;
 }
 
+/**
+ * Container for images
+ * @param props image and options
+ * @returns Image on paper
+ */
 export default function Image(props: Props) {
     // TODO MUImage has issues with resizing within grid layout causing it to disappear
-    /*  return (
-        <Paper>
-            <img {...props} style={{ width: "100%", height: "100%" }} />
-        </Paper>
-    ); */
     return (
         <Paper>
             <MUImage

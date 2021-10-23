@@ -23,6 +23,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * Container wrapper to keep items in eyeline
+ * @param props children for container
+ * @returns 
+ */
 export default function Container(props: Props) {
     const classes = useStyles(props);
 

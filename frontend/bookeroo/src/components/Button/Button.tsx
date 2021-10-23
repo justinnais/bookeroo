@@ -6,7 +6,6 @@ import {
     Theme,
 } from "@material-ui/core";
 import React from "react";
-import { Link as RouterLink } from "react-router-dom";
 
 interface Props extends ButtonProps {
     children?: React.ReactNode;
@@ -33,13 +32,11 @@ export default function Button(props: Props) {
     return (
         <ButtonMU
             color="inherit"
-            // component={props.to ? RouterLink : ButtonMU}
             href={props.to ? props.to : undefined}
             {...props}
             className={classes.button}
         >
             <div>{props.children}</div>
-            
         </ButtonMU>
     );
 }

@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * Searchbar that creates a search query and redirects to search result page
+ * @returns searchbar 
+ */
 export default function Searchbar() {
     const classes = useStyles();
     const history = useHistory();

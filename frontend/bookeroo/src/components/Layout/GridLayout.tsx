@@ -33,6 +33,11 @@ const useStyles = makeStyles((theme: Theme) => {
     });
 });
 
+/**
+ * Creates a customisable responsive grid layout to wrap children in
+ * @param props view prop comments
+ * @returns 
+ */
 export default function GridLayout(props: Props) {
     const classes = useStyles(props);
     return (

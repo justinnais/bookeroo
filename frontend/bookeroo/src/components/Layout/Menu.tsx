@@ -1,7 +1,6 @@
 import {
     MenuItem,
     Menu as MenuMui,
-    ClickAwayListener,
 } from "@material-ui/core";
 import React from "react";
 import Button from "../Button/Button";
@@ -17,6 +16,11 @@ interface Props {
     items: IMenuItem[];
 }
 
+/**
+ * Dropdown menu that shows on click at location provided
+ * @param props items to show in menu
+ * @returns menu
+ */
 export default function Menu(props: Props) {
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 

@@ -16,6 +16,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
+
+/**
+ * 
+ * @param props array of tags to map 
+ * @returns group of badges
+ */
 export default function BadgeGroup(props: Props) {
     const styles = useStyles();
     return (

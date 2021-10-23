@@ -1,6 +1,5 @@
 import {
     Typography,
-    Button,
     createStyles,
     makeStyles,
     Theme,
@@ -13,7 +12,6 @@ interface Props {
     titleSize?: string;
     pretitle?: string;
     subtitle?: string;
-    // body?: string;
     buttons?: React.ReactNode[];
     children: React.ReactNode;
     align?: "center" | "right";
@@ -60,6 +58,11 @@ const useStyles = makeStyles((theme: Theme) => {
     });
 });
 
+/**
+ * Generic text card to format and style text consistently
+ * @param props text and other options to display in card
+ * @returns card to display text
+ */
 export default function TextCard(props: Props) {
     const classes = useStyles(props);
     return (
@@ -80,9 +83,6 @@ export default function TextCard(props: Props) {
                     {props.subtitle}
                 </Typography>
             </div>
-            {/* <Typography variant="body2" component="p">
-                {props.body}
-            </Typography> */}
             <div className={classes.children}>{props.children}</div>
             <div className={classes.buttons}>
                 {props.buttons &&

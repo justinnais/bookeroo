@@ -17,10 +17,12 @@ interface Props {
     formik: any;
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
-
+/**
+ * 
+ * @param props label and options to show in dropdown, formik props
+ * @returns validated dropdown input
+ */
 export default function DropdownSelect(props: Props) {
-    const classes = useStyles();
     const [value, setValue] = useState("");
     const id = camelCase(props.label); // converts label into id
 

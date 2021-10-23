@@ -6,7 +6,7 @@ import {
     Typography,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import parse from "html-react-parser";
 import { useQuery } from "react-query";
 import { IBook } from "../../api/models/Book";
@@ -19,8 +19,6 @@ import { listBookListings } from "../../api/stores/listing";
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
 import CreateListingForm from "./CreateListingForm";
-import Star from "../Rating/Star";
-import Badge from "../Badge/Badge";
 import { createTagsArray } from "../../util/createTagsArray";
 import BadgeGroup from "../Badge/BadgeGroup";
 import ListTable from "../Table/ListTable";
@@ -52,6 +50,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * 
+ * @param props book being displayed on page
+ * @returns renders the book information and sellers
+ */
 export default function BookTemplate(props: Props) {
     const classes = useStyles();
     const authors = createAuthorArray(props.book.authors);

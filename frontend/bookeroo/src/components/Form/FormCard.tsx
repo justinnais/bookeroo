@@ -12,7 +12,7 @@ import React from "react";
 interface Props {
     title: string;
     form: React.ReactNode;
-    buttons: React.ReactNode[]; //this should only be buttons fix later
+    buttons: React.ReactNode[];
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -41,6 +41,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ *
+ * @param props title of card, form child and action buttons
+ * @returns card that holds and styles a form, as well as any additional buttons
+ */
 export default function FormCard(props: Props) {
     const classes = useStyles();
     return (
