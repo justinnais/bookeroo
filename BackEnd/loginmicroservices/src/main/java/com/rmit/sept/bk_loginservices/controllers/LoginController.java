@@ -29,7 +29,7 @@ import javax.validation.Valid;
  */
 @RestController
 @RequestMapping("/api/user")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
 // allows for CORS when testing locally
 public class LoginController
 {
