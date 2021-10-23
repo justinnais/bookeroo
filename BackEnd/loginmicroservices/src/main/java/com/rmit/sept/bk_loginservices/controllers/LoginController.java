@@ -30,7 +30,6 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/api/user")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
-// allows for CORS when testing locally
 public class LoginController
 {
     private static final Logger log = Logger.getLogger(LoginController.class);
@@ -53,14 +52,21 @@ public class LoginController
     @Autowired
     private UserRepository userRepository;
 
-    // LIST
+    /**
+     * Returns a list of all {@link User}s in the system
+     * @return - {@link ResponseEntity} containing a list of all users
+     */
     @GetMapping("")
     public ResponseEntity<?> listUsers()
     {
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 
-    // GET BY ID
+    /**
+     * Returns a {@link User} with a specific given id. Throws a 404 if no user is found
+     * @param id - id of the user to retrieve
+     * @return - {@link ResponseEntity} containing the {@link User}
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id)
     {
@@ -71,6 +77,11 @@ public class LoginController
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    /**
+     * Gets a list of users with a specific {@link AccountStatus}. Returns Bad Request of the status doesn't exist
+     * @param statusString a string that matches one of {@link AccountStatus}'s values
+     * @return  - {@link ResponseEntity} containing the list of {@link User}s
+     */
     @GetMapping("/status/{status}")
     public ResponseEntity<?> getUserByStatus(@PathVariable("status") String statusString)
     {
@@ -93,7 +104,11 @@ public class LoginController
         return new ResponseEntity<>(userRepository.findByAccountStatus(status), HttpStatus.OK);
     }
 
-    // GET PROFILE
+    /**
+     * Returns a {@link User} with a specific given displayName. Throws a 404 if no user is found
+     * @param displayName - displayName of the user to retrieve
+     * @return - {@link ResponseEntity} containing the {@link User}
+     */
     @GetMapping("/profile/{displayName}")
     public ResponseEntity<?> getUserByDisplayName(@PathVariable String displayName)
     {
@@ -105,6 +120,13 @@ public class LoginController
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
+    /**
+     *Takes a {@link User} object in, and attempts to validate it using {@link LoginController#userValidator}.
+     * If valid, registers it to the database
+     * @param user - User to register
+     * @param result - BindingResult object provided by spring boot
+     * @return - a {@link ResponseEntity} with a {@link HttpStatus#CREATED} status code.
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody User user, BindingResult result)
     {
@@ -130,6 +152,13 @@ public class LoginController
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    /**
+     * Takes in a {@link LoginRequest} object, and uses it to log in with the stored details. On success, will return a
+     * JWT token
+     * @param loginRequest - Object containing login details
+     * @param result - BindingResult object provided by spring boot
+     * @return - A JWT token within a {@link ResponseEntity}
+     */
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest,
                                               BindingResult result)
@@ -156,6 +185,12 @@ public class LoginController
         return ResponseEntity.ok(new JWTLoginSuccessResponse(true, jwt));
     }
 
+    /**
+     * Updates the {@link User} object with the given id
+     * @param id - ID of user to update
+     * @param user - A {@link User} object storing the details to update
+     * @return
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user)
     {

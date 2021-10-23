@@ -5,6 +5,11 @@ import javax.validation.ConstraintValidatorContext;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
+/**
+ * Super class for mapping a relationship between an Annotation and ConstraintValidator
+ * @param <T> - Annotation
+ * @param <U> - ConstraintValidator
+ */
 public abstract class EnumValidator<T extends Annotation, U> implements ConstraintValidator<T, U>
 {
     private U[] subset;

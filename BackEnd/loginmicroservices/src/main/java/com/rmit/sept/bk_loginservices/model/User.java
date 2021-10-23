@@ -14,6 +14,9 @@ import javax.validation.constraints.NotBlank;
 import java.util.Collection;
 import java.util.Date;
 
+/**
+ * Represents a User within the system, storing their relevant details
+ */
 @Entity
 public class User implements UserDetails
 {

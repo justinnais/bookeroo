@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
 
+/**
+ * Handles all requests made to the service
+ */
 @RestController
 @RequestMapping("/api/book")
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
@@ -24,14 +27,21 @@ public class BookController
     @Autowired
     private BookRepository bookRepository;
 
-    // LIST
+    /**
+     * Returns all {@link Book}s in the system
+     * @return - {@link ResponseEntity} containing all books
+     */
     @GetMapping("")
     public ResponseEntity<?> listBooks()
     {
         return new ResponseEntity<>(bookService.listBooks(), HttpStatus.OK);
     }
 
-    // GET
+    /**
+     * Returns a {@link Book} with the given ISBN
+     * @param isbn - {@link String} isbn of required book
+     * @return - {@link ResponseEntity} containing the required book
+     */
     @GetMapping("/{isbn}")
     public ResponseEntity<?> getBook(@PathVariable String isbn)
     {
@@ -48,6 +58,13 @@ public class BookController
         return new ResponseEntity<>(book, HttpStatus.OK);
     }
 
+    /**
+     * Searches books by title. This call is not made by the frontend,
+     * is now mostly used now to import books into the system
+     * @param title - title to search on
+     * @return - List of books
+     */
+    @Deprecated
     @GetMapping("/search/title/{title}")
     public ResponseEntity<?> searchByTitle(@PathVariable String title)
     {
@@ -59,6 +76,13 @@ public class BookController
             return new ResponseEntity<>("No books found", HttpStatus.NOT_FOUND);
     }
 
+    /**
+     * Updates a given {@link Book} within the system, based on the given isbn
+     * and {@link Book} object containing new fields
+     * @param isbn - Isbn of book to update
+     * @param book - Book object containing new data
+     * @return
+     */
     @PatchMapping("/{isbn}")
     public ResponseEntity<?> updateBook(@PathVariable String isbn, @RequestBody Book book)
     {

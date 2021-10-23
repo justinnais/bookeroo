@@ -11,47 +11,102 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+/**
+ * Represents a book within the system.
+ * Based primarily on the ISBNDB system
+ */
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Book
 {
+    /**
+     * The maximum tags a book can have
+     */
     public static int MAX_TAGS = 5;
 
+    /**
+     * The isbn10 of the book. Unique
+     */
     @Id
     private String isbn;
 
+    /**
+     * The isbn13 of the book. Unique
+     */
     @Column(unique = true)
     private String isbn13;
 
+    /**
+     * The short title of the book
+     */
     private String title;
 
+    /**
+     * The long title of the book
+     */
     @JsonProperty("title_long")
     private String titleLong;
 
+    /**
+     * How the book is bound, eg: paperback, hardcover
+     */
     private String binding;
 
+    /**
+     * The publisher of the book
+     */
     private String publisher;
 
+    /**
+     * The language the book is written in. In two letter format, eg: EN
+     */
     private String language;
 
+    /**
+     * The date the book was published. ISBNDB does not stick to one format, so cannot be {@link java.time.LocalDateTime}
+     */
     @JsonProperty("date_published")
     private String datePublished;
 
+    /**
+     * Which edition of the book this is
+     */
     private String edition;
 
+    /**
+     * The amount of pages in the book
+     */
     private int pages;
 
+    /**
+     * The physical dimensions of the book, can be inconsistent thanks to ISBNDB
+     */
     private String dimensions;
 
+    /**
+     * A url pointing to the ISBNDB image used for this book
+     */
     private String image;
 
+    /**
+     * A paragraph describing the book. Sometimes in HTML format
+     */
     @Column(columnDefinition = "TEXT")
     private String synopsys;
 
+    /**
+     * A list of authors seperated by |
+     */
     private String authors;
 
+    /**
+     * A list of tags seperated by |
+     */
     private String tags;
 
+    /**
+     * A table of contents in json format.
+     */
     @JsonProperty("table_of_contents")
     private String tableOfContents;
 
@@ -60,8 +115,16 @@ public class Book
         setTableOfContents("{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}");
     }
 
+    /**
+     * Takes a {@link JSONObject} and converts it to a {@link Book}
+     * @param json - Json object to convert
+     * @return - a new Book object
+     * @throws JsonProcessingException - if the json is invalid
+     */
     public static Book fromJson(JSONObject json) throws JsonProcessingException
     {
+        //Start by separating out the author and tags,
+        //so they can be stored within a field each in the db
         String authors = "Unknown";
         String tags = "";
 
@@ -89,9 +152,12 @@ public class Book
 
         json.remove("subjects");
 
+        //Create the book
+
         ObjectMapper objectMapper = new ObjectMapper();
         Book book = objectMapper.readValue(json.toString(), Book.class);
 
+        //Add the tags and authors back onto the book
         book.setAuthors(authors);
         book.setTags(tags);
 
