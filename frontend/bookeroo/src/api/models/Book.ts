@@ -14,4 +14,5 @@ export interface IBook {
     authors: string;
     pages: number;
     tableOfContents: string;
+    tags: string;
 }
