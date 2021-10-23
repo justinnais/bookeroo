@@ -65,7 +65,7 @@ export default function CreateListingForm(props: Props) {
             const { book } = props;
             const request: CreateListingRequest = {
                 bookIsbn: book.isbn || book.isbn13,
-                condition: values.condition,
+                condition: (values.condition as string).toUpperCase(),
                 conditionDesc: values.conditionDescription,
                 used: values.condition !== BookCondition.NEW,
                 userId: user.id,
@@ -98,7 +98,9 @@ export default function CreateListingForm(props: Props) {
 
     const handleError = (err: any) => {
         const errors: { [key: string]: string } = err.response.data;
-        Object.values(errors).map((error) => toast(error));
+        Object.values(errors).map((error) =>
+            toast("Error creating a listing, please try again")
+        );
     };
 
     const form = FormGenerator(formId, fields, onSubmit);

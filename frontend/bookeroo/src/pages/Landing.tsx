@@ -121,7 +121,7 @@ export default function Landing() {
                 />
             </Container>
             <Container style={{ backgroundColor: theme.palette.primary.main }}>
-                <BookDisplay count={4} />
+                <BookDisplay count={4} hideControls />
             </Container>
         </div>
     );

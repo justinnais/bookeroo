@@ -9,9 +9,11 @@ import {
 } from "@material-ui/core";
 import { AxiosResponse } from "axios";
 import React, { useEffect, useState } from "react";
+import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
 import TableHeader from "./TableHeader";
 import TableRows from "./TableRows";
+import fs from "fs";
 
 // https://react.christmas/2020/22
 
@@ -25,7 +27,7 @@ export interface TableColumn<T, K extends keyof T> {
     key: K | "custom"; // allows for custom columns
     header?: string;
     align?: "left" | "right";
-    dataTransform?: (data: any) => string | number | Promise<string | number>;
+    dataTransform?: (data: any) => string | number;
     customComponent?: (data: any) => React.ReactNode; // must be provided when using a custom field
 }
 
@@ -183,7 +185,7 @@ export default function GenericTable<T, K extends keyof T>(
         <Button
             variant="outlined"
             color="secondary"
-            onClick={() => console.log("data", data)} // TODO create CSV with data
+            onClick={() => createCSV(columns, data)} // TODO create CSV with data
         >
             Print
         </Button>
@@ -227,4 +229,76 @@ export default function GenericTable<T, K extends keyof T>(
             </Paper>
         </div>
     );
+}
+
+/**
+ * Create a CSV file from the generic table
+ * @param columns table headers
+ * @param data data rows
+ */
+function createCSV<T, K extends keyof T>(
+    columns: TableColumn<T, K>[],
+    data: T[]
+): void {
+    // returns the cell value based on the key
+    const getTableCell = (column: TableColumn<T, K>, row: T) => {
+        // if a custom component is provided do not provide anything
+        if (column.key === "custom") {
+            return "";
+        } else if (column.dataTransform) {
+            return column.dataTransform(row[column.key]);
+        } else {
+            return row[column.key];
+        }
+    };
+
+    // table headers
+    const headers = columns.map((column) => {
+        if (column.key === "custom") {
+            return "";
+        }
+        return column.header ?? titleCase(column.key.toString());
+    });
+
+    // each row in the CSV
+    const rows: any[] = data.map((row, rowIndex) =>
+        columns.map((column, colIndex) => getTableCell(column, row))
+    );
+
+    // concating the headers and data, joining with commas, checking to make sure cells containing commas are handled by wrapping in "quotes"
+    const csvString = [headers]
+        .concat(rows)
+        .map((item) => {
+            return item
+                .map((cell) => {
+                    if (cell !== null && cell.toString().includes(",")) {
+                        return `"${cell}"`;
+                    } else {
+                        return cell;
+                    }
+                })
+                .join(",");
+        })
+        .join("\n");
+
+    const filename = "bookeroo-data.csv";
+    const blob = new Blob([csvString]);
+    const fileDownloadUrl = URL.createObjectURL(blob);
+    download(fileDownloadUrl, filename);
+    URL.revokeObjectURL(fileDownloadUrl);
+}
+
+/**
+ * Creates a download element, calls in, then removes
+ * @param path url download path
+ * @param filename filename
+ */
+function download(path: string, filename: string) {
+    // https://heynode.com/blog/2020-02/reading-and-writing-csv-files-nodejs/
+    const hiddenElement = document.createElement("a");
+    hiddenElement.href = path;
+    hiddenElement.download = filename;
+    document.body.appendChild(hiddenElement);
+    hiddenElement.click();
+    document.body.removeChild(hiddenElement);
 }
