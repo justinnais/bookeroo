@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme: Theme) =>
         quote: {
             maxWidth: "50vw",
         },
+        form: {
+            display: "flex",
+            justifyContent: "center",
+        },
     })
 );
 
@@ -60,16 +64,30 @@ export default function BookTemplate(props: Props) {
         () => listBookListings(props.book.isbn)
     );
 
+    function scrollToRef(ref: React.RefObject<HTMLDivElement>) {
+        if (ref.current) {
+            ref.current.scrollIntoView();
+        }
+    }
+
     const firstCard = [
         <TextCard
             title={props.book.title}
             titleSize="h4"
             subtitle={authors.join(", ")}
             buttons={[
-                <Button color="secondary" variant="contained">
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => scrollToRef(tableRef)}
+                >
                     View Sellers
                 </Button>,
-                <Button color="secondary" variant="outlined">
+                <Button
+                    color="secondary"
+                    variant="outlined"
+                    onClick={() => scrollToRef(formRef)}
+                >
                     Sell your copy
                 </Button>,
             ]}
@@ -132,14 +150,16 @@ export default function BookTemplate(props: Props) {
             </Container>
             <Container>
                 <div ref={tableRef}>
-                    <Typography variant="h4">Sellers</Typography>
+                    <Typography variant="h4" gutterBottom>
+                        Sellers
+                    </Typography>
                     <ListTable
                         isLoading={isLoading}
                         isError={isError}
                         data={data}
                     />
                 </div>
-                <div ref={formRef}>
+                <div ref={formRef} className={classes.form}>
                     <CreateListingForm book={props.book} />
                 </div>
             </Container>
