@@ -10,6 +10,9 @@ import com.paypal.payments.RefundRequest;
 
 import java.io.IOException;
 
+/**
+ * Class to contain the logic to connect to PayPal and request a refund
+ */
 public class RefundOrder
 {
     private static final PayPalEnvironment environment = new PayPalEnvironment.Sandbox(
@@ -17,6 +20,13 @@ public class RefundOrder
             "EMEhrzu4lYMeQA6x1FGX7xs3Ab5AGZQPYyPtRoZXs3aw-FeRqEeq5F8tau0rGzKdF1fPUx-w5k0kkQ2_");
     private static final PayPalHttpClient client = new PayPalHttpClient(environment);
 
+    /**
+     * Method to refund an order made through PayPal
+     *
+     * @param captureId PayPal created Capture Identification Number
+     * @param price     Price of the transaction
+     * @return Response from the PayPal API
+     */
     public static HttpResponse<Refund> refundOrder(String captureId, Long price) throws IOException
     {
         RefundRequest refundRequest = new RefundRequest();
