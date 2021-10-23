@@ -1,6 +1,7 @@
 package com.rmit.sept.bk_loginservices.controllers;
 
 import com.rmit.sept.bk_loginservices.utils.AccountType;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.AfterAll;
@@ -18,9 +19,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 import java.util.Properties;
 
@@ -61,7 +60,7 @@ class LoginControllerTest
     }
 
     @Test
-    public void RegisterWithAllFieldsEmpty() throws JSONException
+    public void RegisterWithAllFieldsEmpty() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders.post("/api/user" +
                 "/register").contentType(MediaType.APPLICATION_JSON);
@@ -71,13 +70,12 @@ class LoginControllerTest
                 "accountType", "username"))
             userJson.put(s, "");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
-        Assertions.assertNotNull(response);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(400, response.getStatus());
     }
 
     @Test
-    public void RegisterWithValidUser() throws JSONException
+    public void RegisterWithValidUser() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
@@ -90,15 +88,36 @@ class LoginControllerTest
         userJson.put("username", "username@registertest.com-test");
         userJson.put("accountType", AccountType.STANDARD);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
-        Assertions.assertNotNull(response);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(201, response.getStatus());
 
         Assertions.assertTrue(deleteUser("username@registertest.com-test"));
     }
 
     @Test
-    public void LoginWithAllFieldsEmpty() throws JSONException
+    public void RegisterWithBusinessUser() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
+
+        JSONObject userJson = new JSONObject();
+        userJson.put("firstName", "firstName");
+        userJson.put("lastName", "lastName");
+        userJson.put("password", "password");
+        userJson.put("displayName", "displayName");
+        userJson.put("username", "username@registertest.com-test");
+        userJson.put("accountType", AccountType.BUSINESS);
+        userJson.put("abn", "51824753556");
+        userJson.put("companyName", "companyName");
+
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
+        Assertions.assertEquals(201, response.getStatus());
+
+        Assertions.assertTrue(deleteUser("username@registertest.com-test"));
+    }
+
+    @Test
+    public void LoginWithAllFieldsEmpty() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
@@ -107,13 +126,12 @@ class LoginControllerTest
         userJson.put("username", "");
         userJson.put("password", "");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
-        Assertions.assertNotNull(response);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(400, response.getStatus());
     }
 
     @Test
-    public void LoginWithNonEmptyFields() throws JSONException
+    public void LoginWithNonEmptyFields() throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
@@ -122,15 +140,14 @@ class LoginControllerTest
         userJson.put("username", "asdf");
         userJson.put("password", "asdf");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
-        Assertions.assertNotNull(response);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(401, response.getStatus());
     }
 
     @Test
-    public void LoginWithValidUser() throws JSONException
+    public void LoginWithValidUser() throws Exception
     {
-        Assertions.assertTrue(createUser("username@logintest.com-test"));
+        Assertions.assertTrue(createUser(AccountType.STANDARD));
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/login").contentType(MediaType.APPLICATION_JSON);
@@ -139,31 +156,79 @@ class LoginControllerTest
         userJson.put("username", "username@logintest.com-test");
         userJson.put("password", "password");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), true);
-        Assertions.assertNotNull(response);
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
         Assertions.assertEquals(200, response.getStatus());
 
         Assertions.assertTrue(deleteUser("username@logintest.com-test"));
     }
 
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content, boolean print)
+    @Test
+    public void GetUsersByAccountStatus() throws Exception
     {
-        try
-        {
-            ResultActions resultActions = mvc.perform(requestBuilder.content(content));
-            if (print)
-                resultActions.andDo(MockMvcResultHandlers.print());
-            return resultActions.andReturn().getResponse();
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        MockHttpServletRequestBuilder activeRequestBuilder = MockMvcRequestBuilders
+                .get("/api/user/status/active").contentType(MediaType.APPLICATION_JSON);
 
-        return null;
+        MockHttpServletResponse activeResponse = getResponse(activeRequestBuilder);
+        Assertions.assertNotNull(activeResponse);
+        Assertions.assertEquals(200, activeResponse.getStatus());
+        JSONArray activeResponseJson = new JSONArray(activeResponse.getContentAsString());
+
+        Assertions.assertEquals(countAccountsByStatus(0), activeResponseJson.length());
+
+        MockHttpServletRequestBuilder pendingRequestBuilder = MockMvcRequestBuilders
+                .get("/api/user/status/pending").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse pendingResponse = getResponse(pendingRequestBuilder);
+        Assertions.assertEquals(200, pendingResponse.getStatus());
+        JSONArray pendingResponseJson = new JSONArray(pendingResponse.getContentAsString());
+
+        Assertions.assertEquals(countAccountsByStatus(3), pendingResponseJson.length());
     }
 
-    private boolean createUser(String username)
+    @Test
+    public void GetAllUsers() throws Exception
+    {
+        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
+                .get("/api/user").contentType(MediaType.APPLICATION_JSON);
+
+        MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        Assertions.assertEquals(200, response.getStatus());
+        JSONArray responseJson = new JSONArray(response.getContentAsString());
+
+        ResultSet result = db.prepareStatement("SELECT COUNT(*) AS count FROM user").executeQuery();
+
+        Assertions.assertTrue(result.next());
+        Assertions.assertEquals(result.getLong("count"), responseJson.length());
+    }
+
+    private int countAccountsByStatus(int status) throws SQLException
+    {
+        PreparedStatement statement = db.prepareStatement(
+                "SELECT COUNT(*) AS count FROM user WHERE account_status = ?");
+
+        statement.setInt(1, status);
+        ResultSet pendingResults = statement.executeQuery();
+        Assertions.assertTrue(pendingResults.next());
+
+        return pendingResults.getInt("count");
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder) throws Exception
+    {
+        return getResponse(requestBuilder, "");
+    }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
+                                                String content) throws Exception
+    {
+        ResultActions resultActions = mvc.perform(requestBuilder.content(content));
+        resultActions.andDo(MockMvcResultHandlers.print());
+        Assertions.assertNotNull(resultActions);
+        return resultActions.andReturn().getResponse();
+    }
+
+    private boolean createUser(AccountType type) throws Exception
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/api/user/register").contentType(MediaType.APPLICATION_JSON);
@@ -175,23 +240,23 @@ class LoginControllerTest
             userJson.put("lastName", "lastName");
             userJson.put("password", "password");
             userJson.put("displayName", "displayName");
-            userJson.put("username", username);
-            userJson.put("accountType", AccountType.STANDARD);
+            userJson.put("username", "username@logintest.com-test");
+            userJson.put("accountType", type);
         } catch (JSONException e)
         {
             e.printStackTrace();
             return false;
         }
 
-        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString(), false);
-        return response != null && response.getStatus() == 201;
+        MockHttpServletResponse response = getResponse(requestBuilder, userJson.toString());
+        return response.getStatus() == 201;
     }
 
     private static boolean deleteUser(String username)
     {
         try
         {
-            db.prepareStatement("DELETE FROM user WHERE username = '" + username + "'").execute();
+            db.prepareStatement("DELETE FROM user WHERE username LIKE '" + username + "'").execute();
         } catch (SQLException e)
         {
             e.printStackTrace();

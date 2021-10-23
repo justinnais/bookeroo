@@ -1,7 +1,8 @@
 package com.rmit.sept.bk_loginservices.utils;
 
-public enum AccountStatus {
-    OK,
+public enum AccountStatus
+{
+    ACTIVE,
     INACTIVE,
     DELETED,
     PENDING,

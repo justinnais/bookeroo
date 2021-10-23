@@ -1,7 +1,7 @@
 // import { AlertColor } from "@mui/material/Alert";
 import create from "zustand";
 
-export interface Foo {
+export interface IAlert {
     message: string;
     // variant: AlertColor;
     open: boolean;
@@ -12,7 +12,7 @@ export interface Foo {
 
 // TODO fix variant
 
-export const useAlertStore = create<Foo>((set) => ({
+export const useAlertStore = create<IAlert>((set) => ({
     message: "alert",
     // variant: "info",
     open: false,

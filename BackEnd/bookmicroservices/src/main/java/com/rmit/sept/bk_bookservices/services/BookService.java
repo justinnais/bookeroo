@@ -53,8 +53,8 @@ public class BookService
             log.warn("Couldn't find book with isbn: " + isbn + ", checking isbndb");
             try
             {
-                HttpResponse<JsonNode> response = Unirest
-                        .get(isbndbUrl + "/book/" + isbn).header("Authorization", isbndbKey).asJson();
+                HttpResponse<JsonNode> response = Unirest.get(isbndbUrl + "/book/" + isbn)
+                        .header("Authorization", isbndbKey).asJson();
                 if (response.getStatus() != 200)
                 {
                     log.error("Book not found, returning null");
@@ -84,8 +84,9 @@ public class BookService
 
         try
         {
-            HttpResponse<JsonNode> response = Unirest.get(isbndbUrl + "/books/" + title + "?page" +
-                    "=1&pageSize=100").header("Authorization", isbndbKey).asJson();
+            HttpResponse<JsonNode> response = Unirest
+                    .get(isbndbUrl + "/books/" + title + "?page=1&pageSize=100")
+                    .header("Authorization", isbndbKey).asJson();
 
             if (response.getStatus() != 200)
                 log.error("Got no books from isbndb!");
@@ -98,15 +99,12 @@ public class BookService
                     JSONObject bookJson = bookJsons.getJSONObject(i);
                     Book book = Book.fromJson(bookJson);
 
-                    if (bookRepository.findByIsbn(book.getIsbn()) == null) {
+                    if (bookRepository.findByIsbn(book.getIsbn()) == null)
                         bookRepository.save(book);
-                    }
-
 
                     titles.add(book);
                 }
             }
-
         } catch (UnirestException | JsonProcessingException e)
         {
             e.printStackTrace();

@@ -10,6 +10,11 @@ import Image from "../components/Layout/Image";
 import BookDisplay from "../components/Book/BookDisplay";
 import { api } from "../api/api";
 import { IBook } from "../api/models/Book";
+import bookshelfImage from "../assets/bookshelf.jpg";
+import booksWindowImage from "../assets/books-window.jpg";
+import booksWithLeavesImage from "../assets/books-with-leaves.jpg";
+import { IAccount } from "../api/models/Account";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -22,34 +27,43 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Landing() {
     const classes = useStyles();
+    const user = useAuthStore((state) => state.user);
 
-    const WelcomeCard = () => (
-        <TextCard
-            title="Bookeroo"
-            titleSize="h2"
-            pretitle="Welcome to"
-            buttons={[
-                <Button color="secondary" variant="outlined">
-                    Sign Up
-                </Button>,
-            ]}
-        >
-            <Typography variant="body2" component="p">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Delectus cum quod, doloribus quasi atque rem ratione ipsum
-                quaerat a explicabo velit? Velit similique error pariatur earum
-                consequatur doloremque at cumque?
-            </Typography>
-        </TextCard>
-    );
+    const WelcomeCard = (props: { user: IAccount | undefined }) => {
+        const { user } = props;
+        return (
+            <TextCard
+                title={user ? user.displayName : "Bookeroo"}
+                titleSize="h2"
+                pretitle={`Welcome ${user ? "" : "to"}`}
+                buttons={[
+                    <Button
+                        color="secondary"
+                        variant="outlined"
+                        to={user ? `/user/${user.displayName}` : `/register`}
+                    >
+                        {user ? "Profile" : "Sign Up"}
+                    </Button>,
+                ]}
+            >
+                <Typography variant="body2" component="p">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Delectus cum quod, doloribus quasi atque rem ratione ipsum
+                    quaerat a explicabo velit? Velit similique error pariatur
+                    earum consequatur doloremque at cumque?
+                </Typography>
+            </TextCard>
+        );
+    };
 
     const firstCard = [
         <Image
-            src="https://via.placeholder.com/635x512"
+            // https://unsplash.com/photos/1J8k0qqUfYY
+            src={booksWindowImage}
             alt="placeholder"
             aspectRatio={1.4}
         />,
-        <WelcomeCard />,
+        <WelcomeCard user={user} />,
     ];
 
     const SecondTab = () => (
@@ -76,7 +90,8 @@ export default function Landing() {
     const secondCard = [
         <SecondTab />,
         <Image
-            src="https://via.placeholder.com/540x440"
+            // https://unsplash.com/photos/2zDw14yCYqk
+            src={booksWithLeavesImage}
             alt="placeholder"
             aspectRatio={1.2}
         />,

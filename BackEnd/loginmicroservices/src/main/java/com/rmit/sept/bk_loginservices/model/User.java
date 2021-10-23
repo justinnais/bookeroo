@@ -17,7 +17,6 @@ import java.util.Date;
 @Entity
 public class User implements UserDetails
 {
-
     /**
      * The unique identifier for this user object
      */
@@ -79,7 +78,7 @@ public class User implements UserDetails
     /**
      * The current status of the account
      */
-    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.OK, AccountStatus.PENDING,
+    @AccountStatusConstraint(nullable = true, anyOf = {AccountStatus.ACTIVE, AccountStatus.PENDING,
             AccountStatus.REJECTED, AccountStatus.BANNED, AccountStatus.INACTIVE})
     private AccountStatus accountStatus;
 

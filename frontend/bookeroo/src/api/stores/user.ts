@@ -1,20 +1,38 @@
 // book microservice store
 
-import { apiLogin } from "../api";
-import { CreateAccountRequest, LoginAccountRequest } from "../models/Account";
+import { AccountStatus } from "../../util/enums";
+import storage from "../../util/storage";
+import { api } from "../api";
+import {
+    CreateBusinessAccountRequest,
+    CreatePersonalAccountRequest,
+    IAccount,
+    LoginAccountRequest,
+} from "../models/Account";
+// https://www.bezkoder.com/react-hooks-jwt-auth/
 
 export function listUsers() {
-    return apiLogin.get("");
+    return api.get("/user");
 }
 
 export function getUser(id: string) {
-    return apiLogin.get(`/${id}`);
+    return api.get(`/user/${id}`);
 }
 
-export function registerUser(user: CreateAccountRequest) {
-    return apiLogin.post(`/register`, user);
+export function getProfile(displayName: string) {
+    return api.get(`/user/profile/${displayName}`);
+}
+
+export function registerUser(
+    user: CreatePersonalAccountRequest | CreateBusinessAccountRequest
+) {
+    return api.post(`/user/register`, user);
 }
 
 export function loginUser(auth: LoginAccountRequest) {
-    return apiLogin.post(`/login`, auth);
+    return api.post(`/user/login`, auth);
+}
+
+export function editUser(id: number, user: Partial<IAccount>) {
+    return api.patch(`/user/${id}`, user);
 }

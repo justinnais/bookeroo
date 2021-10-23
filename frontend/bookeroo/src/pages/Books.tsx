@@ -36,6 +36,9 @@ const useStyles = makeStyles((theme: Theme) =>
             gap: theme.spacing(2),
             justifyContent: "center",
         },
+        bookDisplay: {
+            backgroundColor: theme.palette.common.white,
+        },
     })
 );
 
@@ -74,9 +77,11 @@ export default function Books() {
                     </TextCard>
                 </div>
             </Container>
-            <Container>
-                <BookDisplay />
-            </Container>
+            <div className={classes.bookDisplay}>
+                <Container>
+                    <BookDisplay />
+                </Container>
+            </div>
         </div>
     );
 }

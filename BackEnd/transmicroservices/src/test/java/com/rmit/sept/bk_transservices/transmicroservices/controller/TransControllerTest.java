@@ -44,14 +44,12 @@ class TransControllerTest
                 ".rds.amazonaws.com:3306/bookeroo", connectionProps);
 
         deleteTransaction("%555%");
-        deleteTransItem("%555%");
     }
 
     @AfterAll
     static void cleanup()
     {
         deleteTransaction("%555%");
-        deleteTransItem("%555%");
     }
 
     @AfterAll
@@ -64,53 +62,47 @@ class TransControllerTest
     public void CreateValidTransaction() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
-
-        JSONArray listings = new JSONArray();
-        listings.put(createListing(123, 15551));
-        listings.put(createListing(543, 15552));
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
-        transJSON.put("buyer_id", 25551);
-        transJSON.put("listings", listings);
+        transJSON.put("buyerId", 25551);
+        transJSON.put("price", 321);
+        transJSON.put("listingId", 312);
+        transJSON.put("captureId", "123");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
 
-        Assertions.assertTrue(deleteTransItem("15551"));
-        Assertions.assertTrue(deleteTransItem("15552"));
         Assertions.assertTrue(deleteTransaction("25551"));
     }
 
     @Test
-    public void CreateTransactionWithoutListing() throws JSONException
+    public void CreateTransactionWithoutListingId() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
-        transJSON.put("buyer_id", 25551);
+        transJSON.put("buyerId", 25551);
+        transJSON.put("price", 123);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
 
     @Test
-    public void CreateTransactionWithoutBuyer() throws JSONException
+    public void CreateTransactionWithoutBuyerId() throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
-
-        JSONArray listings = new JSONArray();
-        listings.put(createListing(123, 15551));
-        listings.put(createListing(543, 15552));
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
-        transJSON.put("listings", listings);
+        transJSON.put("listingId", 6532);
+        transJSON.put("price", 123);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(400, response.getStatus());
     }
@@ -120,9 +112,9 @@ class TransControllerTest
     {
         String buyerId = "95559";
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+                .get("/api/trans/user/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
 
         JSONArray responseJSON = new JSONArray(response.getContentAsString());
@@ -137,54 +129,43 @@ class TransControllerTest
         createTransaction(buyerId, listingId);
 
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/trans/list/" + buyerId).contentType(MediaType.APPLICATION_JSON);
+                .get("/api/trans/user/" + buyerId).contentType(MediaType.APPLICATION_JSON);
 
-        MockHttpServletResponse response = getResponse(requestBuilder, "", true);
+        MockHttpServletResponse response = getResponse(requestBuilder, "");
         Assertions.assertNotNull(response);
 
         JSONArray responseJSON = new JSONArray(response.getContentAsString());
         JSONObject object = (JSONObject) responseJSON.get(0);
 
-        Assertions.assertEquals(listingId, object.get("listing_id"));
+        Assertions.assertEquals(listingId, object.get("listingId"));
         Assertions.assertEquals(123, object.get("price"));
 
         Assertions.assertTrue(deleteTransaction(String.valueOf(buyerId)));
-        Assertions.assertTrue(deleteTransItem(String.valueOf(listingId)));
     }
 
     private void createTransaction(long buyerId, long listingId) throws JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .post("/api/trans/transaction").contentType(MediaType.APPLICATION_JSON);
-
-        JSONArray listings = new JSONArray();
-        listings.put(createListing(123, listingId));
+                .post("/api/trans/create").contentType(MediaType.APPLICATION_JSON);
 
         JSONObject transJSON = new JSONObject();
-        transJSON.put("buyer_id", buyerId);
-        transJSON.put("listings", listings);
+        transJSON.put("buyerId", buyerId);
+        transJSON.put("listingId", listingId);
+        transJSON.put("price", 123);
+        transJSON.put("captureId", "123");
 
-        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString(), true);
+        MockHttpServletResponse response = getResponse(requestBuilder, transJSON.toString());
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
     }
 
-    private JSONObject createListing(long price, long listing_id) throws JSONException
-    {
-        JSONObject listing = new JSONObject();
-        listing.put("price", price);
-        listing.put("listing_id", listing_id);
-        return listing;
-    }
-
     private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content, boolean print)
+                                                String content)
     {
         try
         {
             ResultActions resultActions = mvc.perform(requestBuilder.content(content));
-            if (print)
-                resultActions.andDo(MockMvcResultHandlers.print());
+            resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
         {
@@ -198,20 +179,6 @@ class TransControllerTest
         try
         {
             db.prepareStatement("DELETE FROM transaction WHERE buyer_id LIKE '" + buyerId + "'").execute();
-        } catch (SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
-        return true;
-    }
-
-    private static boolean deleteTransItem(String listingId)
-    {
-        try
-        {
-            db.prepareStatement("DELETE FROM transaction_item WHERE listing_id LIKE '" + listingId +
-                    "'").execute();
         } catch (SQLException e)
         {
             e.printStackTrace();

@@ -17,7 +17,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = AccountStatusConstraintValidator.class)
 public @interface AccountStatusConstraint
 {
-
     AccountStatus[] anyOf();
 
     boolean nullable() default false;
@@ -27,5 +26,4 @@ public @interface AccountStatusConstraint
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }

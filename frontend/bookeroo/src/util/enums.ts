@@ -1,13 +1,20 @@
 export enum AccountType {
-    STANDARD,
-    BUSINESS,
-    ADMIN,
+    STANDARD = "STANDARD",
+    BUSINESS = "BUSINESS",
+    ADMIN = "ADMIN",
 }
 
 export enum AccountStatus {
-    OK,
-    PENDING,
-    REJECTED,
-    BANNED,
-    INACTIVE,
+    ACTIVE = "ACTIVE",
+    PENDING = "PENDING",
+    REJECTED = "REJECTED",
+    BANNED = "BANNED",
+    INACTIVE = "INACTIVE",
+}
+
+export enum BookCondition {
+    NEW = "New",
+    GOOD = "Good",
+    FAIR = "Fair",
+    POOR = "Poor",
 }

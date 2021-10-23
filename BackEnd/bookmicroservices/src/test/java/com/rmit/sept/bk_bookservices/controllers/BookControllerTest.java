@@ -96,49 +96,40 @@ class BookControllerTest
     }
 
     @Test
-    public void SearchByValidTitle() throws UnsupportedEncodingException, JSONException
+    public void UpdateBook() throws UnsupportedEncodingException, JSONException
     {
         MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/Leviathan Wakes").contentType(MediaType.APPLICATION_JSON);
+                .get("/api/book/0316129089").contentType(MediaType.APPLICATION_JSON);
         MockHttpServletResponse response = getResponse(requestBuilder);
+        Assertions.assertNotNull(response);
+        JSONObject preUpdateObject = new JSONObject(response.getContentAsString());
+
+        Assertions.assertEquals("Leviathan Wakes", preUpdateObject.get("title"));
+
+        requestBuilder = MockMvcRequestBuilders.patch("/api/book/0316129089")
+                .contentType(MediaType.APPLICATION_JSON);
+        response = getResponse(requestBuilder, "{\"title\": \"Leviathan Wakes1\"}");
         Assertions.assertNotNull(response);
         Assertions.assertEquals(200, response.getStatus());
+        JSONObject postUpdateObject = new JSONObject(response.getContentAsString());
 
-        JSONArray responseArray = new JSONArray(response.getContentAsString());
-        boolean found = false;
-        for (int i = 0; i < responseArray.length(); i++)
-        {
-            JSONObject obj = responseArray.getJSONObject(i);
-            if (obj.get("isbn").equals("0316129089"))
-            {
-                found = true;
-                break;
-            }
-        }
-        Assertions.assertTrue(found);
-    }
+        Assertions.assertEquals("Leviathan Wakes1", postUpdateObject.get("title"));
 
-    @Test
-    public void SearchByInvalidTitle()
-    {
-        MockHttpServletRequestBuilder requestBuilder = MockMvcRequestBuilders
-                .get("/api/book/search/title/nsILBUR8943BG38BP8VB").contentType(MediaType.APPLICATION_JSON);
-        MockHttpServletResponse response = getResponse(requestBuilder);
+        requestBuilder = MockMvcRequestBuilders.patch("/api/book/0316129089")
+                .contentType(MediaType.APPLICATION_JSON);
+        response = getResponse(requestBuilder, "{\"title\": \"Leviathan Wakes\"}");
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(404, response.getStatus());
+        Assertions.assertEquals(200, response.getStatus());
+        JSONObject finalUpdateObject = new JSONObject(response.getContentAsString());
+
+        Assertions.assertEquals("Leviathan Wakes", finalUpdateObject.get("title"));
     }
 
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
-    {
-        return getResponse(requestBuilder, "");
-    }
-
-    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder,
-                                                String content)
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder, String body)
     {
         try
         {
-            ResultActions resultActions = mvc.perform(requestBuilder.content(content));
+            ResultActions resultActions = mvc.perform(requestBuilder.content(body));
             resultActions.andDo(MockMvcResultHandlers.print());
             return resultActions.andReturn().getResponse();
         } catch (Exception e)
@@ -147,4 +138,11 @@ class BookControllerTest
         }
         return null;
     }
+
+    private MockHttpServletResponse getResponse(MockHttpServletRequestBuilder requestBuilder)
+    {
+        return getResponse(requestBuilder, "");
+    }
+
+    
 }

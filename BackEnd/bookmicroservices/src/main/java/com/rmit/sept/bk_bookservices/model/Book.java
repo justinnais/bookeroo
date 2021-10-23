@@ -7,11 +7,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Book {
+public class Book
+{
+    public static int MAX_TAGS = 5;
 
     @Id
     private String isbn;
@@ -46,149 +50,219 @@ public class Book {
 
     private String authors;
 
-    public Book() {}
+    private String tags;
 
-    public static Book fromJson(JSONObject json) throws JsonProcessingException {
+    @JsonProperty("table_of_contents")
+    private String tableOfContents;
 
+    public Book()
+    {
+        setTableOfContents("{\"Chapter 1\":\"The Start\",\"Chapter 2\":\"The Middle\",\"Chapter 3\":\"The End\"}");
+    }
+
+    public static Book fromJson(JSONObject json) throws JsonProcessingException
+    {
         String authors = "Unknown";
+        String tags = "";
 
-        if (json.has("authors")) {
-            authors = json.getJSONArray("authors").join("|").replaceAll("\\\"","");
-        }
+        if (json.has("authors"))
+            authors = json.getJSONArray("authors").join("|").replaceAll("\\\"", "");
 
         json.remove("authors");
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        if (json.has("subjects")) {
+            int count = 0;
+            for (int i = 0; i < json.getJSONArray("subjects").length(); i++) {
+                Object tag = json.getJSONArray("subjects").get(i);
+                if (tag instanceof String) {
+                    if (tags.length() != 0) {
+                        tags = tags + "|";
+                    }
+                    tags = tags+(String) tag;
+                    count++;
+                    if (count >= MAX_TAGS) {
+                        break;
+                    }
+                }
+            }
+        }
 
+        json.remove("subjects");
+
+        ObjectMapper objectMapper = new ObjectMapper();
         Book book = objectMapper.readValue(json.toString(), Book.class);
 
         book.setAuthors(authors);
-
+        book.setTags(tags);
 
         return book;
-
-
     }
 
-    public String getIsbn() {
+    public String getIsbn()
+    {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(String isbn)
+    {
         this.isbn = isbn;
     }
 
-    public String getIsbn13() {
+    public String getIsbn13()
+    {
         return isbn13;
     }
 
-    public void setIsbn13(String isbn13) {
+    public void setIsbn13(String isbn13)
+    {
         this.isbn13 = isbn13;
     }
 
-    public String getTitle() {
+    public String getTitle()
+    {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(String title)
+    {
         this.title = title;
     }
 
-    public String getTitleLong() {
+    public String getTitleLong()
+    {
         return titleLong;
     }
 
-    public void setTitleLong(String titleLong) {
+    public void setTitleLong(String titleLong)
+    {
         this.titleLong = titleLong;
     }
 
-    public String getBinding() {
+    public String getBinding()
+    {
         return binding;
     }
 
-    public void setBinding(String binding) {
+    public void setBinding(String binding)
+    {
         this.binding = binding;
     }
 
-    public String getPublisher() {
+    public String getPublisher()
+    {
         return publisher;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher(String publisher)
+    {
         this.publisher = publisher;
     }
 
-    public String getLanguage() {
+    public String getLanguage()
+    {
         return language;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage(String language)
+    {
         this.language = language;
     }
 
-    public String getDatePublished() {
+    public String getDatePublished()
+    {
         return datePublished;
     }
 
-    public void setDatePublished(String datePublished) {
+    public void setDatePublished(String datePublished)
+    {
         this.datePublished = datePublished;
     }
 
-    public String getEdition() {
+    public String getEdition()
+    {
         return edition;
     }
 
-    public void setEdition(String edition) {
+    public void setEdition(String edition)
+    {
         this.edition = edition;
     }
 
-    public int getPages() {
+    public Integer getPages()
+    {
         return pages;
     }
 
-    public void setPages(int pages) {
+    public void setPages(int pages)
+    {
         this.pages = pages;
     }
 
-    public String getDimensions() {
+    public String getDimensions()
+    {
         return dimensions;
     }
 
-    public void setDimensions(String dimensions) {
+    public void setDimensions(String dimensions)
+    {
         this.dimensions = dimensions;
     }
 
-    public String getImage() {
+    public String getImage()
+    {
         return image;
     }
 
-    public void setImage(String image) {
+    public void setImage(String image)
+    {
         this.image = image;
     }
 
-    public String getSynopsys() {
+    public String getSynopsys()
+    {
         return synopsys;
     }
 
-    public void setSynopsys(String synopsys) {
+    public void setSynopsys(String synopsys)
+    {
         this.synopsys = synopsys;
     }
 
-    public String getAuthors() {
+    public String getAuthors()
+    {
         return authors;
     }
 
-    public void setAuthors(String authors) {
+    public void setAuthors(String authors)
+    {
         this.authors = authors;
     }
 
-    @Override
-    public boolean equals(Object other) {
-        return (other.hashCode()==this.hashCode());
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
+    }
+
+    public String getTableOfContents() {
+        return tableOfContents;
+    }
+
+    public void setTableOfContents(String tableOfContents) {
+        this.tableOfContents = tableOfContents;
     }
 
     @Override
-    public int hashCode() {
+    public boolean equals(Object other)
+    {
+        return (other.hashCode() == this.hashCode());
+    }
+
+    @Override
+    public int hashCode()
+    {
         return this.isbn.hashCode();
     }
 }

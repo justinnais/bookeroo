@@ -8,17 +8,36 @@ public class Listing
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long userId;
-
     private Long bookIsbn;
-
     private boolean used;
 
     @Enumerated(EnumType.STRING)
-    private Condition cond;
+    @Column(name = "cond")
+    private Condition condition;
+    @Column(name = "cond_desc")
+    private String conditionDesc;
+    private Long price;
 
-    private String condDesc;
+    public Long getBookIsbn()
+    {
+        return bookIsbn;
+    }
+
+    public void setBookIsbn(Long bookIsbn)
+    {
+        this.bookIsbn = bookIsbn;
+    }
+
+    public Long getPrice()
+    {
+        return price;
+    }
+
+    public void setPrice(Long price)
+    {
+        this.price = price;
+    }
 
     public Long getId()
     {
@@ -40,17 +59,7 @@ public class Listing
         this.userId = userId;
     }
 
-    public Long getbookIsbn()
-    {
-        return bookIsbn;
-    }
-
-    public void setbookIsbn(Long bookIsbn)
-    {
-        this.bookIsbn = bookIsbn;
-    }
-
-    public boolean isUsed()
+    public Boolean isUsed()
     {
         return used;
     }
@@ -60,23 +69,23 @@ public class Listing
         this.used = used;
     }
 
-    public Condition getCond()
+    public Condition getCondition()
     {
-        return cond;
+        return condition;
     }
 
-    public void setCond(Condition cond)
+    public void setCondition(Condition condition)
     {
-        this.cond = cond;
+        this.condition = condition;
     }
 
-    public String getCondDesc()
+    public String getConditionDesc()
     {
-        return condDesc;
+        return conditionDesc;
     }
 
-    public void setCondDesc(String condDesc)
+    public void setConditionDesc(String conditionDesc)
     {
-        this.condDesc = condDesc;
+        this.conditionDesc = conditionDesc;
     }
 }
