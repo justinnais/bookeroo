@@ -1,12 +1,7 @@
 import React from "react";
 import { useQuery } from "react-query";
 import { useHistory } from "react-router-dom";
-import { IAccount } from "../../../api/models/Account";
-import { IListing } from "../../../api/models/Listing";
-import { listUsers, editUser } from "../../../api/stores/user";
 import { useAlertStore } from "../../../stores/useAlertStore";
-import { AccountStatus } from "../../../util/enums";
-import Menu, { IMenuItem } from "../../Layout/Menu";
 import GenericTable, { TableColumn } from "../GenericTable";
 import { listTrans } from "../../../api/stores/trans";
 import { ITransaction } from "../../../api/models/Transaction";
@@ -20,12 +15,12 @@ export default function TransactionTable() {
     const alert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => alert(message);
 
-    const columns: TableColumn<IListing, keyof IListing>[] = [
-        { key: "id", header: "ID" },
-        { key: "bookIsbn", header: "ISBN" },
-        { key: "userId", header: "User" },
-        { key: "condition" },
-        { key: "conditionDesc", header: "Condtion Description" },
+    const columns: TableColumn<ITransaction, keyof ITransaction>[] = [
+        { key: "transactionId", header: "ID" },
+        { key: "buyerId", header: "Buyer" },
+        { key: "datetime", header: "Date" },
+        { key: "listingId", header: "Listing" },
+        { key: "status" },
     ];
     return (
         <GenericTable
