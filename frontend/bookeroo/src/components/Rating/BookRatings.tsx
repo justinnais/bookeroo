@@ -10,6 +10,11 @@ interface Props {
     isbn: string;
 }
 
+/**
+ * Logic for book star rating, creates rating requests
+ * @param props book that is being rated
+ * @returns star component
+ */
 export default function BookRatings(props: Props) {
     const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
     const user = useAuthStore((state) => state.user);

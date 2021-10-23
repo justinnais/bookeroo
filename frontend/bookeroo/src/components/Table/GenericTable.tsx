@@ -8,12 +8,11 @@ import {
     TablePagination,
 } from "@material-ui/core";
 import { AxiosResponse } from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { titleCase } from "../../util/stringManipulation";
 import Button from "../Button/Button";
 import TableHeader from "./TableHeader";
 import TableRows from "./TableRows";
-import fs from "fs";
 
 // https://react.christmas/2020/22
 

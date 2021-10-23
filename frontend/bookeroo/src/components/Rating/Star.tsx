@@ -18,6 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ * Star ratings
+ * @param props rating value, callback when clicked
+ * @returns star display
+ */
 export default function Star(props: Props) {
     const styles = useStyles();
     const isLoggedIn = useAuthStore((state) => state.isAuthenticated);

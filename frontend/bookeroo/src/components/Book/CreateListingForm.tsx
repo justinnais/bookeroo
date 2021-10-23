@@ -1,12 +1,5 @@
-import { makeStyles, Theme, createStyles } from "@material-ui/core";
-import { request } from "http";
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
-import {
-    createListing,
-    listBookListings,
-    listListings,
-} from "../../api/stores/listing";
+import { createListing, listBookListings } from "../../api/stores/listing";
 import { useAlertStore } from "../../stores/useAlertStore";
 import FormCard from "../Form/FormCard";
 import FormGenerator, { GeneratedField } from "../Form/FormGenerator";
@@ -22,11 +15,12 @@ interface Props {
     book: IBook;
 }
 
-const useStyles = makeStyles((theme: Theme) => createStyles({}));
-
+/**
+ *
+ * @param props book for listing being created
+ * @returns form for user to upload the book for sale
+ */
 export default function CreateListingForm(props: Props) {
-    const classes = useStyles();
-    const history = useHistory();
     const user = useAuthStore((state) => state.user);
     const setAlert = useAlertStore((state) => state.setAlert);
     const toast = (message: string) => {

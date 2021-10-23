@@ -17,13 +17,16 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ *
+ * @returns footer component at bottom of page
+ */
 export default function Footer() {
     const classes = useStyles();
 
     // can't use AppBar as it outputs a <header> which causes issues with footer positioning
     return (
         <div className={classes.root}>
-            {/* <AppBar className={classes.root}> */}
             <Container noMargin>
                 <Toolbar className={classes.toolbar} disableGutters>
                     <Button>Team</Button>
@@ -31,7 +34,6 @@ export default function Footer() {
                     <Button>Help</Button>
                 </Toolbar>
             </Container>
-            {/* </AppBar> */}
         </div>
     );
 }

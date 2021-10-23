@@ -14,6 +14,11 @@ interface Props {
     userId: number;
 }
 
+/**
+ * Logic for user star rating, creates rating requests
+ * @param props user that is being rated
+ * @returns star component
+ */
 export default function UserRating(props: Props) {
     const isLoggedIn = useAuthStore((state) => state.isAuthenticated);
     const user = useAuthStore((state) => state.user);

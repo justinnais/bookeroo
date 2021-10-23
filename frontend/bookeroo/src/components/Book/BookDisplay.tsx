@@ -2,7 +2,6 @@ import { makeStyles, Theme, createStyles } from "@material-ui/core";
 import { Pagination } from "@material-ui/lab";
 import React, { useState } from "react";
 import { useQuery } from "react-query";
-import { api } from "../../api/api";
 import { IBook } from "../../api/models/Book";
 import { listBooks } from "../../api/stores/book";
 import BookCard from "./BookCard";
@@ -29,9 +28,13 @@ const useStyles = makeStyles((theme: Theme) =>
     })
 );
 
+/**
+ *
+ * @param props optional number of books to show per page, option to hide controls
+ * @returns grid display of book cards
+ */
 export default function BookDisplay(props: Props) {
     const classes = useStyles();
-    /* pages for pagination of table */
     const [page, setPage] = useState(0);
     const booksPerPage = props.count || 8;
     const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -54,11 +57,6 @@ export default function BookDisplay(props: Props) {
     if (isLoading) {
         books = Array(booksPerPage).fill(undefined);
     }
-
-    // if there is a number provided, show that number of books in the display
-    /*  if (props.count) {
-        books = books.slice(0, props.count);
-    } */
 
     return (
         <div className={classes.root}>

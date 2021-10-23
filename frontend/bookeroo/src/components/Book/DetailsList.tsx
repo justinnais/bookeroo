@@ -25,6 +25,12 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     })
 );
+
+/**
+ * 
+ * @param props array of items to display in list
+ * @returns list
+ */
 export default function DetailsList(props: Props) {
     const classes = useStyles();
     return (

@@ -1,7 +1,6 @@
-import { makeStyles, Theme, createStyles, Grid, Link } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import { useFormik } from "formik";
-import React, { useState } from "react";
-
+import React from "react";
 import * as yup from "yup";
 import { camelCase } from "../../util/stringManipulation";
 import DropdownSelect from "./DropdownSelect";
@@ -26,9 +25,7 @@ export interface GeneratedField {
 export default function FormGenerator(
     formId: string,
     fields: GeneratedField[],
-    onSubmit: (values: any) => void,
-    sideBySide?: boolean
-    // errors?: { [key: string]: string }
+    onSubmit: (values: any) => void
 ) {
     const initialValues: { [key: string]: string } = {};
     fields.forEach((field) => {
@@ -59,7 +56,6 @@ export default function FormGenerator(
                                     label={field.label}
                                     type={field.type}
                                     formik={formik}
-                                    // errors={errors}
                                 />
                             )}
                         </Grid>

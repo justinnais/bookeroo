@@ -15,6 +15,11 @@ import Searchbar from "./Searchbar";
 import { useAuthStore } from "../../stores/useAuthStore";
 import { IAccount } from "../../api/models/Account";
 import { useAlertStore } from "../../stores/useAlertStore";
+
+/**
+ * NOTE - this file has comments explaining some React basics to help get the team up to speed on creating Components
+ */
+
 /**
  * This is the component styling - we use this to create classes that apply only to things in this component
  * If you need to create global styles, they go in App.scss
@@ -81,7 +86,6 @@ export default function Header() {
             <div className={classes.navButtons}>
                 <Button onClick={toggleSearch}>Search</Button>
                 <Button to={Routes.Books}>Books</Button>
-                {/* <Button to={Routes.Checkout}>Cart</Button> */}
                 {isAuthenticated && (
                     <Button to={`/user/${user!.displayName}`}>Profile</Button>
                 )}
