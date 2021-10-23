@@ -81,14 +81,20 @@ export default function Star(props: Props) {
         };
 
         const handleError = (err: any) => {
-            const error: { [key: string]: string } = err.response.data;
+            try {
+                if (err.toString().includes("409")) {
+                    toast("You have already left a review for this book!");
+                } else toast(`${err}`);
+            } catch (error) {
+                console.error(error);
+            }
             // can be an object or string?
 
-            if (typeof error === "string") {
-                toast(error);
-            } else {
-                Object.values(error).map((error) => toast(error));
-            }
+            // if (typeof error === "string") {
+            //     toast(error);
+            // } else {
+            //     Object.values(error).map((error) => toast(error));
+            // }
         };
 
         return (

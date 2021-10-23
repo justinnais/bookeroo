@@ -15,7 +15,7 @@ import { CreateListingRequest } from "../../api/models/Listing";
 import { IBook } from "../../api/models/Book";
 import SubmitButton from "../Button/SubmitButton";
 import { useAuthStore } from "../../stores/useAuthStore";
-import { BookCondition } from "../../util/enums";
+import { AccountType, BookCondition } from "../../util/enums";
 import { useQuery } from "react-query";
 
 interface Props {
@@ -34,17 +34,23 @@ export default function CreateListingForm(props: Props) {
     };
     const [isSubmitting, setSubmitting] = useState(false);
 
-    const { refetch } = useQuery("listBookListings", () =>
+    const { refetch } = useQuery(`listBookListings-${props.book.isbn}`, () =>
         listBookListings(props.book.isbn)
     );
 
     const formId = "listingForm";
 
+    // remove new for regular accounts
+    let conditions = Object.values(BookCondition);
+    if (user && user.accountType === AccountType.STANDARD) {
+        conditions.shift();
+    }
+
     const fields: GeneratedField[] = [
         {
             label: "Condition",
             type: "select",
-            options: Object.values(BookCondition),
+            options: conditions,
             schema: yup.string().required("Condition is required"),
         },
         {
@@ -84,7 +90,7 @@ export default function CreateListingForm(props: Props) {
     };
 
     const handleResponse = (res: any, request: CreateListingRequest) => {
-        if (res.status === 200) {
+        if (res.status === 201) {
             toast(`Successfully created listing for ${props.book.title}`);
             refetch();
         }

@@ -8,7 +8,7 @@ export function listReviews() {
 }
 
 export function getReviewsForBook(isbn: string) {
-    return api.get(`/review/${isbn}`);
+    return api.get(`/review/book/${isbn}`);
 }
 
 export function getReviewsForUser(user: number) {
@@ -16,5 +16,5 @@ export function getReviewsForUser(user: number) {
 }
 
 export function createReview(review: CreateReviewRequest) {
-    return api.post(`/review/post`, review);
+    return api.post(`/review/book/post`, review);
 }
