@@ -27,7 +27,7 @@ Our backend is running on `https://bookeroo-api.danieljmills.com/api`.
 	
 ## Release Notes
 ### Release 0.3.0 - 23 October 2021
-* Buisiness accounts can now sign up - please wait for an admin to approve your account
+* Business accounts can now sign up - please wait for an admin to approve your account
 * Admin users now have greater control - approve, ban, reject users
 * Users can now review their favourite books and other users
 * More information about books is provided through table of contents and category tags
