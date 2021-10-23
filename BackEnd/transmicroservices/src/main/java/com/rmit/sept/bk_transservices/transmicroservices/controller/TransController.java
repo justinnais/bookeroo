@@ -18,13 +18,18 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/trans")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080", "https://bookeroo" +
+        ".danieljmills.com"})
 public class TransController
 {
     @Autowired
     TransactionRepository transactionRepository;
 
-    // create
+    /**
+     * Endpoint for creating new {@link Transaction} entities
+     *
+     * @param transaction Transaction representing body of the request
+     */
     @PostMapping("/create")
     public ResponseEntity<?> createTransaction(@RequestBody Transaction transaction)
     {
@@ -44,29 +49,36 @@ public class TransController
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    // Get all transactions 
+    /**
+     * Endpoint to return all the transactions in the system
+     */
     @GetMapping(value = "")
     public ResponseEntity<?> listTransactions()
     {
         return new ResponseEntity<>(transactionRepository.findAll(), HttpStatus.OK);
     }
 
-    // Get single transaction
+    /**
+     * Endpoint for retrieving a specific transaction by its id
+     *
+     * @param transId Id of transaction to return
+     */
     @GetMapping(value = "/{transId}")
     public ResponseEntity<?> getTransaction(@PathVariable Long transId)
     {
         Optional<Transaction> transaction = transactionRepository.findById(transId);
 
         if (transaction.isEmpty())
-        {
             return new ResponseEntity<>("No transaction exists with that id", HttpStatus.NOT_FOUND);
-        } else
-        {
+        else
             return new ResponseEntity<>(transaction.get(), HttpStatus.OK);
-        }
     }
 
-    // Get transactions for specific user
+    /**
+     * Endpoint for returning all transactions made by a user
+     *
+     * @param buyerId Id of the user
+     */
     @GetMapping(value = "/user/{buyerId}")
     public ResponseEntity<?> listUsersTransactions(@PathVariable("buyerId") Long buyerId)
     {
@@ -74,6 +86,11 @@ public class TransController
         return ResponseEntity.ok(transactions);
     }
 
+    /**
+     * Endpoint for refunding transactions
+     *
+     * @param transId Id of transaction to return
+     */
     @PutMapping("/refund/{transId}")
     public ResponseEntity<?> refundTransaction(@PathVariable("transId") Long transId)
     {
@@ -82,12 +99,14 @@ public class TransController
             return new ResponseEntity<>("No transaction exists with that id", HttpStatus.NOT_FOUND);
         Transaction transaction = transResult.get();
 
+        // Test to see if the transaction occurred more than 2 hours ago
         long currentTime = new Date().getTime();
         long diff = currentTime - transaction.getDatetime().getTime();
         if (diff > 7200000)
             return new ResponseEntity<>("More than 2 hours have elapsed since this transaction " +
                     "was made", HttpStatus.LOCKED);
 
+        // Query PayPal to attempt a refund
         HttpResponse<Refund> refund;
         try
         {

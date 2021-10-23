@@ -18,7 +18,8 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/review")
-@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080","https://bookeroo.danieljmills.com"})
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080", "https://bookeroo" +
+        ".danieljmills.com"})
 public class ReviewController
 {
     @Autowired
@@ -30,42 +31,73 @@ public class ReviewController
     @Autowired
     private UserReviewRepository userReviewRepository;
 
+    /**
+     * Endpoint to list all book reviews
+     */
     @GetMapping("/book")
     public ResponseEntity<?> listBookReviews()
     {
         return new ResponseEntity<>(bookReviewRepository.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to list all user reviews
+     */
     @GetMapping("/user")
     public ResponseEntity<?> listUserReviews()
     {
         return new ResponseEntity<>(userReviewRepository.findAll(), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to get all book reviews for a specific book
+     *
+     * @param isbn ISBN of book
+     */
     @GetMapping("/book/{isbn}")
     public ResponseEntity<?> getBookReviewsByBook(@PathVariable String isbn)
     {
         return new ResponseEntity<>(bookReviewRepository.findByBookIsbn(isbn), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to get all user reviews by the id of the reviewed user
+     *
+     * @param reviewedUserId id of the reviewed user
+     */
     @GetMapping("/user/{reviewedUserId}")
     public ResponseEntity<?> getUserReviewByReviewed(@PathVariable Long reviewedUserId)
     {
         return new ResponseEntity<>(userReviewRepository.findUserReviewsByReviewedUserId(reviewedUserId), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to get all book reviews made by a specific user
+     *
+     * @param userId id of reviewer
+     */
     @GetMapping("/book/byUser/{userId}")
     public ResponseEntity<?> getBookReviewsByUser(@PathVariable Long userId)
     {
         return new ResponseEntity<>(bookReviewRepository.findByUserId(userId), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to get all user reviews made by a specific user
+     *
+     * @param reviewerUserId id of reviewer
+     */
     @GetMapping("/user/byUser/{reviewerUserId}")
     public ResponseEntity<?> getUserReviewsByReviewer(@PathVariable Long reviewerUserId)
     {
         return new ResponseEntity<>(userReviewRepository.findUserReviewsByReviewerUserId(reviewerUserId), HttpStatus.OK);
     }
 
+    /**
+     * Endpoint to create new book reviews
+     *
+     * @param bookReview Object representation of the body of the API request
+     */
     @PostMapping("/book/post")
     public ResponseEntity<?> postBookReview(@Valid @RequestBody BookReview bookReview)
     {
@@ -89,6 +121,11 @@ public class ReviewController
         return new ResponseEntity<>(bookReview, HttpStatus.CREATED);
     }
 
+    /**
+     * Endpoint to create new user reviews
+     *
+     * @param userReview Object representation of the body of the API request
+     */
     @PostMapping("/user/post")
     public ResponseEntity<?> postUserReview(@RequestBody UserReview userReview)
     {

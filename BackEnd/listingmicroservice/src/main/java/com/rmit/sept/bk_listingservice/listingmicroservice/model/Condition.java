@@ -1,5 +1,9 @@
 package com.rmit.sept.bk_listingservice.listingmicroservice.model;
-// TODO update tests with new conditions
+
+/**
+ * Physical condition of a book for a listing.
+ * NEW > GOOD > FAIR > POOR
+ */
 public enum Condition
 {
     NEW,
