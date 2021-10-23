@@ -93,6 +93,7 @@ public class Book
         Book book = objectMapper.readValue(json.toString(), Book.class);
 
         book.setAuthors(authors);
+        book.setTags(tags);
 
         return book;
     }
