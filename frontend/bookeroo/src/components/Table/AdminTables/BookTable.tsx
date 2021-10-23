@@ -5,6 +5,7 @@ import { IBook } from "../../../api/models/Book";
 import { listBooks } from "../../../api/stores/book";
 import GenericTable, { TableColumn } from "../GenericTable";
 import { createAuthorArray } from "../../../util/createAuthorArray";
+import Button from "../../Button/Button";
 
 export default function BookTable() {
     const history = useHistory();
@@ -27,6 +28,11 @@ export default function BookTable() {
         },
         { key: "publisher" },
         { key: "pages" },
+        {
+            key: "custom",
+            header: " ",
+            customComponent: (book: IBook) => <Button>Edit</Button>, // TODO add functionality
+        },
     ];
     return (
         <GenericTable

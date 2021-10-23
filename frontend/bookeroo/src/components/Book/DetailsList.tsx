@@ -17,6 +17,9 @@ interface Props {
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
+        paper: {
+            height: "24rem",
+        },
         details: {
             background: theme.palette.common.white,
         },
@@ -30,8 +33,8 @@ export default function DetailsList(props: Props) {
     return (
         <Paper className={classes.paper}>
             <List className={classes.details}>
-                {props.items.map((item) => (
-                    <ListItem>
+                {props.items.map((item, key) => (
+                    <ListItem key={key}>
                         <ListItemText
                             primary={item.value}
                             secondary={item.label}

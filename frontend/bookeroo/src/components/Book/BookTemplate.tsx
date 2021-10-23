@@ -4,41 +4,20 @@ import {
     createStyles,
     Button,
     Typography,
-    List,
-    ListItem,
-    ListItemText,
-    Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
-import React, { useEffect, useState } from "react";
-import {
-    DataGrid,
-    GridCellParams,
-    GridColDef,
-    GridValueGetterParams,
-} from "@material-ui/data-grid";
-import { useParams } from "react-router";
+import React, { useEffect, useRef, useState } from "react";
 import parse from "html-react-parser";
-import { useQuery } from "react-query";
 import { IBook } from "../../api/models/Book";
 import { theme } from "../../styles/theme";
 import GridLayout from "../Layout/GridLayout";
 import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
-import {
-    createListing,
-    listBookListings,
-    listListings,
-} from "../../api/stores/listing";
+
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
-import GenericTable, { TableColumn } from "../Table/GenericTable";
-import FormGenerator from "../Form/FormGenerator";
 import CreateListingForm from "./CreateListingForm";
-import { IListing } from "../../api/models/Listing";
-import { getUser } from "../../api/stores/user";
-import { IAccount } from "../../api/models/Account";
 import ListTable from "./ListTable";
 import Badge from "../Badge/Badge";
 import { createTagsArray } from "../../util/createTagsArray";
@@ -55,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "auto",
         },
         icon: {
-            // height: "100px",
             fontSize: 100,
         },
         details: {
@@ -73,6 +51,16 @@ export default function BookTemplate(props: Props) {
 
     const authors = createAuthorArray(props.book.authors);
     const tags = createTagsArray(props.book.tags);
+    const tableRef = useRef<HTMLDivElement>(null);
+    const formRef = useRef<HTMLDivElement>(null);
+
+    function scrollToRef(ref: React.RefObject<HTMLDivElement>) {
+        if (ref.current) {
+            ref.current.scrollIntoView();
+        }
+    }
+
+    // console.log("json", JSON.parse(props.book.tableOfContents));
 
     const firstCard = [
         <TextCard
@@ -80,17 +68,25 @@ export default function BookTemplate(props: Props) {
             titleSize="h4"
             subtitle={authors.join(", ")}
             buttons={[
-                <Button color="secondary" variant="contained">
+                <Button
+                    color="secondary"
+                    variant="contained"
+                    onClick={() => scrollToRef(tableRef)}
+                >
                     View Sellers
                 </Button>,
-                <Button color="secondary" variant="outlined">
+                <Button
+                    color="secondary"
+                    variant="outlined"
+                    onClick={() => scrollToRef(formRef)}
+                >
                     Sell your copy
                 </Button>,
             ]}
         >
             <BadgeGroup tags={tags} />
 
-            <Typography variant="body2" component="p">
+            <Typography variant="body2" component="div">
                 {props.book.synopsys && parse(props.book.synopsys)}
             </Typography>
         </TextCard>,
@@ -133,12 +129,6 @@ export default function BookTemplate(props: Props) {
         <DetailsList items={toc} />,
     ];
 
-    const addToCartButton = (params: GridCellParams) => (
-        <Button variant="contained" color="secondary">
-            Add to cart
-        </Button>
-    );
-
     return (
         <div>
             <Container noMargin>
@@ -151,9 +141,13 @@ export default function BookTemplate(props: Props) {
                 <GridLayout items={secondCard} spacing={2} />
             </Container>
             <Container>
-                <Typography variant="h4">Sellers</Typography>
-                <ListTable isbn={props.book.isbn} />
-                <CreateListingForm book={props.book} />
+                <div ref={tableRef}>
+                    <Typography variant="h4">Sellers</Typography>
+                    <ListTable isbn={props.book.isbn} />
+                </div>
+                <div ref={formRef}>
+                    <CreateListingForm book={props.book} />
+                </div>
             </Container>
         </div>
     );

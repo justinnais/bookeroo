@@ -9,7 +9,6 @@ import Login from "./pages/Login";
 import Contact from "./pages/Contact";
 import Profile from "./pages/Profile";
 import Checkout from "./pages/Checkout";
-import PayPal from "./pages/PayPal";
 import { createStyles, makeStyles, Theme } from "@material-ui/core";
 import Footer from "./components/Layout/Footer";
 import { Routes } from "./routes/Routes";

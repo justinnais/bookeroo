@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
     createStyles({
         button: {
             textTransform: "capitalize",
+            minWidth: "5rem",
         },
     })
 );

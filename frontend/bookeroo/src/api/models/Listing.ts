@@ -18,6 +18,8 @@ export interface CreateListingRequest {
 }
 
 export interface CreateTransactionRequest {
-    listings: Array<IListing>;
-    buyer_id: string;
+    listingId: number;
+    price: string;
+    buyerId: number;
+    captureId: string;
 }
