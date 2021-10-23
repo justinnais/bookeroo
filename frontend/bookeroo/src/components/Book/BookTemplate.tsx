@@ -4,41 +4,20 @@ import {
     createStyles,
     Button,
     Typography,
-    List,
-    ListItem,
-    ListItemText,
-    Paper,
 } from "@material-ui/core";
 import FormatQuoteIcon from "@material-ui/icons/FormatQuote";
 import React, { useEffect, useRef, useState } from "react";
-import {
-    DataGrid,
-    GridCellParams,
-    GridColDef,
-    GridValueGetterParams,
-} from "@material-ui/data-grid";
-import { useParams } from "react-router";
 import parse from "html-react-parser";
-import { useQuery } from "react-query";
 import { IBook } from "../../api/models/Book";
 import { theme } from "../../styles/theme";
 import GridLayout from "../Layout/GridLayout";
 import TextCard from "../Layout/TextCard";
 import Image from "../Layout/Image";
 import Container from "../Layout/Container";
-import {
-    createListing,
-    listBookListings,
-    listListings,
-} from "../../api/stores/listing";
+
 import { createAuthorArray } from "../../util/createAuthorArray";
 import DetailsList from "./DetailsList";
-import GenericTable, { TableColumn } from "../Table/GenericTable";
-import FormGenerator from "../Form/FormGenerator";
 import CreateListingForm from "./CreateListingForm";
-import { IListing } from "../../api/models/Listing";
-import { getUser } from "../../api/stores/user";
-import { IAccount } from "../../api/models/Account";
 import ListTable from "./ListTable";
 
 interface Props {
@@ -52,7 +31,6 @@ const useStyles = makeStyles((theme: Theme) =>
             height: "auto",
         },
         icon: {
-            // height: "100px",
             fontSize: 100,
         },
         details: {
@@ -77,6 +55,8 @@ export default function BookTemplate(props: Props) {
             ref.current.scrollIntoView();
         }
     }
+
+    // console.log("json", JSON.parse(props.book.tableOfContents));
 
     const firstCard = [
         <TextCard
@@ -116,7 +96,10 @@ export default function BookTemplate(props: Props) {
     ];
 
     const secondList = [
-        { label: "Table Of Contents", value: props.book.tableOfContents },
+        {
+            label: "Table Of Contents",
+            value: props.book.tableOfContents,
+        },
     ];
 
     const quote = (
