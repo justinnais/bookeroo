@@ -18,14 +18,28 @@
 
 ## Run
 To run the application locally : 
-1) `cd backend`
-2) `./run-docker.sh all` OR `.run-docker.sh <microservice>` to run individually
-3) `cd ../frontend/bookeroo`
-4) `npm install`
-5) `npm run start`
+1) `cd ../frontend/bookeroo`
+2) `npm install`
+3) `npm run start`
+
+Our backend is running on `https://bookeroo-api.danieljmills.com/api`.
 
 	
 ## Release Notes
+### Release 0.3.0 - 23 October 2021
+* Buisiness accounts can now sign up - please wait for an admin to approve your account
+* Admin users now have greater control - approve, ban, reject users
+* Users can now review their favourite books and other users
+* More information about books is provided through table of contents and category tags
+* Admins can print off their reports in CSV format, users can print their order history too
+* Users can now purchase books! Please checkout with PayPal
+* BREAKING CHANGE - API endpoints were adjusted to be more consistent
+* NGINX routing has been improved
+* Deployment is fully automated by CircleCI
+* Pagination of book displays
+* Updates to authentication and security
+* Created GenericTable
+
 ### Release 0.2.0 - 18 September 2021
 * Setup CircleCI for deployment and testing
 * Listing microservice created
