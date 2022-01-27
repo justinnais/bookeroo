@@ -10,11 +10,11 @@ commands:
     steps:
       - run:
           name: build-and-test-<<parameters.git-folder>>
-          command: cd BackEnd/<<parameters.git-folder>>/ && mvn clean package
+          command: cd backend/<<parameters.git-folder>>/ && mvn clean package
       - run:
           name: copy-<<parameters.git-folder>>
           command:
-            scp BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/BackEnd/<<parameters.git-folder>>/target/<<parameters.jar>>
+            scp backend/<<parameters.git-folder>>/target/<<parameters.jar>> ubuntu@$BOOK_AWS:~/backend/<<parameters.git-folder>>/target/<<parameters.jar>>
 
 jobs:
   build-backend:  
@@ -54,10 +54,10 @@ jobs:
           jar: reviewmicroservices-0.0.1.jar
 
       
-      - run: scp BackEnd/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/BackEnd/docker-entrypoint.sh
-      - run: scp BackEnd/Dockerfile ubuntu@$BOOK_AWS:~/BackEnd/Dockerfile
-      - run: scp BackEnd/docker-compose.yml ubuntu@$BOOK_AWS:~/BackEnd/docker-compose.yml
-      - run: ssh ubuntu@$BOOK_AWS '(cd BackEnd/ && sudo chmod +x docker-entrypoint.sh && sudo docker build . -t bookeroo && sudo docker-compose up -d)'
+      - run: scp backend/docker-entrypoint.sh ubuntu@$BOOK_AWS:~/backend/docker-entrypoint.sh
+      - run: scp backend/Dockerfile ubuntu@$BOOK_AWS:~/backend/Dockerfile
+      - run: scp backend/docker-compose.yml ubuntu@$BOOK_AWS:~/backend/docker-compose.yml
+      - run: ssh ubuntu@$BOOK_AWS '(cd backend/ && sudo chmod +x docker-entrypoint.sh && sudo docker build . -t bookeroo && sudo docker-compose up -d)'
 
 workflows:
   build-and-test: 
